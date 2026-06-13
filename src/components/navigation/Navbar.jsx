@@ -52,11 +52,11 @@ export const Navbar = () => {
     document.documentElement.setAttribute('data-theme', activeTheme);
   }, [activeTheme]);
 
-  // Handle Logo double click
+  // Handle Logo triple click to trigger admin login modal
   const handleLogoClick = () => {
     setClickCount((prev) => {
       const newCount = prev + 1;
-      if (newCount === 2) {
+      if (newCount === 3) {
         setLoginModalOpen(true);
         return 0;
       }
