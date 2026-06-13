@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
-export const Preloader = ({ finishLoading }) => {
+export const Preloader = ({ finishLoading, preloaderText }) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const Preloader = ({ finishLoading }) => {
         />
 
         {/* Monogram MO container */}
-        <div className="relative w-24 h-24 mb-6 flex items-center justify-center border border-white/10 rounded-2xl bg-white/[0.02] backdrop-blur-md overflow-hidden">
+        <div className="relative w-28 h-28 mb-6 flex items-center justify-center border border-white/10 rounded-2xl bg-white/[0.02] backdrop-blur-md overflow-hidden p-2">
           {/* Glass light sweep animation */}
           <motion.div 
             initial={{ x: '-100%', y: '-100%' }}
@@ -59,9 +59,9 @@ export const Preloader = ({ finishLoading }) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="text-white text-3xl font-extrabold tracking-widest font-sans"
+            className="text-white text-xl font-extrabold tracking-widest font-sans text-center truncate w-full"
           >
-            MO
+            {preloaderText || 'MO'}
           </motion.span>
         </div>
 

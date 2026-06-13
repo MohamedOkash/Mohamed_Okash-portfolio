@@ -10,7 +10,7 @@ import {
   Loader2, Languages, Mail, Settings, ShieldAlert, Cpu, 
   HardHat, Monitor, LogOut, ArrowLeft, CheckCircle2,
   Search, ArrowUp, ArrowDown, Upload, Download, Undo, Eye,
-  Globe, Palette, Image, ShieldCheck, HeartPulse, FlameKindling,
+  Globe, Palette, Image, ShieldCheck, Shield, HeartPulse, FlameKindling,
   Server, Copy, Check, ArrowUpRight, CheckSquare, Square,
   ChevronDown, ChevronUp, EyeOff, Layers
 } from 'lucide-react';
@@ -83,10 +83,53 @@ export default function AdminDashboard() {
   const [localListFilter, setLocalListFilter] = useState('');
   const fileInputRef = useRef(null);
 
+  const initializeFormData = (rawDoc) => {
+    if (!rawDoc) return null;
+    const copy = JSON.parse(JSON.stringify(rawDoc));
+    if (!copy.brandIdentity) {
+      copy.brandIdentity = {};
+    }
+    const defaultBrand = {
+      brandName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+      shortName: { ar: "عكاش", en: "Okash", ur: "عکاش" },
+      subtitle: { ar: "مهندس سلامة وبنية تحتية IT", en: "HSE & IT Infrastructure Engineer", ur: "ایچ ایس ای اور آئی تي انفراسٹرکچر انجینئر" },
+      logoText: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+      heroName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+      footerText: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "Mohamed Okash" },
+      preloaderText: { ar: "عكاش", en: "OKASH", ur: "عکاش" },
+      browserTitle: { ar: "محمد عكاش | معرض الأعمال", en: "Mohamed Okash | Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
+      seoTitle: { ar: "محمد عكاش | معرض الأعمال الاحترافي", en: "Mohamed Okash | Professional Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
+      seoDescription: { ar: "الموقع الشخصي لمحمد عكاش - مهندس بنية تحتية IT وأمن وسلامة مهنية HSE", en: "Personal portfolio of Mohamed Okash - IT Infrastructure & HSE Safety Engineer", ur: "محمد عکاش کا ذاتی پورٹ فولیو - آئی تي انفراسٹرکچر اور ایچ ایس ای سيفتي انجینئر" }
+    };
+    copy.brandIdentity = {
+      ...defaultBrand,
+      ...copy.brandIdentity
+    };
+    for (const key of Object.keys(defaultBrand)) {
+      copy.brandIdentity[key] = {
+        ...defaultBrand[key],
+        ...copy.brandIdentity[key]
+      };
+    }
+    if (!copy.themeSettings) {
+      copy.themeSettings = {};
+    }
+    if (copy.themeSettings.letterSpacing === undefined) {
+      copy.themeSettings.letterSpacing = "0px";
+    }
+    if (copy.themeSettings.lineHeight === undefined) {
+      copy.themeSettings.lineHeight = 1.6;
+    }
+    if (copy.themeSettings.paragraphWidth === undefined) {
+      copy.themeSettings.paragraphWidth = "65ch";
+    }
+    return copy;
+  };
+
   // Sync form state on store load
   useEffect(() => {
     if (data) {
-      setFormData(JSON.parse(JSON.stringify(data)));
+      setFormData(initializeFormData(data));
     }
   }, [data]);
 
@@ -828,6 +871,20 @@ export default function AdminDashboard() {
                     <AdminMultiLangInput label={t.cms.projectImpact} textarea valueObj={proj.businessValue} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.projects[globalIndex].businessValue[key] = val;
+                      setFormData(updated);
+                    }} />
+
+                    <AdminMultiLangInput label={t.cms.problemLabel || 'Problem Context'} textarea valueObj={proj.problem || { ar: '', en: '', ur: '' }} onChangeKey={(key, val) => {
+                      const updated = { ...formData };
+                      if (!updated.projects[globalIndex].problem) updated.projects[globalIndex].problem = { ar: '', en: '', ur: '' };
+                      updated.projects[globalIndex].problem[key] = val;
+                      setFormData(updated);
+                    }} />
+
+                    <AdminMultiLangInput label={t.cms.solutionLabel || 'Proposed Solution'} textarea valueObj={proj.solution || { ar: '', en: '', ur: '' }} onChangeKey={(key, val) => {
+                      const updated = { ...formData };
+                      if (!updated.projects[globalIndex].solution) updated.projects[globalIndex].solution = { ar: '', en: '', ur: '' };
+                      updated.projects[globalIndex].solution[key] = val;
                       setFormData(updated);
                     }} />
 
@@ -1681,12 +1738,19 @@ export default function AdminDashboard() {
                           }}
                           className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
                         >
-                          <option value="textBlock">Text Block</option>
-                          <option value="glassCard">Glass Card</option>
+                          <option value="heroBanner">Hero Banner</option>
+                          <option value="glassCardGrid">Glass Card Grid</option>
+                          <option value="featureGrid">Features Grid</option>
                           <option value="timeline">Timeline</option>
-                          <option value="featureGrid">Feature Grid</option>
-                          <option value="contactBlock">Contact Block</option>
-                          <option value="highlightBanner">Highlight Banner</option>
+                          <option value="textBlock">Text Block</option>
+                          <option value="ctaBlock">CTA Block</option>
+                          <option value="statisticsBlock">Statistics Block</option>
+                          <option value="imageText">Image + Text</option>
+                          <option value="quoteBlock">Quote Block</option>
+                          {/* Backward compatibility aliases */}
+                          <option value="glassCard">Glass Card (Deprecated)</option>
+                          <option value="contactBlock">Contact Block (Deprecated)</option>
+                          <option value="highlightBanner">Highlight Banner (Deprecated)</option>
                         </select>
                       </div>
 
@@ -1902,7 +1966,7 @@ export default function AdminDashboard() {
             <span className="text-zinc-400">{t.cms.fontScale}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.fontScale || 1.0}x</span>
           </div>
-          <input type="range" min="0.8" max="1.4" step="0.05" value={formData.themeSettings.fontScale || 1.0} onChange={(e) => {
+          <input type="range" min="0.8" max="1.5" step="0.05" value={formData.themeSettings.fontScale || 1.0} onChange={(e) => {
             const updated = { ...formData };
             updated.themeSettings.fontScale = Number(e.target.value);
             setFormData(updated);
@@ -1947,6 +2011,55 @@ export default function AdminDashboard() {
           </select>
         </div>
 
+        {/* Letter Spacing selection */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.letterSpacing || 'Letter Spacing'}</label>
+          <select 
+            value={formData.themeSettings.letterSpacing || '0px'} 
+            onChange={(e) => {
+              const updated = { ...formData };
+              updated.themeSettings.letterSpacing = e.target.value;
+              setFormData(updated);
+            }}
+            className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+          >
+            <option value="-0.05em">-0.05em</option>
+            <option value="-0.02em">-0.02em</option>
+            <option value="0px">0px (Normal)</option>
+            <option value="0.02em">0.02em</option>
+            <option value="0.05em">0.05em</option>
+            <option value="0.1em">0.1em</option>
+            <option value="0.15em">0.15em</option>
+            <option value="0.2em">0.2em</option>
+          </select>
+        </div>
+
+        {/* Line Height slider */}
+        <div>
+          <div className="flex justify-between text-xs font-bold uppercase mb-1">
+            <span className="text-zinc-400">{t.cms.lineHeight || 'Line Height'}</span>
+            <span className="text-[var(--primary)]">{formData.themeSettings.lineHeight || 1.6}</span>
+          </div>
+          <input type="range" min="1.0" max="2.2" step="0.1" value={formData.themeSettings.lineHeight || 1.6} onChange={(e) => {
+            const updated = { ...formData };
+            updated.themeSettings.lineHeight = Number(e.target.value);
+            setFormData(updated);
+          }} className="w-full accent-[var(--primary)]" />
+        </div>
+
+        {/* Paragraph Max Width slider */}
+        <div>
+          <div className="flex justify-between text-xs font-bold uppercase mb-1">
+            <span className="text-zinc-400">{t.cms.paragraphWidth || 'Paragraph Max Width'}</span>
+            <span className="text-[var(--primary)]">{formData.themeSettings.paragraphWidth || '65ch'}</span>
+          </div>
+          <input type="range" min="40" max="95" step="5" value={parseInt(formData.themeSettings.paragraphWidth, 10) || 65} onChange={(e) => {
+            const updated = { ...formData };
+            updated.themeSettings.paragraphWidth = `${e.target.value}ch`;
+            setFormData(updated);
+          }} className="w-full accent-[var(--primary)]" />
+        </div>
+
         {/* Font Color picker */}
         <div className="flex items-center gap-4">
           <div className="flex-1">
@@ -1988,6 +2101,183 @@ export default function AdminDashboard() {
     </div>
   );
 
+  // Tab 15: Brand Identity
+  const renderBrandIdentityTab = () => {
+    if (!formData.brandIdentity) {
+      formData.brandIdentity = {};
+    }
+    if (!formData.brandIdentity.brandName) formData.brandIdentity.brandName = { ar: '', en: '', ur: '' };
+    if (!formData.brandIdentity.logoText) formData.brandIdentity.logoText = { ar: '', en: '', ur: '' };
+    if (!formData.brandIdentity.heroName) formData.brandIdentity.heroName = { ar: '', en: '', ur: '' };
+    if (!formData.brandIdentity.footerText) formData.brandIdentity.footerText = { ar: '', en: '', ur: '' };
+    if (!formData.brandIdentity.preloaderText) formData.brandIdentity.preloaderText = { ar: '', en: '', ur: '' };
+    if (!formData.brandIdentity.seoTitle) formData.brandIdentity.seoTitle = { ar: '', en: '', ur: '' };
+    if (!formData.brandIdentity.seoDescription) formData.brandIdentity.seoDescription = { ar: '', en: '', ur: '' };
+    if (!formData.brandIdentity.shortName) formData.brandIdentity.shortName = { ar: '', en: '', ur: '' };
+    if (!formData.brandIdentity.subtitle) formData.brandIdentity.subtitle = { ar: '', en: '', ur: '' };
+    if (!formData.brandIdentity.browserTitle) formData.brandIdentity.browserTitle = { ar: '', en: '', ur: '' };
+
+    return (
+      <div className="space-y-6">
+        <div className="border-b border-zinc-800 pb-3 mb-4">
+          <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms?.sidebarBrandIdentity || 'Brand Identity'}</h3>
+          <p className="text-xs text-zinc-500 mt-1">{t.cms?.brandIdentityDesc || 'Manage your global brand names, logos, subtitles, preloader, and SEO properties.'}</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-zinc-800 bg-zinc-900/10 mb-5">
+          <div className="md:col-span-3">
+            <span className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-2">{t.cms?.brandNameArabic || 'Arabic Brand Name'} / {t.cms?.brandNameEnglish || 'English Brand Name'} / {t.cms?.brandNameUrdu || 'Urdu Brand Name'}</span>
+          </div>
+          <AdminInput 
+            label={t.cms?.brandNameArabic || 'Arabic Brand Name'} 
+            value={formData.brandIdentity.brandName?.ar || ''} 
+            dir="rtl"
+            onChange={(e) => {
+              const updated = { ...formData };
+              if (!updated.brandIdentity) updated.brandIdentity = {};
+              if (!updated.brandIdentity.brandName) updated.brandIdentity.brandName = {};
+              updated.brandIdentity.brandName.ar = e.target.value;
+              setFormData(updated);
+            }} 
+          />
+          <AdminInput 
+            label={t.cms?.brandNameEnglish || 'English Brand Name'} 
+            value={formData.brandIdentity.brandName?.en || ''} 
+            dir="ltr"
+            onChange={(e) => {
+              const updated = { ...formData };
+              if (!updated.brandIdentity) updated.brandIdentity = {};
+              if (!updated.brandIdentity.brandName) updated.brandIdentity.brandName = {};
+              updated.brandIdentity.brandName.en = e.target.value;
+              setFormData(updated);
+            }} 
+          />
+          <AdminInput 
+            label={t.cms?.brandNameUrdu || 'Urdu Brand Name'} 
+            value={formData.brandIdentity.brandName?.ur || ''} 
+            dir="rtl"
+            onChange={(e) => {
+              const updated = { ...formData };
+              if (!updated.brandIdentity) updated.brandIdentity = {};
+              if (!updated.brandIdentity.brandName) updated.brandIdentity.brandName = {};
+              updated.brandIdentity.brandName.ur = e.target.value;
+              setFormData(updated);
+            }} 
+          />
+        </div>
+
+        <AdminMultiLangInput 
+          label={t.cms?.brandNameShort || 'Short Brand Name'} 
+          valueObj={formData.brandIdentity.shortName} 
+          onChangeKey={(key, val) => {
+            const updated = { ...formData };
+            if (!updated.brandIdentity) updated.brandIdentity = {};
+            if (!updated.brandIdentity.shortName) updated.brandIdentity.shortName = {};
+            updated.brandIdentity.shortName[key] = val;
+            setFormData(updated);
+          }} 
+        />
+
+        <AdminMultiLangInput 
+          label={t.cms?.brandNameSubtitle || 'Brand Subtitle'} 
+          valueObj={formData.brandIdentity.subtitle} 
+          onChangeKey={(key, val) => {
+            const updated = { ...formData };
+            if (!updated.brandIdentity) updated.brandIdentity = {};
+            if (!updated.brandIdentity.subtitle) updated.brandIdentity.subtitle = {};
+            updated.brandIdentity.subtitle[key] = val;
+            setFormData(updated);
+          }} 
+        />
+
+        <AdminMultiLangInput 
+          label={t.cms?.heroDisplayName || 'Hero Display Name'} 
+          valueObj={formData.brandIdentity.heroName} 
+          onChangeKey={(key, val) => {
+            const updated = { ...formData };
+            if (!updated.brandIdentity) updated.brandIdentity = {};
+            if (!updated.brandIdentity.heroName) updated.brandIdentity.heroName = {};
+            updated.brandIdentity.heroName[key] = val;
+            setFormData(updated);
+          }} 
+        />
+
+        <AdminMultiLangInput 
+          label={t.cms?.navbarLogoText || 'Navbar Logo Text'} 
+          valueObj={formData.brandIdentity.logoText} 
+          onChangeKey={(key, val) => {
+            const updated = { ...formData };
+            if (!updated.brandIdentity) updated.brandIdentity = {};
+            if (!updated.brandIdentity.logoText) updated.brandIdentity.logoText = {};
+            updated.brandIdentity.logoText[key] = val;
+            setFormData(updated);
+          }} 
+        />
+
+        <AdminMultiLangInput 
+          label={t.cms?.footerBrandText || 'Footer Brand Text'} 
+          valueObj={formData.brandIdentity.footerText} 
+          onChangeKey={(key, val) => {
+            const updated = { ...formData };
+            if (!updated.brandIdentity) updated.brandIdentity = {};
+            if (!updated.brandIdentity.footerText) updated.brandIdentity.footerText = {};
+            updated.brandIdentity.footerText[key] = val;
+            setFormData(updated);
+          }} 
+        />
+
+        <AdminMultiLangInput 
+          label={t.cms?.preloaderBrandText || 'Preloader Brand Text'} 
+          valueObj={formData.brandIdentity.preloaderText} 
+          onChangeKey={(key, val) => {
+            const updated = { ...formData };
+            if (!updated.brandIdentity) updated.brandIdentity = {};
+            if (!updated.brandIdentity.preloaderText) updated.brandIdentity.preloaderText = {};
+            updated.brandIdentity.preloaderText[key] = val;
+            setFormData(updated);
+          }} 
+        />
+
+        <AdminMultiLangInput 
+          label={t.cms?.browserTitle || 'Browser Title'} 
+          valueObj={formData.brandIdentity.browserTitle} 
+          onChangeKey={(key, val) => {
+            const updated = { ...formData };
+            if (!updated.brandIdentity) updated.brandIdentity = {};
+            if (!updated.brandIdentity.browserTitle) updated.brandIdentity.browserTitle = {};
+            updated.brandIdentity.browserTitle[key] = val;
+            setFormData(updated);
+          }} 
+        />
+
+        <AdminMultiLangInput 
+          label={t.cms?.seoTitle || 'SEO Title'} 
+          valueObj={formData.brandIdentity.seoTitle} 
+          onChangeKey={(key, val) => {
+            const updated = { ...formData };
+            if (!updated.brandIdentity) updated.brandIdentity = {};
+            if (!updated.brandIdentity.seoTitle) updated.brandIdentity.seoTitle = {};
+            updated.brandIdentity.seoTitle[key] = val;
+            setFormData(updated);
+          }} 
+        />
+
+        <AdminMultiLangInput 
+          label={t.cms?.seoDescription || 'SEO Description'} 
+          textarea
+          valueObj={formData.brandIdentity.seoDescription} 
+          onChangeKey={(key, val) => {
+            const updated = { ...formData };
+            if (!updated.brandIdentity) updated.brandIdentity = {};
+            if (!updated.brandIdentity.seoDescription) updated.brandIdentity.seoDescription = {};
+            updated.brandIdentity.seoDescription[key] = val;
+            setFormData(updated);
+          }} 
+        />
+      </div>
+    );
+  };
+
   // Tab 13: Media & Branding
   const renderBrandingTab = () => (
     <div className="space-y-6">
@@ -2023,6 +2313,7 @@ export default function AdminDashboard() {
   const renderActiveForm = () => {
     switch (activeTab) {
       case 'general': return renderGeneralTab();
+      case 'brandIdentity': return renderBrandIdentityTab();
       case 'structure': return renderStructureTab();
       case 'hero': return renderHeroTab();
       case 'about': return renderAboutTab();
@@ -2057,8 +2348,13 @@ export default function AdminDashboard() {
           '--body-weight-setting': formData.themeSettings.bodyWeight || '300',
           '--font-color-setting': formData.themeSettings.fontColor || '#fafafa',
           '--heading-color-setting': formData.themeSettings.headingColor || '#fafafa',
+          '--letter-spacing-setting': formData.themeSettings.letterSpacing || 'normal',
+          '--line-height-setting': formData.themeSettings.lineHeight || '1.6',
+          '--paragraph-width-setting': formData.themeSettings.paragraphWidth || '65ch',
           'fontFamily': formData.themeSettings.fontFamily ? `'${formData.themeSettings.fontFamily}', sans-serif` : 'sans-serif',
           'fontSize': `calc(100% * ${formData.themeSettings.fontScale || 1.0})`,
+          'letterSpacing': formData.themeSettings.letterSpacing || 'normal',
+          'lineHeight': formData.themeSettings.lineHeight || '1.6',
           '--heading-weight': formData.themeSettings.headingWeight || '800',
           '--body-weight': formData.themeSettings.bodyWeight || '300',
           '--font-color': formData.themeSettings.fontColor || '#fafafa',
@@ -2250,6 +2546,26 @@ export default function AdminDashboard() {
             </div>
           )}
 
+          {activeTab === 'brandIdentity' && (
+            <div className="p-4 rounded-xl border border-zinc-800 bg-black/40 text-left space-y-2 text-xs">
+              <span className="text-[10px] text-zinc-500 font-bold uppercase block text-center border-b border-zinc-800 pb-1 mb-2">
+                {t.cms?.sidebarBrandIdentity || 'Brand Identity'}
+              </span>
+              <div><strong className="text-zinc-400">Arabic Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.brandName?.ar || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">English Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.brandName?.en || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">Urdu Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.brandName?.ur || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">Short Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.shortName?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">Subtitle:</strong> <span className="text-white font-medium">{formData.brandIdentity?.subtitle?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">Navbar Logo:</strong> <span className="text-white font-medium">{formData.brandIdentity?.logoText?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">Hero Display Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.heroName?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">Footer Text:</strong> <span className="text-white font-medium">{formData.brandIdentity?.footerText?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">Preloader Text:</strong> <span className="text-white font-medium">{formData.brandIdentity?.preloaderText?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">Browser Title:</strong> <span className="text-white font-medium">{formData.brandIdentity?.browserTitle?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">SEO Title:</strong> <span className="text-white font-medium">{formData.brandIdentity?.seoTitle?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-zinc-400">SEO Description:</strong> <span className="text-white font-light block mt-1">{formData.brandIdentity?.seoDescription?.[lang] || 'N/A'}</span></div>
+            </div>
+          )}
+
         </div>
       </div>
     );
@@ -2382,6 +2698,13 @@ export default function AdminDashboard() {
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'general' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
             <Settings className="w-3.5 h-3.5" /> {t.cms?.sidebarSettings || 'General Settings'}
+          </button>
+
+          <button 
+            onClick={() => handleTabChange('brandIdentity')}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'brandIdentity' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+          >
+            <Shield className="w-3.5 h-3.5" /> {t.cms?.sidebarBrandIdentity || 'Brand Identity'}
           </button>
 
           <button 

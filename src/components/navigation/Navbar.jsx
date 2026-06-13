@@ -155,7 +155,7 @@ export const Navbar = () => {
   }
 
   const sectionsList = data?.websiteStructure?.sections || DEFAULT_PORTFOLIO_DATA.websiteStructure.sections;
-  const logoTextVal = data?.general?.logoText?.[lang] || data?.general?.siteName?.[lang] || t.name;
+  const logoTextVal = data?.brandIdentity?.logoText?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
 
   return (
     <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${

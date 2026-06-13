@@ -10,18 +10,24 @@
 /* Global Typography Controls */
 body, p, li, span, a, input, textarea, select, button {
   font-family: var(--font-family-setting, var(--font-sans)) !important;
+  letter-spacing: var(--letter-spacing-setting, normal);
 }
 
 body {
   background-color: var(--bg);
   color: var(--font-color-setting, var(--text)) !important;
   font-size: calc(1rem * var(--font-scale-setting, 1.0)) !important;
+  line-height: var(--line-height-setting, 1.6) !important;
   overflow-x: hidden;
   transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s ease;
 }
 
 body, p, .tagline {
   font-weight: var(--body-weight-setting, 300) !important;
+}
+
+p {
+  max-width: var(--paragraph-width-setting, 65ch);
 }
 
 h1, h2, h3, h4, h5, h6, h1 span, h2 span, h3 span, h4 span, h5 span, h6 span {

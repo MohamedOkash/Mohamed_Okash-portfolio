@@ -4,174 +4,281 @@ export const CinematicBackground = () => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Graceful delayed fade-in after 1 second to create a premium cinematic entering effect
-    const timer = setTimeout(() => setMounted(true), 1000);
+    // Delayed fade-in for premium entrance
+    const timer = setTimeout(() => setMounted(true), 800);
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <div 
-      className="absolute inset-0 overflow-hidden pointer-events-none z-0 select-none transition-opacity duration-[4000ms] ease-in-out"
+      className="fixed inset-0 overflow-hidden pointer-events-none z-0 select-none transition-opacity duration-[3000ms] ease-in-out"
       style={{ opacity: mounted ? 1.0 : 0 }}
     >
-      {/* Layer 1: Very Soft Animated Grid */}
+      {/* Soft Radial Ambient Glows */}
+      {/* 1. Behind Hero Section */}
       <div 
-        className="absolute inset-0 opacity-[0.035]"
+        className="absolute top-[-5%] left-1/2 -translate-x-1/2 w-[85vw] h-[55vh] rounded-full blur-[140px] pointer-events-none opacity-30 transition-all duration-1000"
+        style={{
+          background: `radial-gradient(circle, var(--primary) 0%, transparent 70%)`
+        }}
+      />
+      {/* 2. Middle Page Accent */}
+      <div 
+        className="absolute top-[40%] right-[-10%] w-[50vw] h-[50vh] rounded-full blur-[160px] pointer-events-none opacity-[0.15] bg-[var(--accent)]"
+      />
+      {/* 3. Footer Accent */}
+      <div 
+        className="absolute bottom-[-10%] left-[-10%] w-[45vw] h-[45vh] rounded-full blur-[150px] pointer-events-none opacity-[0.12] bg-[var(--primary)]"
+      />
+
+      {/* Layer 1: Engineering Blueprint Grid */}
+      <div 
+        className="absolute inset-0 opacity-[0.035] transition-all"
         style={{
           backgroundImage: `
-            linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px)
+            linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px)
           `,
-          backgroundSize: '80px 80px',
-          animation: 'gridMove 120s linear infinite',
-          maskImage: 'radial-gradient(circle at 50% 50%, black, transparent 80%)',
-          WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black, transparent 80%)'
+          backgroundSize: '60px 60px',
+          animation: 'gridScroll 180s linear infinite',
+          maskImage: 'radial-gradient(circle at 50% 50%, black 40%, transparent 95%)',
+          WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 40%, transparent 95%)'
         }}
       />
 
+      {/* Layer 5: Ambient Premium Light Rays & Glow Trails */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lightRay1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.8" />
+            <stop offset="50%" stopColor="var(--accent)" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="lightRay2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        {/* Soft Diagonal Light Rays */}
+        <path d="M -100 -100 L 800 800 L 700 850 L -200 50 Z" fill="url(#lightRay1)" />
+        <path d="M 1200 -200 L 400 900 L 300 850 L 1100 -300 Z" fill="url(#lightRay2)" />
+      </svg>
+
+      {/* SVG Canvas for IT, AI, HSE Topology & Blueprint Elements */}
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        {/* Layer 2: Extremely Low-Opacity Blueprint Lines & Technical Indicators */}
-        <g className="opacity-[0.04]" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.5">
-          {/* Vertical Rulers */}
-          <line x1="5%" y1="0" x2="5%" y2="100%" strokeDasharray="3 9" />
-          <line x1="95%" y1="0" x2="95%" y2="100%" strokeDasharray="3 9" />
+        
+        {/* Layer 2: IT Infrastructure Topology */}
+        {/* Router, Switches, Servers, Fiber Links & Connections */}
+        <g className="opacity-[0.045]" stroke="var(--primary)" strokeWidth="1" fill="none">
+          {/* Fiber Links (Glowing/Dashed Paths) */}
+          <path d="M 120 180 H 380 V 320 H 550" strokeDasharray="5 5" className="animate-dash" />
+          <path d="M 850 120 H 1050 V 280 H 900 V 450" strokeDasharray="6 4" className="animate-dash" style={{ animationDirection: 'reverse' }} />
+          <path d="M 100 650 H 320 V 500 H 450" strokeDasharray="4 6" className="animate-dash" />
+          <path d="M 750 780 H 980 V 620 H 1150" strokeDasharray="8 4" className="animate-dash" />
           
-          {/* Horizontal guidelines */}
-          <line x1="0" y1="15%" x2="100%" y2="15%" strokeDasharray="5 15" />
-          <line x1="0" y1="85%" x2="100%" y2="85%" strokeDasharray="5 15" />
+          {/* Fiber link crossover lines */}
+          <line x1="380" y1="200" x2="850" y2="120" stroke="var(--accent)" strokeDasharray="2 8" />
+          <line x1="320" y1="500" x2="750" y2="780" stroke="var(--accent)" strokeDasharray="3 9" />
 
-          {/* Technical crosshairs & coordinate markers */}
-          <circle cx="5%" cy="15%" r="6" fill="none" />
-          <line x1="5%" y1="15%" x2="5%" y2="17%" />
-          <line x1="5%" y1="15%" x2="7%" y2="15%" />
+          {/* Routers & Switch Node Graphics */}
+          {/* Router 1 */}
+          <circle cx="120" cy="180" r="16" strokeWidth="1.5" />
+          <path d="M 110 180 H 130 M 120 170 V 190" strokeWidth="1" />
+          <circle cx="120" cy="180" r="6" fill="var(--primary)" className="animate-pulse" />
 
-          <circle cx="95%" cy="85%" r="6" fill="none" />
-          <line x1="95%" y1="85%" x2="95%" y2="83%" />
-          <line x1="95%" y1="85%" x2="93%" y2="85%" />
+          {/* Router 2 */}
+          <circle cx="1050" cy="280" r="16" strokeWidth="1.5" stroke="var(--accent)" />
+          <path d="M 1040 280 H 1060 M 1050 270 V 290" stroke="var(--accent)" strokeWidth="1" />
+          <circle cx="1050" cy="280" r="6" fill="var(--accent)" className="animate-pulse" />
 
-          {/* Coordinate text tags in corners (HSE-IT schematic vibe) */}
-          <text x="6%" y="14%" fill="rgba(255,255,255,0.4)" fontSize="9" fontFamily="monospace" letterSpacing="1">SYS_MONITOR: ACTIVE</text>
-          <text x="6%" y="16%" fill="rgba(255,255,255,0.2)" fontSize="8" fontFamily="monospace">X: 892.41 // Y: 104.93</text>
-          <text x="88%" y="87%" fill="rgba(255,255,255,0.3)" fontSize="8" fontFamily="monospace">HSE_FLOW: SECURE</text>
+          {/* Switch 1 (with ports) */}
+          <rect x="350" y="305" width="60" height="30" rx="4" strokeWidth="1.5" fill="rgba(0,0,0,0.4)" />
+          <circle cx="362" cy="320" r="2" fill="var(--primary)" />
+          <circle cx="372" cy="320" r="2" fill="var(--primary)" />
+          <circle cx="382" cy="320" r="2" fill="var(--accent)" />
+          <circle cx="392" cy="320" r="2" fill="var(--primary)" />
+          <circle cx="402" cy="320" r="2" fill="red" className="animate-pulse" />
+
+          {/* Switch 2 */}
+          <rect x="950" y="605" width="60" height="30" rx="4" strokeWidth="1.5" fill="rgba(0,0,0,0.4)" stroke="var(--accent)" />
+          <circle cx="962" cy="620" r="2" fill="var(--accent)" />
+          <circle cx="972" cy="620" r="2" fill="var(--primary)" />
+          <circle cx="982" cy="620" r="2" fill="var(--accent)" />
+          <circle cx="992" cy="620" r="2" fill="var(--accent)" />
+
+          {/* Server Stacks */}
+          {/* Server 1 */}
+          <g transform="translate(550, 300)">
+            <rect x="0" y="0" width="70" height="15" rx="2" fill="rgba(0,0,0,0.5)" />
+            <rect x="0" y="18" width="70" height="15" rx="2" fill="rgba(0,0,0,0.5)" />
+            <rect x="0" y="36" width="70" height="15" rx="2" fill="rgba(0,0,0,0.5)" />
+            <circle cx="8" cy="7.5" r="1.5" fill="#10B981" className="animate-ping" style={{ animationDuration: '3s' }} />
+            <circle cx="8" cy="25.5" r="1.5" fill="#10B981" />
+            <circle cx="8" cy="43.5" r="1.5" fill="#10B981" />
+            <line x1="20" y1="7.5" x2="60" y2="7.5" stroke="var(--primary)" strokeWidth="0.5" />
+            <line x1="20" y1="25.5" x2="60" y2="25.5" stroke="var(--primary)" strokeWidth="0.5" />
+            <line x1="20" y1="43.5" x2="60" y2="43.5" stroke="var(--primary)" strokeWidth="0.5" />
+          </g>
+
+          {/* Server 2 */}
+          <g transform="translate(450, 480)">
+            <rect x="0" y="0" width="70" height="15" rx="2" fill="rgba(0,0,0,0.5)" stroke="var(--accent)" />
+            <rect x="0" y="18" width="70" height="15" rx="2" fill="rgba(0,0,0,0.5)" stroke="var(--accent)" />
+            <circle cx="8" cy="7.5" r="1.5" fill="var(--accent)" />
+            <circle cx="8" cy="25.5" r="1.5" fill="var(--accent)" className="animate-ping" style={{ animationDuration: '2s' }} />
+            <line x1="20" y1="7.5" x2="60" y2="7.5" stroke="var(--accent)" strokeWidth="0.5" />
+            <line x1="20" y1="25.5" x2="60" y2="25.5" stroke="var(--accent)" strokeWidth="0.5" />
+          </g>
         </g>
 
-        {/* Layer 3: Subtle Network Topology Nodes (IT Infrastructure Vibe) */}
-        <g className="opacity-[0.04]" stroke="var(--primary)" strokeWidth="0.75" fill="none">
-          {/* Main node connections (dashed lines) */}
-          <path d="M 150 180 L 300 120 L 250 320 Z M 250 320 L 450 250 M 300 120 L 450 250" strokeDasharray="4 4" />
-          <path d="M 800 600 L 950 520 L 900 720 Z M 900 720 L 1100 650 M 950 520 L 1100 650" strokeDasharray="4 4" />
+        {/* Layer 3: AI & Vibe Coding Layer */}
+        {/* Neural Pathways, Flow Diagrams, Logic Nodes, Code Streams */}
+        <g className="opacity-[0.038]">
+          {/* Neural pathways & Flow diagrams */}
+          <g stroke="rgba(255,255,255,0.2)" strokeWidth="0.75" fill="none">
+            {/* Logic Node / Decision Diamond */}
+            <polygon points="500,100 540,120 500,140 460,120" stroke="var(--primary)" />
+            <circle cx="500" cy="120" r="3" fill="var(--primary)" />
+            <path d="M 500 140 V 200 L 480 220" />
+            <path d="M 500 120 H 620 V 150" strokeDasharray="3 3" />
+            <rect x="585" y="150" width="70" height="25" rx="3" stroke="var(--accent)" fill="rgba(0,0,0,0.2)" />
+            <circle cx="620" cy="162" r="2.5" fill="var(--accent)" />
+            
+            {/* Logic Connectors */}
+            <path d="M 250 500 L 220 540 H 180" />
+            <circle cx="180" cy="540" r="3" fill="white" />
+            <path d="M 980 620 H 920 V 550" />
+          </g>
 
-          {/* Topology nodes */}
-          <circle cx="150" cy="180" r="4" fill="var(--primary)" className="animate-pulse" style={{ animationDuration: '3s' }} />
-          <circle cx="300" cy="120" r="4.5" fill="var(--primary)" className="animate-pulse" style={{ animationDuration: '4s' }} />
-          <circle cx="250" cy="320" r="5" fill="var(--primary)" className="animate-pulse" style={{ animationDuration: '5s' }} />
-          <circle cx="450" cy="250" r="4" fill="var(--primary)" />
-          
-          <circle cx="800" cy="600" r="4.5" fill="var(--primary)" className="animate-pulse" style={{ animationDuration: '4.5s' }} />
-          <circle cx="950" cy="520" r="4" fill="var(--primary)" className="animate-pulse" style={{ animationDuration: '3.5s' }} />
-          <circle cx="900" cy="720" r="5.5" fill="var(--primary)" className="animate-pulse" style={{ animationDuration: '6s' }} />
-          <circle cx="1100" cy="650" r="4" fill="var(--primary)" />
+          {/* Code streams, Digital particles and symbols */}
+          <g fill="rgba(255, 255, 255, 0.45)" fontSize="9.5" fontFamily="monospace" letterSpacing="0.5">
+            {/* Floating technical syntax tags */}
+            <text x="80%" y="12%" fill="var(--primary)" opacity="0.8">const AI = async () =&gt; &#123;</text>
+            <text x="81.5%" y="14%" opacity="0.5">  await safetyShield.verify();</text>
+            <text x="81.5%" y="16%" opacity="0.5">  return api.deploy("production");</text>
+            <text x="80%" y="18%" fill="var(--primary)" opacity="0.8">&#125;;</text>
+            
+            <text x="5%" y="45%" opacity="0.7">&lt;SafetyHSE /&gt; [STABLE]</text>
+            <text x="5%" y="47%" opacity="0.3">sys_score = 99.8% // API_OK</text>
+            
+            <text x="75%" y="55%" opacity="0.6">while (vibeCoding) &#123;</text>
+            <text x="76.5%" y="57.5%" opacity="0.4">  optimize(performance);</text>
+            <text x="75%" y="60%" opacity="0.6">&#125;</text>
+
+            <text x="45%" y="82%" fill="var(--accent)" opacity="0.6">&lt;LiquidGlass /&gt; [] &#123;&#125;</text>
+            <text x="45%" y="84%" opacity="0.3">const async API AI &lt;&gt;</text>
+
+            {/* Random scattered coding symbols */}
+            <text x="18%" y="28%" fill="var(--primary)" opacity="0.7">&lt;&gt;</text>
+            <text x="42%" y="15%" opacity="0.4">&#123;&#125;</text>
+            <text x="88%" y="38%" opacity="0.5">[]</text>
+            <text x="64%" y="48%" fill="var(--accent)" opacity="0.6">const</text>
+            <text x="32%" y="62%" opacity="0.5">async</text>
+            <text x="8%" y="78%" fill="var(--primary)" opacity="0.4">API</text>
+            <text x="87%" y="72%" fill="var(--accent)" opacity="0.8">AI</text>
+            <text x="58%" y="71%" opacity="0.3">&lt;/&gt;</text>
+          </g>
         </g>
 
-        {/* Layer 4: Soft Safety Engineering Geometry (HSE Vibe) */}
-        <g className="opacity-[0.04]" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="0.75" fill="none">
-          {/* Subtle hazard stripes pattern in top-right */}
-          <line x1="90%" y1="5%" x2="95%" y2="10%" />
-          <line x1="91%" y1="5%" x2="96%" y2="10%" />
-          <line x1="92%" y1="5%" x2="97%" y2="10%" />
-          <line x1="93%" y1="5%" x2="98%" y2="10%" />
-          <line x1="94%" y1="5%" x2="99%" y2="10%" />
-          
-          {/* Minimal HSE circular compliance shield in left center */}
-          <circle cx="8%" cy="50%" r="20" strokeDasharray="6 4" />
-          <circle cx="8%" cy="50%" r="12" />
-          <line x1="8%" y1="46%" x2="8%" y2="54%" />
-          <line x1="4%" y1="50%" x2="12%" y2="50%" />
+        {/* Layer 4: HSE (Health, Safety & Environment) Layer */}
+        {/* Safety Geometry, Hazard Triangles, Compliance Indicators, Inspection Markers */}
+        <g className="opacity-[0.045]" stroke="white" strokeWidth="0.8" fill="none">
+          {/* Construction planning / Grid guidelines */}
+          <line x1="0" y1="8%" x2="100%" y2="8%" strokeDasharray="10 20" />
+          <line x1="0" y1="92%" x2="100%" y2="92%" strokeDasharray="10 20" />
+          <line x1="8%" y1="0" x2="8%" y2="100%" strokeDasharray="5 15" />
+          <line x1="92%" y1="0" x2="92%" y2="100%" strokeDasharray="5 15" />
 
-          {/* Safety Warning Triangle in bottom-left */}
-          <polygon points="120,780 145,825 95,825" strokeWidth="0.8" />
-          <line x1="120" y1="795" x2="120" y2="812" strokeWidth="1.5" />
-          <circle cx="120" cy="819" r="1" fill="white" />
-        </g>
+          {/* Hazard Warning Triangles */}
+          {/* Triangle 1 */}
+          <g transform="translate(150, 420)">
+            <polygon points="15,0 30,26 0,26" stroke="var(--accent)" strokeWidth="1.2" />
+            <line x1="15" y1="9" x2="15" y2="18" stroke="var(--accent)" strokeWidth="1.5" />
+            <circle cx="15" cy="22" r="1" fill="var(--accent)" stroke="none" />
+          </g>
+          {/* Triangle 2 */}
+          <g transform="translate(860, 720)">
+            <polygon points="15,0 30,26 0,26" stroke="var(--primary)" strokeWidth="1.2" />
+            <line x1="15" y1="9" x2="15" y2="18" stroke="var(--primary)" strokeWidth="1.5" />
+            <circle cx="15" cy="22" r="1" fill="var(--primary)" stroke="none" />
+          </g>
 
-        {/* Layer 5: AI Neural-Flow Particles */}
-        <g className="opacity-[0.04]" fill="var(--primary)">
-          {/* Slowly drifting neural signal dots */}
-          <circle cx="200" cy="200" r="2.5" className="animate-drift-1" />
-          <circle cx="850" cy="550" r="2" className="animate-drift-2" />
-          <circle cx="600" cy="300" r="1.8" className="animate-drift-3" />
-          <circle cx="400" cy="700" r="2.2" className="animate-drift-4" />
-          <circle cx="1000" cy="250" r="1.5" className="animate-drift-5" />
-        </g>
+          {/* Compliance circular indicator shield */}
+          <g transform="translate(680, 220)">
+            <circle cx="20" cy="20" r="18" strokeDasharray="6 4" stroke="var(--primary)" />
+            <circle cx="20" cy="20" r="12" stroke="var(--primary)" />
+            <path d="M 20 10 V 30 M 10 20 H 30" stroke="var(--primary)" strokeWidth="0.5" />
+            <path d="M 15 20 L 19 24 L 26 16" stroke="var(--primary)" strokeWidth="1" />
+          </g>
 
-        {/* Layer 6: Vibe Coding & Code Flow */}
-        <g className="opacity-[0.038]" fill="none" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.5">
-          {/* Subtle floating brackets and terminal codes */}
-          <text x="75%" y="20%" fill="rgba(255,255,255,0.4)" fontSize="9" fontFamily="monospace" letterSpacing="0.5">const build = async (safety, tech) =&gt; &#123;</text>
-          <text x="77%" y="22%" fill="rgba(255,255,255,0.25)" fontSize="8" fontFamily="monospace">  return vibeCoding(safety + tech); // AI &amp; API</text>
-          <text x="75%" y="24%" fill="rgba(255,255,255,0.4)" fontSize="9" fontFamily="monospace">&#125;;</text>
+          {/* Inspection crosshairs / Target markers */}
+          <g transform="translate(940, 80)">
+            <circle cx="15" cy="15" r="12" />
+            <line x1="15" y1="0" x2="15" y2="30" strokeDasharray="3 3" />
+            <line x1="0" y1="15" x2="30" y2="15" strokeDasharray="3 3" />
+            <text x="22" y="10" fill="rgba(255,255,255,0.4)" fontSize="7" fontFamily="monospace" stroke="none">HSE_MARK: 02</text>
+          </g>
 
-          {/* Floating code symbols / tags */}
-          <text x="12%" y="75%" fill="rgba(255,255,255,0.3)" fontSize="9" fontFamily="monospace">&lt;HsePro /&gt; [SYSTEM_INIT]</text>
-          <text x="12%" y="77%" fill="rgba(255,255,255,0.15)" fontSize="7" fontFamily="monospace">STATUS: 200 OK // &lt;&gt; &#123;&#125; []</text>
-          
-          <text x="82%" y="45%" fill="rgba(255,255,255,0.3)" fontSize="9" fontFamily="monospace">await aiSystems.compile();</text>
-          <text x="82%" y="47%" fill="rgba(255,255,255,0.15)" fontSize="8" fontFamily="monospace">sys.safetyRank === "A+" // API_CONNECT</text>
-
-          {/* New subtle requested keywords */}
-          <text x="45%" y="12%" fill="rgba(255,255,255,0.25)" fontSize="10" fontFamily="monospace">&lt;&gt; const async API AI &#123;&#125; []</text>
-          <text x="35%" y="85%" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">const safetyGeometry = [] =&gt; async</text>
-          <text x="68%" y="72%" fill="rgba(255,255,255,0.3)" fontSize="8.5" fontFamily="monospace">API.deploy(&#123; mode: 'AI' &#125;) // &lt;&gt;</text>
-          <text x="5%" y="32%" fill="rgba(255,255,255,0.18)" fontSize="8" fontFamily="monospace">[] &#123;&#125; const async API AI &lt;&gt;</text>
-          <text x="88%" y="60%" fill="rgba(255,255,255,0.22)" fontSize="9" fontFamily="monospace">async () =&gt; &lt;SafetyConnect /&gt;</text>
+          {/* Diagonal Hazard safety warning stripes */}
+          <g transform="translate(40, 25)" stroke="var(--primary)" strokeWidth="1" opacity="0.7">
+            <line x1="0" y1="10" x2="10" y2="0" />
+            <line x1="10" y1="10" x2="20" y2="0" />
+            <line x1="20" y1="10" x2="30" y2="0" />
+            <line x1="30" y1="10" x2="40" y2="0" />
+            <line x1="40" y1="10" x2="50" y2="0" />
+          </g>
         </g>
       </svg>
 
-      {/* Adding custom keyframes dynamically */}
+      {/* Layer 5: Ambient Floating Glass Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[20%] left-[15%] w-12 h-16 rounded-lg bg-white/[0.01] border border-white/[0.05] backdrop-blur-[2px] shadow-sm animate-drift-slow-1" />
+        <div className="absolute top-[65%] right-[12%] w-16 h-20 rounded-xl bg-white/[0.01] border border-white/[0.04] backdrop-blur-[3px] shadow-sm animate-drift-slow-2" />
+        <div className="absolute bottom-[20%] left-[25%] w-10 h-10 rounded bg-white/[0.01] border border-white/[0.06] backdrop-blur-[1px] shadow-sm animate-drift-slow-3" />
+        <div className="absolute top-[10%] right-[30%] w-8 h-12 rounded-lg bg-white/[0.01] border border-white/[0.05] backdrop-blur-[2px] shadow-sm animate-drift-slow-4" />
+      </div>
+
+      {/* Dynamic Keyframes Injection */}
       <style>{`
-        @keyframes gridMove {
-          0% {
-            background-position: 0 0;
-          }
-          100% {
-            background-position: 80px 160px;
-          }
+        @keyframes gridScroll {
+          0% { background-position: 0 0; }
+          100% { background-position: 360px 720px; }
         }
-        .animate-drift-1 {
-          animation: drift1 20s infinite ease-in-out;
+        .animate-dash {
+          stroke-dasharray: 8;
+          animation: dashMove 20s linear infinite;
         }
-        .animate-drift-2 {
-          animation: drift2 25s infinite ease-in-out;
+        @keyframes dashMove {
+          to { stroke-dashoffset: -1000; }
         }
-        .animate-drift-3 {
-          animation: drift3 22s infinite ease-in-out;
+        .animate-drift-slow-1 {
+          animation: driftSlow1 28s infinite ease-in-out;
         }
-        .animate-drift-4 {
-          animation: drift4 28s infinite ease-in-out;
+        .animate-drift-slow-2 {
+          animation: driftSlow2 32s infinite ease-in-out;
         }
-        .animate-drift-5 {
-          animation: drift5 18s infinite ease-in-out;
+        .animate-drift-slow-3 {
+          animation: driftSlow3 24s infinite ease-in-out;
+        }
+        .animate-drift-slow-4 {
+          animation: driftSlow4 36s infinite ease-in-out;
         }
 
-        @keyframes drift1 {
-          0%, 100% { transform: translate(0, 0); opacity: 0.2; }
-          50% { transform: translate(60px, -40px); opacity: 1; }
+        @keyframes driftSlow1 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+          50% { transform: translate(40px, -60px) rotate(15deg); opacity: 0.8; }
         }
-        @keyframes drift2 {
-          0%, 100% { transform: translate(0, 0); opacity: 0.1; }
-          50% { transform: translate(-80px, 60px); opacity: 0.9; }
+        @keyframes driftSlow2 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.2; }
+          50% { transform: translate(-70px, 40px) rotate(-10deg); opacity: 0.7; }
         }
-        @keyframes drift3 {
-          0%, 100% { transform: translate(0, 0); opacity: 0.3; }
-          50% { transform: translate(50px, 70px); opacity: 1; }
+        @keyframes driftSlow3 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.4; }
+          50% { transform: translate(50px, 50px) rotate(20deg); opacity: 0.9; }
         }
-        @keyframes drift4 {
-          0%, 100% { transform: translate(0, 0); opacity: 0.2; }
-          50% { transform: translate(-50px, -50px); opacity: 0.8; }
-        }
-        @keyframes drift5 {
-          0%, 100% { transform: translate(0, 0); opacity: 0.1; }
-          50% { transform: translate(70px, 30px); opacity: 1; }
+        @keyframes driftSlow4 {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+          50% { transform: translate(-30px, -40px) rotate(-25deg); opacity: 0.7; }
         }
       `}</style>
     </div>

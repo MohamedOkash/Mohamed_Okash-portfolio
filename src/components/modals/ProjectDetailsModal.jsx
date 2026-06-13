@@ -1,14 +1,14 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, CheckCircle2, ShieldAlert, Cpu, HardHat, Code2, AlertTriangle, Lightbulb, BarChart3, Binary } from 'lucide-react';
+import { X, ExternalLink, CheckCircle2, ShieldAlert, Cpu, HardHat, Code2, AlertTriangle, Lightbulb, BarChart3, Binary, Wrench, TrendingUp } from 'lucide-react';
 import { useLanguageStore } from '../../store/languageStore';
 import { translations } from '../../data/translations';
 
 const GithubIcon = (props) => (
   <svg 
     viewBox="0 0 24 24" 
-    width="24" 
-    height="24" 
+    width="20" 
+    height="20" 
     stroke="currentColor" 
     strokeWidth="2" 
     fill="none" 
@@ -36,6 +36,13 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
   if (!project) return null;
 
+  // Multi-lingual fallbacks for problem/solution fields if they are missing in the schema
+  const problemContent = project.problem?.[lang] || project.problem?.en || project.description?.[lang] || project.description?.en || '';
+  const solutionContent = project.solution?.[lang] || project.solution?.en || project.architecture?.[lang] || project.architecture?.en || '';
+  const architectureContent = project.architecture?.[lang] || project.architecture?.en || '';
+  const challengesContent = project.challenges?.[lang] || project.challenges?.en || '';
+  const businessImpactContent = project.businessValue?.[lang] || project.businessValue?.en || '';
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -55,7 +62,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 30 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-            className="relative w-full max-w-5xl bg-[#0a0a0c]/90 border border-[var(--border)] rounded-[2rem] shadow-2xl p-6 md:p-10 z-10 overflow-hidden max-h-[90vh] overflow-y-auto liquid-glass"
+            className="relative w-full max-w-5xl bg-[#0a0a0c]/90 border border-white/[0.08] rounded-[2rem] shadow-2xl p-6 md:p-10 z-10 overflow-hidden max-h-[90vh] overflow-y-auto liquid-glass"
           >
             {/* Ambient inner blob */}
             <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[100px] opacity-20 pointer-events-none bg-[var(--primary)]" />
@@ -68,9 +75,9 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                 </div>
                 <div>
                   <span className="text-xs font-semibold tracking-wider text-[var(--primary)] uppercase opacity-80 block">
-                    {project.category[lang] || project.category.en}
+                    {project.category?.[lang] || project.category?.en || ''}
                   </span>
-                  <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+                  <h2 className="text-2xl md:text-3xl font-black tracking-tight text-white">
                     {project.title}
                   </h2>
                 </div>
@@ -84,92 +91,111 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
               </button>
             </div>
 
-            {/* Content Grid */}
+            {/* Content Grid (9 Case Study Sections) */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Left Column: Details & Case Study Narrative (2/3 width) */}
+              
+              {/* Left Column: Details & Narrative (2/3 width) */}
               <div className="lg:col-span-2 space-y-8">
-                {/* Description Overview */}
-                <div>
-                  <h4 className="text-xs uppercase tracking-widest font-bold opacity-40 mb-3">{t.overview}</h4>
-                  <p className="text-base md:text-lg opacity-85 leading-relaxed font-light">
-                    {project.description[lang] || project.description.en}
-                  </p>
-                </div>
-
-                {/* Problem & Challenges Section */}
-                <div className="pt-6 border-t border-white/[0.04] space-y-4">
-                  <div className="flex items-center gap-2">
-                    <AlertTriangle className="w-5 h-5 text-red-400" />
-                    <h4 className="text-sm uppercase tracking-wider font-extrabold text-red-400">
-                      {t.problemLabel} & {t.techChallenges}
-                    </h4>
+                
+                {/* 1. Problem Section */}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-red-400">
+                    <AlertTriangle className="w-5 h-5 shrink-0" />
+                    <h4 className="text-xs uppercase tracking-widest font-black">{t.problemLabel || 'Problem Context'}</h4>
                   </div>
-                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-red-500/5 border border-red-500/10 p-5 rounded-2xl">
-                    {project.challenges[lang] || project.challenges.en}
+                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-red-500/[0.02] border border-red-500/10 p-5 rounded-2xl">
+                    {problemContent}
                   </p>
                 </div>
 
-                {/* Solution & Architecture Section */}
-                <div className="pt-6 border-t border-white/[0.04] space-y-4">
-                  <div className="flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-green-400" />
-                    <h4 className="text-sm uppercase tracking-wider font-extrabold text-green-400">
-                      {t.solutionLabel} & {t.architecture}
-                    </h4>
+                {/* 2. Solution Section */}
+                <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                  <div className="flex items-center gap-2 text-green-400">
+                    <Lightbulb className="w-5 h-5 shrink-0" />
+                    <h4 className="text-xs uppercase tracking-widest font-black">{t.solutionLabel || 'Proposed Solution'}</h4>
                   </div>
-                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-green-500/5 border border-green-500/10 p-5 rounded-2xl">
-                    {project.architecture[lang] || project.architecture.en}
+                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-green-500/[0.02] border border-green-500/10 p-5 rounded-2xl">
+                    {solutionContent}
                   </p>
                 </div>
 
-                {/* Key Features List */}
-                <div className="pt-6 border-t border-white/[0.04] space-y-4">
-                  <h4 className="text-xs uppercase tracking-widest font-bold opacity-40">{t.keyFeatures}</h4>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {project.features.map((feature, idx) => (
-                      <li key={idx} className="flex gap-3 items-start text-sm">
-                        <CheckCircle2 className="w-5 h-5 text-[var(--primary)] shrink-0 mt-0.5" />
-                        <span className="opacity-80">
-                          {feature[lang] || feature.en}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Business Impact */}
-                {project.businessValue && (
-                  <div className="pt-6 border-t border-white/[0.04] space-y-4">
-                    <div className="flex items-center gap-2">
-                      <BarChart3 className="w-5 h-5 text-yellow-400" />
-                      <h4 className="text-xs uppercase tracking-widest font-bold opacity-40">{t.businessImpactLabel}</h4>
+                {/* 3. Architecture Section */}
+                {architectureContent && (
+                  <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                    <div className="flex items-center gap-2 text-[var(--primary)]">
+                      <Cpu className="w-5 h-5 shrink-0" />
+                      <h4 className="text-xs uppercase tracking-widest font-black">{t.architecture || 'System Architecture'}</h4>
                     </div>
-                    <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-yellow-500/5 border border-yellow-500/10 p-5 rounded-2xl">
-                      {project.businessValue[lang] || project.businessValue.en}
+                    <p className="text-sm md:text-base opacity-85 leading-relaxed font-light bg-white/[0.01] border border-white/[0.04] p-5 rounded-2xl">
+                      {architectureContent}
+                    </p>
+                  </div>
+                )}
+
+                {/* 4. Features Section */}
+                {project.features && project.features.length > 0 && (
+                  <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                    <h4 className="text-xs uppercase tracking-widest font-bold opacity-45">{t.keyFeatures || 'Key Features'}</h4>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {project.features.map((feature, idx) => (
+                        <li key={idx} className="flex gap-3 items-start text-sm">
+                          <CheckCircle2 className="w-5 h-5 text-[var(--primary)] shrink-0 mt-0.5" />
+                          <span className="opacity-80">
+                            {feature[lang] || feature.en}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* 5. Challenges Section */}
+                {challengesContent && (
+                  <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                    <div className="flex items-center gap-2 text-orange-400">
+                      <Wrench className="w-5 h-5 shrink-0" />
+                      <h4 className="text-xs uppercase tracking-widest font-black">{t.techChallenges || 'Engineering Challenges'}</h4>
+                    </div>
+                    <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-orange-500/[0.02] border border-orange-500/10 p-5 rounded-2xl">
+                      {challengesContent}
+                    </p>
+                  </div>
+                )}
+
+                {/* 6. Business Impact Section */}
+                {businessImpactContent && (
+                  <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                    <div className="flex items-center gap-2 text-yellow-400">
+                      <TrendingUp className="w-5 h-5 shrink-0" />
+                      <h4 className="text-xs uppercase tracking-widest font-black">{t.businessImpactLabel || 'Business Impact & Value'}</h4>
+                    </div>
+                    <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-yellow-500/[0.02] border border-yellow-500/10 p-5 rounded-2xl">
+                      {businessImpactContent}
                     </p>
                   </div>
                 )}
               </div>
 
-              {/* Right Column: Sidebar (1/3 width) */}
+              {/* Right Column: Sidebar / Tech Stack & Links (1/3 width) */}
               <div className="space-y-6 lg:border-l lg:border-white/[0.05] lg:pl-8">
-                {/* Tech Environment / Tech Stack */}
+                
+                {/* 7. Tech Stack Section */}
                 <div>
-                  <h4 className="text-xs uppercase tracking-widest font-bold opacity-40 mb-4">{t.techStack}</h4>
+                  <h4 className="text-xs uppercase tracking-widest font-bold opacity-45 mb-4">{t.techStack || 'Technology Stack'}</h4>
                   <div className="flex flex-wrap gap-2">
-                    {project.tech.map((techItem, index) => (
+                    {project.tech && project.tech.map((techItem, index) => (
                       <span 
                         key={index}
                         className="px-3 py-1.5 text-xs rounded-xl bg-white/[0.02] border border-white/[0.05] font-medium opacity-90 flex items-center gap-1.5"
                       >
-                        <Binary className="w-3.5 h-3.5 opacity-60" />
+                        <Binary className="w-3.5 h-3.5 opacity-60 text-[var(--primary)]" />
                         {techItem[lang] || techItem.en || techItem}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                {/* Project links: Live Demo & GitHub */}
+                {/* 8. Demo & 9. GitHub Links */}
                 <div className="pt-6 border-t border-white/[0.05] space-y-3">
                   {project.demoLink && (
                     <a
@@ -179,7 +205,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                       className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 shadow-lg cursor-pointer transition-all hover:-translate-y-0.5"
                     >
                       <ExternalLink className="w-4.5 h-4.5" />
-                      {t.demoLink}
+                      {t.demoLink || 'Live Demo'}
                     </a>
                   )}
 
@@ -191,11 +217,12 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                       className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm border border-white/20 hover:bg-white/5 transition-all cursor-pointer hover:-translate-y-0.5"
                     >
                       <GithubIcon className="w-4.5 h-4.5" />
-                      {t.sourceLink}
+                      {t.sourceLink || 'Source Code'}
                     </a>
                   )}
                 </div>
               </div>
+
             </div>
           </motion.div>
         </div>

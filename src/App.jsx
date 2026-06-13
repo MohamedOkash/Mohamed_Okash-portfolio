@@ -3,11 +3,15 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from './app/providers/HelmetProvider';
 import { AppRouter } from './app/router';
 
+import { LazyMotion, domAnimation } from 'framer-motion';
+
 function App() {
   return (
     <HelmetProvider>
       <BrowserRouter>
-        <AppRouter />
+        <LazyMotion features={domAnimation}>
+          <AppRouter />
+        </LazyMotion>
       </BrowserRouter>
     </HelmetProvider>
   );

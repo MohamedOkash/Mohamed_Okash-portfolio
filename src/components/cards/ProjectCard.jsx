@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SpotlightCard } from '../ui/SpotlightCard';
 import { useLanguageStore } from '../../store/languageStore';
-import { ArrowUpRight, Code } from 'lucide-react';
+import { ArrowUpRight, Award, Layers, Activity } from 'lucide-react';
+import { translations } from '../../data/translations';
 
 const GithubIcon = (props) => (
   <svg 
     viewBox="0 0 24 24" 
-    width="24" 
-    height="24" 
+    width="18" 
+    height="18" 
     stroke="currentColor" 
     strokeWidth="2" 
     fill="none" 
@@ -22,83 +23,150 @@ const GithubIcon = (props) => (
 
 export const ProjectCard = ({ project, onClick }) => {
   const { lang } = useLanguageStore();
+  const t = translations[lang] || translations.ar;
 
-  const category = project.category[lang] || project.category.en;
-  const description = project.description[lang] || project.description.en;
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    // Calculate tilt angles (max 8 degrees for a premium organic feel)
+    setTilt({
+      x: -y / (rect.height / 2) * 8,
+      y: x / (rect.width / 2) * 8
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
+  const category = project.category?.[lang] || project.category?.en || '';
+  const description = project.description?.[lang] || project.description?.en || '';
+
+  const getStatusLabel = (status) => {
+    if (!status) return '';
+    return t.cms?.[status] || status.replace('-', ' ');
+  };
+
+  const getTypeLabel = (type) => {
+    if (!type) return '';
+    return t.cms?.[type] || type;
+  };
 
   return (
-    <SpotlightCard 
-      onClick={onClick}
-      className="flex flex-col h-full hover:border-[var(--primary)]/30 transition-all duration-300"
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${tilt.x !== 0 ? -6 : 0}px)`,
+        transition: 'transform 0.15s ease-out, box-shadow 0.3s ease',
+      }}
+      className="h-full rounded-3xl"
     >
-      <div className="flex-1">
-        {/* Category badge */}
-        <span className="text-[10px] md:text-xs font-semibold tracking-wider text-[var(--primary)] uppercase opacity-85 block mb-3">
-          {category}
-        </span>
+      <SpotlightCard 
+        onClick={onClick}
+        className="flex flex-col h-full bg-[#0d0d11]/85 border-white/[0.08] hover:border-[var(--primary)]/40 transition-all duration-300 shadow-2xl backdrop-blur-xl relative overflow-hidden group rounded-3xl"
+      >
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--primary)] rounded-full blur-[60px] opacity-10 pointer-events-none group-hover:opacity-25 transition-opacity" />
 
-        {/* Title */}
-        <h3 className="text-xl md:text-2xl font-bold mb-3 tracking-tight group-hover:text-[var(--primary)]">
-          {project.title}
-        </h3>
-
-        {/* Short description */}
-        <p className="text-sm md:text-base opacity-70 leading-relaxed mb-6 line-clamp-3">
-          {description}
-        </p>
-      </div>
-
-      <div>
-        {/* Tech stack tags */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.tech.slice(0, 4).map((techItem, index) => (
-            <span 
-              key={index}
-              className="px-2.5 py-1 text-[10px] md:text-xs rounded-lg bg-white/[0.03] border border-white/[0.05] opacity-80"
-            >
-              {techItem[lang] || techItem.en || techItem}
-            </span>
-          ))}
-          {project.tech.length > 4 && (
-            <span className="px-2.5 py-1 text-[10px] md:text-xs rounded-lg bg-white/[0.01] border border-white/[0.02] opacity-50">
-              +{project.tech.length - 4}
-            </span>
-          )}
-        </div>
-
-        {/* Footer links */}
-        <div className="flex justify-between items-center pt-4 border-t border-white/[0.05]">
-          <span className="text-xs font-bold text-[var(--primary)] flex items-center gap-1 group-hover:underline">
-            {lang === 'ar' ? 'استكشف المنتج' : lang === 'ur' ? 'تفصیلات دیکھیں' : 'Explore Product'}
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </span>
-
-          <div className="flex gap-3 text-sm opacity-60">
-            {project.githubLink && (
-              <a 
-                href={project.githubLink}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="hover:text-[var(--primary)] transition-colors p-1"
-              >
-                <GithubIcon className="w-4.5 h-4.5" />
-              </a>
+        <div className="flex-1 p-6">
+          {/* Badge toolbar */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {project.featured && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 border border-amber-500/30 text-amber-400 uppercase tracking-wider">
+                <Award className="w-3 h-3" />
+                {t.cms?.featured || 'Featured'}
+              </span>
             )}
-            {project.demoLink && (
-              <a 
-                href={project.demoLink}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="hover:text-[var(--primary)] transition-colors p-1"
-              >
-                <ArrowUpRight className="w-4.5 h-4.5" />
-              </a>
+            {project.projectType && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-purple-500/10 border border-purple-500/30 text-purple-400 uppercase tracking-wider">
+                <Layers className="w-3 h-3" />
+                {getTypeLabel(project.projectType)}
+              </span>
+            )}
+            {project.status && (
+              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
+                project.status === 'completed'
+                  ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
+                  : 'bg-blue-500/10 border border-blue-500/30 text-blue-400'
+              }`}>
+                <Activity className="w-3 h-3" />
+                {getStatusLabel(project.status)}
+              </span>
             )}
           </div>
+
+          {/* Category */}
+          <span className="text-[10px] md:text-xs font-bold tracking-wider text-[var(--primary)] uppercase opacity-85 block mb-2">
+            {category}
+          </span>
+
+          {/* Title */}
+          <h3 className="text-xl md:text-2xl font-black mb-3 tracking-tight group-hover:text-[var(--primary)] transition-colors">
+            {project.title}
+          </h3>
+
+          {/* Description */}
+          <p className="text-sm md:text-base opacity-70 leading-relaxed mb-6 line-clamp-3 font-light">
+            {description}
+          </p>
         </div>
-      </div>
-    </SpotlightCard>
+
+        <div className="px-6 pb-6">
+          {/* Tech tags */}
+          <div className="flex flex-wrap gap-1.5 mb-6">
+            {project.tech.slice(0, 4).map((techItem, index) => (
+              <span 
+                key={index}
+                className="px-2.5 py-1 text-[10px] md:text-xs rounded-xl bg-white/[0.03] border border-white/[0.06] opacity-90 font-medium"
+              >
+                {techItem[lang] || techItem.en || techItem}
+              </span>
+            ))}
+            {project.tech.length > 4 && (
+              <span className="px-2.5 py-1 text-[10px] md:text-xs rounded-xl bg-white/[0.01] border border-white/[0.02] opacity-50 font-medium">
+                +{project.tech.length - 4}
+              </span>
+            )}
+          </div>
+
+          {/* Footer controls */}
+          <div className="flex justify-between items-center pt-4 border-t border-white/[0.06]">
+            <span className="text-xs font-bold text-[var(--primary)] flex items-center gap-1 group-hover:underline">
+              {lang === 'ar' ? 'استكشف المنتج' : lang === 'ur' ? 'تفصیلات دیکھیں' : 'Explore Product'}
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </span>
+
+            <div className="flex gap-3 text-sm opacity-60">
+              {project.githubLink && (
+                <a 
+                  href={project.githubLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="hover:text-[var(--primary)] transition-colors p-1"
+                >
+                  <GithubIcon className="w-4.5 h-4.5" />
+                </a>
+              )}
+              {project.demoLink && (
+                <a 
+                  href={project.demoLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="hover:text-[var(--primary)] transition-colors p-1"
+                >
+                  <ArrowUpRight className="w-4.5 h-4.5" />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </SpotlightCard>
+    </div>
   );
 };

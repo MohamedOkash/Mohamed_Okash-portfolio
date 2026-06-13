@@ -1,9 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
 import { ArrowDown, Mail, ArrowUpRight } from 'lucide-react';
+
+const Counter = ({ target, duration = 1200 }) => {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const end = parseInt(target, 10);
+    if (isNaN(end) || start === end) {
+      setCount(target);
+      return;
+    }
+    const increment = end / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+  return <>{count}</>;
+};
 
 export const Hero = () => {
   const { lang } = useLanguageStore();
@@ -15,8 +39,10 @@ export const Hero = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const heroNameVal = data?.brandIdentity?.heroName?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
+
   return (
-    <section id="hero" className="min-h-[85vh] flex flex-col justify-center items-center text-center relative px-6 py-16 overflow-hidden">
+    <section id="hero" className="min-h-[75vh] flex flex-col justify-center items-center text-center relative px-6 py-12 overflow-hidden">
       {/* Background elegant gradient blobs */}
       <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] rounded-full blur-[120px] opacity-25 pointer-events-none bg-[var(--blob1)]" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full blur-[140px] opacity-20 pointer-events-none bg-[var(--blob2)]" />
@@ -32,7 +58,7 @@ export const Hero = () => {
         className="inline-flex items-center gap-2.5 px-4.5 py-1.5 rounded-full border border-[var(--border)] bg-white/[0.02] text-xs font-semibold tracking-wider uppercase mb-5 shadow-sm backdrop-blur-md"
       >
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-        <span className="opacity-95 text-white">{data?.translations?.[lang]?.name || t.name}</span>
+        <span className="opacity-95 text-white">{heroNameVal}</span>
         <span className="opacity-30 select-none">•</span>
         <span className="opacity-60">{data?.translations?.[lang]?.available || t.available}</span>
       </motion.div>
@@ -42,7 +68,7 @@ export const Hero = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tight mb-3 leading-[1.05]"
+        className="text-5xl sm:text-7xl md:text-8xl font-black tracking-tight mb-3 leading-[1.05]"
       >
         <span className="opacity-95 select-none block">
           {data?.translations?.[lang]?.heroTitle1 || t.heroTitle1}
@@ -57,7 +83,7 @@ export const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="text-sm sm:text-base md:text-lg opacity-60 max-w-2xl leading-relaxed mb-5 px-4 font-light"
+        className="text-sm sm:text-base md:text-lg opacity-60 max-w-2xl leading-relaxed mb-6 px-4 font-light"
       >
         {data?.translations?.[lang]?.tagline || t.tagline}
       </motion.p>
@@ -67,30 +93,30 @@ export const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className="grid grid-cols-3 gap-6 sm:gap-12 md:gap-16 max-w-2xl mx-auto mb-6 text-center z-20"
+        className="grid grid-cols-3 gap-6 sm:gap-12 md:gap-16 max-w-2xl mx-auto mb-7 text-center z-20"
       >
         <div className="flex flex-col items-center">
-          <span className="text-2xl sm:text-3xl font-black text-white leading-tight">
-            {(data?.hero?.statistics?.projectsBuilt && data.hero.statistics.projectsBuilt >= 8) ? data.hero.statistics.projectsBuilt : 8}+
+          <span className="text-2xl sm:text-3xl font-black text-white leading-tight font-mono">
+            <Counter target={data?.hero?.statistics?.projectsBuilt || 8} />+
           </span>
-          <span className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
-            {t.cms?.projectsBuiltLabel || 'Projects'}
+          <span className="text-[9px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
+            {lang === 'ar' ? 'مشاريع منفذة' : lang === 'ur' ? 'منصوبے' : 'Projects Built'}
           </span>
         </div>
         <div className="flex flex-col items-center border-x border-white/[0.08] px-4 sm:px-8 md:px-12">
-          <span className="text-2xl sm:text-3xl font-black text-white leading-tight">
-            4
+          <span className="text-2xl sm:text-3xl font-black text-white leading-tight font-mono">
+            <Counter target={4} />
           </span>
-          <span className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
-            {t.cms?.industriesCountLabel || 'Industries'}
+          <span className="text-[9px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
+            {lang === 'ar' ? 'قطاعات صناعية' : lang === 'ur' ? 'صنعتیں' : 'Industries'}
           </span>
         </div>
         <div className="flex flex-col items-center">
-          <span className="text-2xl sm:text-3xl font-black text-white leading-tight">
-            {(data?.hero?.statistics?.experienceYears && data.hero.statistics.experienceYears >= 7) ? data.hero.statistics.experienceYears : 7}+
+          <span className="text-2xl sm:text-3xl font-black text-white leading-tight font-mono">
+            <Counter target={data?.hero?.statistics?.experienceYears || 7} />+
           </span>
-          <span className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
-            {t.cms?.yearsExpLabel || 'Years Experience'}
+          <span className="text-[9px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
+            {lang === 'ar' ? 'سنوات الخبرة' : lang === 'ur' ? 'سال کا تجربہ' : 'Years Exp'}
           </span>
         </div>
       </motion.div>
@@ -104,7 +130,7 @@ export const Hero = () => {
       >
         <button
           onClick={() => handleScrollTo('projects')}
-          className="px-8 py-4 rounded-xl font-bold text-sm bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-95 shadow-xl transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
+          className="px-8 py-3.5 rounded-xl font-bold text-sm bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-95 shadow-xl transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
         >
           {data?.translations?.[lang]?.viewProjects || t.viewProjects}
           <ArrowUpRight className="w-4 h-4" />
@@ -112,7 +138,7 @@ export const Hero = () => {
 
         <button
           onClick={() => handleScrollTo('contact')}
-          className="px-8 py-4 rounded-xl font-bold text-sm border border-[var(--border)] bg-white/[0.01] hover:bg-white/[0.06] transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
+          className="px-8 py-3.5 rounded-xl font-bold text-sm border border-[var(--border)] bg-white/[0.01] hover:bg-white/[0.06] transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
         >
           <Mail className="w-4 h-4" />
           {data?.translations?.[lang]?.contactMe || t.contactMe}
@@ -124,7 +150,7 @@ export const Hero = () => {
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
         onClick={() => handleScrollTo('why-me')}
-        className="absolute bottom-8 cursor-pointer opacity-45 hover:opacity-100 transition-opacity"
+        className="absolute bottom-6 cursor-pointer opacity-45 hover:opacity-100 transition-opacity"
       >
         <ArrowDown className="w-5 h-5 text-[var(--primary)]" />
       </motion.div>

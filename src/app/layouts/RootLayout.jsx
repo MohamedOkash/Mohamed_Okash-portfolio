@@ -28,11 +28,14 @@ export const RootLayout = ({ children }) => {
     '--heading-weight-setting': themeSettings.headingWeight || '800',
     '--body-weight-setting': themeSettings.bodyWeight || '300',
     '--font-color-setting': themeSettings.fontColor || '#fafafa',
-    '--heading-color-setting': themeSettings.headingColor || '#fafafa'
+    '--heading-color-setting': themeSettings.headingColor || '#fafafa',
+    '--letter-spacing-setting': themeSettings.letterSpacing || 'normal',
+    '--line-height-setting': themeSettings.lineHeight || '1.6',
+    '--paragraph-width-setting': themeSettings.paragraphWidth || '65ch'
   } : {};
 
   const blobOpacity = themeSettings?.bgIntensity !== undefined ? themeSettings.bgIntensity : 0.45;
-  const copyrightName = data?.general?.siteName?.[lang] || data?.general?.logoText?.[lang] || t.name;
+  const copyrightName = data?.brandIdentity?.footerText?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
   const footerTextVal = data?.translations?.[lang]?.footerText || t.footerText;
 
   return (

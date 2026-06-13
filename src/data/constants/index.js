@@ -1,4 +1,16 @@
 export const DEFAULT_PORTFOLIO_DATA = {
+  brandIdentity: {
+    brandName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+    shortName: { ar: "عكاش", en: "Okash", ur: "عکاش" },
+    subtitle: { ar: "مهندس سلامة وبنية تحتية IT", en: "HSE & IT Infrastructure Engineer", ur: "ایچ ایس ای اور آئی تي انفراسٹرکچر انجینئر" },
+    logoText: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+    heroName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+    footerText: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "Mohamed Okash" },
+    preloaderText: { ar: "عكاش", en: "OKASH", ur: "عکاش" },
+    browserTitle: { ar: "محمد عكاش | معرض الأعمال", en: "Mohamed Okash | Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
+    seoTitle: { ar: "محمد عكاش | معرض الأعمال الاحترافي", en: "Mohamed Okash | Professional Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
+    seoDescription: { ar: "الموقع الشخصي لمحمد عكاش - مهندس بنية تحتية IT وأمن وسلامة مهنية HSE", en: "Personal portfolio of Mohamed Okash - IT Infrastructure & HSE Safety Engineer", ur: "محمد عکاش کا ذاتی پورٹ فولیو - آئی تي انفراسٹرکچر اور ایچ ایس ای سيفتي انجینئر" }
+  },
   general: {
     siteName: {
       ar: "محمد عكاش",
@@ -593,7 +605,10 @@ export const DEFAULT_PORTFOLIO_DATA = {
     headingWeight: "800",
     bodyWeight: "300",
     fontColor: "#fafafa",
-    headingColor: "#fafafa"
+    headingColor: "#fafafa",
+    letterSpacing: "0px",
+    lineHeight: "1.6",
+    paragraphWidth: "65ch"
   },
   languageSettings: {
     languages: ["ar", "en", "ur"]
