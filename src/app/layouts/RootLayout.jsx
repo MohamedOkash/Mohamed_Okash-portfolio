@@ -3,6 +3,7 @@ import { Navbar } from '../../components/navigation/Navbar';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
+import { CinematicBackground } from '../../components/ui/CinematicBackground';
 
 export const RootLayout = ({ children }) => {
   const { lang } = useLanguageStore();
@@ -12,14 +13,22 @@ export const RootLayout = ({ children }) => {
 
   const themeSettings = data?.themeSettings;
   const themeStyles = themeSettings ? {
-    '--primary': themeSettings.accentColor,
-    '--accent': themeSettings.accentColor,
+    '--primary': themeSettings.accentColor || '#ffffff',
+    '--accent': themeSettings.accentColor || '#ffffff',
     '--accent-text': '#000000',
-    '--glass-opacity': themeSettings.glassOpacity,
-    '--border-opacity': themeSettings.borderOpacity,
-    '--blur-strength': `${themeSettings.blurStrength}px`,
-    '--glow-intensity': themeSettings.glowIntensity,
-    '--bg-intensity': themeSettings.bgIntensity
+    '--glass-opacity': themeSettings.glassOpacity !== undefined ? themeSettings.glassOpacity : 0.03,
+    '--border-opacity': themeSettings.borderOpacity !== undefined ? themeSettings.borderOpacity : 0.06,
+    '--blur-strength': `${themeSettings.blurStrength !== undefined ? themeSettings.blurStrength : 16}px`,
+    '--glow-intensity': themeSettings.glowIntensity !== undefined ? themeSettings.glowIntensity : 0.2,
+    '--bg-intensity': themeSettings.bgIntensity !== undefined ? themeSettings.bgIntensity : 0.1,
+    
+    // Typography controls
+    '--font-family-setting': themeSettings.fontFamily ? `'${themeSettings.fontFamily}', var(--font-sans)` : 'var(--font-sans)',
+    '--font-scale-setting': themeSettings.fontScale !== undefined ? themeSettings.fontScale : 1.0,
+    '--heading-weight-setting': themeSettings.headingWeight || '800',
+    '--body-weight-setting': themeSettings.bodyWeight || '300',
+    '--font-color-setting': themeSettings.fontColor || '#fafafa',
+    '--heading-color-setting': themeSettings.headingColor || '#fafafa'
   } : {};
 
   const blobOpacity = themeSettings?.bgIntensity !== undefined ? themeSettings.bgIntensity : 0.45;
@@ -28,6 +37,7 @@ export const RootLayout = ({ children }) => {
 
   return (
     <div 
+      dir={isRtl ? 'rtl' : 'ltr'}
       className="relative min-h-screen overflow-x-hidden selection:bg-[var(--primary)] selection:text-[var(--accent-text)]"
       style={themeStyles}
     >
@@ -37,6 +47,9 @@ export const RootLayout = ({ children }) => {
         <div className="absolute top-[30%] right-[-10%] w-[45vw] h-[45vw] rounded-full blur-[120px] md:blur-[160px] mix-blend-screen animate-float-2 bg-[var(--blob2)]" style={{ opacity: blobOpacity }} />
         <div className="absolute bottom-[-10%] left-[20%] w-[40vw] h-[40vw] rounded-full blur-[120px] md:blur-[160px] mix-blend-screen animate-float-3 bg-[var(--blob3)]" style={{ opacity: blobOpacity }} />
       </div>
+
+      {/* Cinematic Advanced Background Layer */}
+      <CinematicBackground />
 
       {/* Sticky Top Navigation */}
       <Navbar />

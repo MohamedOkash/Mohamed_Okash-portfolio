@@ -27,12 +27,14 @@ const AdminInput = ({ label, value, onChange, type="text", textarea=false, dir="
 );
 
 const AdminMultiLangInput = ({ label, valueObj = { ar: '', en: '', ur: '' }, onChangeKey, textarea=false }) => {
+  const { lang } = useLanguageStore();
+  const t = translations[lang] || translations.ar;
   return (
     <div className="mb-5 p-4 rounded-xl border border-zinc-800 bg-zinc-900/20 space-y-3">
       {label && <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 font-extrabold">{label}</label>}
       <div className="space-y-3 pl-3 border-l border-zinc-800">
         <div>
-          <span className="text-[10px] text-zinc-500 font-bold uppercase block mb-1">العربية (Arabic)</span>
+          <span className="text-[10px] text-zinc-500 font-bold uppercase block mb-1">{t.cms?.arabic || 'العربية (Arabic)'}</span>
           {textarea ? (
             <textarea rows="3" dir="rtl" value={valueObj.ar || ""} onChange={(e) => onChangeKey('ar', e.target.value)} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
           ) : (
@@ -40,7 +42,7 @@ const AdminMultiLangInput = ({ label, valueObj = { ar: '', en: '', ur: '' }, onC
           )}
         </div>
         <div>
-          <span className="text-[10px] text-zinc-500 font-bold uppercase block mb-1">English</span>
+          <span className="text-[10px] text-zinc-500 font-bold uppercase block mb-1">{t.cms?.english || 'English'}</span>
           {textarea ? (
             <textarea rows="3" dir="ltr" value={valueObj.en || ""} onChange={(e) => onChangeKey('en', e.target.value)} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
           ) : (
@@ -48,7 +50,7 @@ const AdminMultiLangInput = ({ label, valueObj = { ar: '', en: '', ur: '' }, onC
           )}
         </div>
         <div>
-          <span className="text-[10px] text-zinc-500 font-bold uppercase block mb-1">اردو (Urdu)</span>
+          <span className="text-[10px] text-zinc-500 font-bold uppercase block mb-1">{t.cms?.urdu || 'اردو (Urdu)'}</span>
           {textarea ? (
             <textarea rows="3" dir="rtl" value={valueObj.ur || ""} onChange={(e) => onChangeKey('ur', e.target.value)} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
           ) : (
@@ -64,8 +66,9 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const { logout, user } = useAuthStore();
   const { data, loadPortfolio, savePortfolio } = usePortfolioStore();
-  const { lang } = useLanguageStore();
+  const { lang, setLanguage } = useLanguageStore();
   const t = translations[lang] || translations.ar;
+  const isRtl = t.dir === 'rtl';
 
   // Local state for full CMS form
   const [formData, setFormData] = useState(null);
@@ -99,13 +102,13 @@ export default function AdminDashboard() {
     const handleBeforeUnload = (e) => {
       if (isDirty) {
         e.preventDefault();
-        e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        e.returnValue = (t.cms?.unsavedTitle || 'Unsaved Changes') + '. ' + (t.cms?.unsavedSubtitle || 'Press Save Changes to publish.');
         return e.returnValue;
       }
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [isDirty]);
+  }, [isDirty, t]);
 
   const showStatus = (type, text) => {
     setStatusMsg({ type, text });
@@ -115,7 +118,7 @@ export default function AdminDashboard() {
   // Safe navigation alert
   const handleTabChange = (newTab) => {
     if (isDirty) {
-      if (!window.confirm('You have unsaved changes in this tab. Switch tabs anyway?')) {
+      if (!window.confirm(t.cms?.tabDirtyConfirm || 'You have unsaved changes in this tab. Switch tabs anyway?')) {
         return;
       }
     }
@@ -146,9 +149,9 @@ export default function AdminDashboard() {
       validatePortfolioData(updated);
       // Save to Firestore
       await savePortfolio(updated);
-      showStatus('success', `Saved successfully! Snapshot version #${currentVersion} created.`);
+      showStatus('success', (t.cms?.saveSuccess || 'Saved successfully! Snapshot version #{version} created.').replace('{version}', currentVersion));
     } catch (err) {
-      showStatus('error', `Save Error: ${err.message}`);
+      showStatus('error', (t.cms?.saveError || 'Save Error: {error}').replace('{error}', err.message));
     }
     setIsSaving(false);
   };
@@ -156,12 +159,14 @@ export default function AdminDashboard() {
   // Safety Rollback
   const handleRollback = () => {
     if (!data?.settings?.backup) {
-      showStatus('error', 'No backup snapshot found in cloud database.');
+      showStatus('error', t.cms?.noBackupCloud || 'No backup snapshot found in cloud database.');
       return;
     }
-    if (window.confirm(`Are you sure you want to restore the previous snapshot? (Version #${data.settings.backup.settings?.version || 'N/A'}, saved at ${new Date(data.settings.backup.settings?.lastSavedAt).toLocaleString()})`)) {
+    const backupVer = data.settings.backup.settings?.version || 'N/A';
+    const backupTime = new Date(data.settings.backup.settings?.lastSavedAt).toLocaleString();
+    if (window.confirm((t.cms?.restoreConfirm || 'Are you sure you want to restore?').replace('{version}', backupVer).replace('{time}', backupTime))) {
       setFormData(JSON.parse(JSON.stringify(data.settings.backup)));
-      showStatus('success', 'Restored previous snapshot in editor. Press "Save Changes" to publish.');
+      showStatus('success', t.cms?.restoreSuccess || 'Restored previous snapshot in editor. Press "Save Changes" to publish.');
     }
   };
 
@@ -175,7 +180,7 @@ export default function AdminDashboard() {
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
-    showStatus('success', 'Backup file exported successfully.');
+    showStatus('success', (t.cms?.exportBackup || 'Backup file exported successfully.') + ' ' + (t.cms?.savedSuccess || ''));
   };
 
   // Import JSON
@@ -188,13 +193,13 @@ export default function AdminDashboard() {
       try {
         const parsed = JSON.parse(event.target.result);
         if (!parsed.general || !parsed.hero || !parsed.about || !parsed.projects || !parsed.skills || !parsed.experience) {
-          showStatus('error', 'Invalid JSON file: Missing core portfolio properties.');
+          showStatus('error', t.cms?.invalidJson || 'Invalid JSON file: Missing core portfolio properties.');
           return;
         }
         setFormData(parsed);
-        showStatus('success', 'JSON backup parsed successfully into editor. Press "Save Changes" to apply.');
+        showStatus('success', t.cms?.importSuccess || 'JSON backup parsed successfully into editor. Press "Save Changes" to apply.');
       } catch (err) {
-        showStatus('error', `Failed to parse backup JSON file: ${err.message}`);
+        showStatus('error', (t.cms?.importError || 'Failed to parse backup JSON file: {error}').replace('{error}', err.message));
       }
     };
     fileReader.readAsText(file);
@@ -313,41 +318,41 @@ export default function AdminDashboard() {
   // Tab 1: General Settings
   const renderGeneralTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">General Settings</h3>
-      <AdminMultiLangInput label="Site Name (Title)" valueObj={formData.general.siteName} onChangeKey={(langKey, val) => {
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.tabGeneral}</h3>
+      <AdminMultiLangInput label={t.cms.siteName} valueObj={formData.general.siteName} onChangeKey={(langKey, val) => {
         const updated = { ...formData };
         updated.general.siteName[langKey] = val;
         setFormData(updated);
       }} />
-      <AdminMultiLangInput label="Logo Text" valueObj={formData.general.logoText} onChangeKey={(langKey, val) => {
+      <AdminMultiLangInput label={t.cms.logoText} valueObj={formData.general.logoText} onChangeKey={(langKey, val) => {
         const updated = { ...formData };
         updated.general.logoText[langKey] = val;
         setFormData(updated);
       }} />
-      <AdminMultiLangInput label="Brand / Role Subtitle" valueObj={formData.general.brandIdentity} onChangeKey={(langKey, val) => {
+      <AdminMultiLangInput label={t.cms.brandSubtitle} valueObj={formData.general.brandIdentity} onChangeKey={(langKey, val) => {
         const updated = { ...formData };
         updated.general.brandIdentity[langKey] = val;
         setFormData(updated);
       }} />
-      <AdminMultiLangInput label="SEO Description" textarea valueObj={formData.general.seoDescription} onChangeKey={(langKey, val) => {
+      <AdminMultiLangInput label={t.cms.seoDescription} textarea valueObj={formData.general.seoDescription} onChangeKey={(langKey, val) => {
         const updated = { ...formData };
         updated.general.seoDescription[langKey] = val;
         setFormData(updated);
       }} />
 
       <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">Social & Contact Links</h4>
-        <AdminInput label="GitHub URL" value={formData.general.socialLinks.github} onChange={(e) => {
+        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.socialLinks}</h4>
+        <AdminInput label={t.cms.githubUrl} value={formData.general.socialLinks.github} onChange={(e) => {
           const updated = { ...formData };
           updated.general.socialLinks.github = e.target.value;
           setFormData(updated);
         }} />
-        <AdminInput label="LinkedIn URL" value={formData.general.socialLinks.linkedin} onChange={(e) => {
+        <AdminInput label={t.cms.linkedinUrl} value={formData.general.socialLinks.linkedin} onChange={(e) => {
           const updated = { ...formData };
           updated.general.socialLinks.linkedin = e.target.value;
           setFormData(updated);
         }} />
-        <AdminInput label="WhatsApp Number (Digits with Country Code)" value={formData.general.socialLinks.whatsapp} onChange={(e) => {
+        <AdminInput label={t.cms.whatsappNumber} value={formData.general.socialLinks.whatsapp} onChange={(e) => {
           const updated = { ...formData };
           updated.general.socialLinks.whatsapp = e.target.value.replace(/\D/g, '');
           setFormData(updated);
@@ -359,12 +364,12 @@ export default function AdminDashboard() {
   // Tab 2: Website Structure
   const renderStructureTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">Website Structure</h3>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.tabStructure}</h3>
       
       <div className="flex items-center justify-between p-4 rounded-xl border border-zinc-800 bg-zinc-900/10">
         <div>
-          <h5 className="font-bold text-sm text-white mb-0.5">Show Top Navbar</h5>
-          <p className="text-xs text-zinc-500">Toggle the visibility of the header navigation bar</p>
+          <h5 className="font-bold text-sm text-white mb-0.5">{t.cms.showNavbar}</h5>
+          <p className="text-xs text-zinc-500">{t.cms.showNavbarDesc}</p>
         </div>
         <button 
           onClick={() => {
@@ -383,8 +388,8 @@ export default function AdminDashboard() {
       </div>
 
       <div className="space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">Homepage Sections (Visibility & Layout Order)</h4>
-        <p className="text-xs text-zinc-500">Drag or use Up/Down controls to change how sections flow on the homepage.</p>
+        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.homepageSections}</h4>
+        <p className="text-xs text-zinc-500">{t.cms.sectionsDesc}</p>
         
         <div className="space-y-3">
           {formData.websiteStructure.sections.map((sect, idx) => (
@@ -418,7 +423,7 @@ export default function AdminDashboard() {
                 </button>
                 <div>
                   <h5 className="font-bold text-sm text-white capitalize">{sect.id.replace('-', ' ')}</h5>
-                  <p className="text-[10px] text-zinc-500">Slug: #{sect.id}</p>
+                  <p className="text-[10px] text-zinc-500">{t.cms.projectId || 'ID'}: #{sect.id}</p>
                 </div>
               </div>
 
@@ -435,7 +440,7 @@ export default function AdminDashboard() {
                       : 'bg-zinc-950/40 border-zinc-800 text-zinc-500'
                   }`}
                 >
-                  {sect.visible ? 'Visible' : 'Hidden'}
+                  {sect.visible ? t.cms.visible : t.cms.hidden}
                 </button>
 
                 <div className="w-44 text-right">
@@ -447,7 +452,7 @@ export default function AdminDashboard() {
                       list[idx].title[lang] = e.target.value;
                       setFormData({ ...formData, websiteStructure: { ...formData.websiteStructure, sections: list } });
                     }}
-                    placeholder="Section Title"
+                    placeholder={t.cms.sectionTitlePlaceholder}
                     className="p-2 w-full rounded bg-black/60 border border-zinc-800 text-xs text-white outline-none focus:border-[var(--primary)]"
                   />
                 </div>
@@ -462,18 +467,18 @@ export default function AdminDashboard() {
   // Tab 3: Hero Section
   const renderHeroTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">Hero Section</h3>
-      <AdminMultiLangInput label="Hero Title Part 1" valueObj={formData.hero.title1} onChangeKey={(key, val) => {
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.sidebarHero}</h3>
+      <AdminMultiLangInput label={t.cms.heroTitle1} valueObj={formData.hero.title1} onChangeKey={(key, val) => {
         const updated = { ...formData };
         updated.hero.title1[key] = val;
         setFormData(updated);
       }} />
-      <AdminMultiLangInput label="Hero Title Part 2" valueObj={formData.hero.title2} onChangeKey={(key, val) => {
+      <AdminMultiLangInput label={t.cms.heroTitle2} valueObj={formData.hero.title2} onChangeKey={(key, val) => {
         const updated = { ...formData };
         updated.hero.title2[key] = val;
         setFormData(updated);
       }} />
-      <AdminMultiLangInput label="Hero Tagline description" textarea valueObj={formData.hero.tagline} onChangeKey={(key, val) => {
+      <AdminMultiLangInput label={t.cms.heroTagline} textarea valueObj={formData.hero.tagline} onChangeKey={(key, val) => {
         const updated = { ...formData };
         updated.hero.tagline[key] = val;
         setFormData(updated);
@@ -481,7 +486,7 @@ export default function AdminDashboard() {
 
       {/* Roles List */}
       <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">Animated Role Cycle Items</h4>
+        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.animatedRoles}</h4>
         <div className="space-y-3">
           {formData.hero.roles.map((role, idx) => (
             <div key={idx} className="p-3 bg-zinc-950/40 border border-zinc-800 rounded-lg flex items-center justify-between gap-4">
@@ -507,17 +512,17 @@ export default function AdminDashboard() {
                   const list = [...formData.hero.roles];
                   list[idx].ar = e.target.value;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} placeholder="Arabic" className="p-2 text-xs rounded bg-black/60 border border-zinc-800 text-white" />
+                }} placeholder={t.cms.arabic} className="p-2 text-xs rounded bg-black/60 border border-zinc-800 text-white" />
                 <input type="text" value={role.en || ''} onChange={(e) => {
                   const list = [...formData.hero.roles];
                   list[idx].en = e.target.value;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} placeholder="English" className="p-2 text-xs rounded bg-black/60 border border-zinc-800 text-white" />
+                }} placeholder={t.cms.english} className="p-2 text-xs rounded bg-black/60 border border-zinc-800 text-white" />
                 <input type="text" value={role.ur || ''} onChange={(e) => {
                   const list = [...formData.hero.roles];
                   list[idx].ur = e.target.value;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} placeholder="Urdu" className="p-2 text-xs rounded bg-black/60 border border-zinc-800 text-white" />
+                }} placeholder={t.cms.urdu} className="p-2 text-xs rounded bg-black/60 border border-zinc-800 text-white" />
               </div>
 
               <button 
@@ -539,25 +544,25 @@ export default function AdminDashboard() {
           }}
           className="w-full py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-xs font-bold rounded-lg flex items-center justify-center gap-2 cursor-pointer"
         >
-          <Plus className="w-3.5 h-3.5" /> Add New Role
+          <Plus className="w-3.5 h-3.5" /> {t.cms.addNewRole}
         </button>
       </div>
 
       {/* Hero statistics */}
       <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">Hero Counter Statistics</h4>
+        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.heroStats}</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <AdminInput label="Years Experience" type="number" value={formData.hero.statistics.experienceYears} onChange={(e) => {
+          <AdminInput label={t.cms.yearsExpLabel} type="number" value={formData.hero.statistics.experienceYears} onChange={(e) => {
             const updated = { ...formData };
             updated.hero.statistics.experienceYears = Number(e.target.value);
             setFormData(updated);
           }} />
-          <AdminInput label="Projects Built" type="number" value={formData.hero.statistics.projectsBuilt} onChange={(e) => {
+          <AdminInput label={t.cms.projectsBuiltLabel} type="number" value={formData.hero.statistics.projectsBuilt} onChange={(e) => {
             const updated = { ...formData };
             updated.hero.statistics.projectsBuilt = Number(e.target.value);
             setFormData(updated);
           }} />
-          <AdminInput label="Certifications Count" type="number" value={formData.hero.statistics.certificationsCount} onChange={(e) => {
+          <AdminInput label={t.cms.certsCountLabel} type="number" value={formData.hero.statistics.certificationsCount} onChange={(e) => {
             const updated = { ...formData };
             updated.hero.statistics.certificationsCount = Number(e.target.value);
             setFormData(updated);
@@ -570,18 +575,18 @@ export default function AdminDashboard() {
   // Tab 4: About Section
   const renderAboutTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">About / Biography</h3>
-      <AdminMultiLangInput label="Section Title" valueObj={formData.about.title} onChangeKey={(key, val) => {
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.sidebarAbout}</h3>
+      <AdminMultiLangInput label={t.cms.aboutTitleLabel} valueObj={formData.about.title} onChangeKey={(key, val) => {
         const updated = { ...formData };
         updated.about.title[key] = val;
         setFormData(updated);
       }} />
-      <AdminMultiLangInput label="Section Subtitle" valueObj={formData.about.subtitle} onChangeKey={(key, val) => {
+      <AdminMultiLangInput label={t.cms.aboutSubtitleLabel} valueObj={formData.about.subtitle} onChangeKey={(key, val) => {
         const updated = { ...formData };
         updated.about.subtitle[key] = val;
         setFormData(updated);
       }} />
-      <AdminMultiLangInput label="Biography Content (Story)" textarea valueObj={formData.about.text} onChangeKey={(key, val) => {
+      <AdminMultiLangInput label={t.cms.aboutTextLabel} textarea valueObj={formData.about.text} onChangeKey={(key, val) => {
         const updated = { ...formData };
         updated.about.text[key] = val;
         setFormData(updated);
@@ -613,7 +618,7 @@ export default function AdminDashboard() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
-          <h3 className="text-lg font-black uppercase text-[var(--primary)]">Projects / Case Studies</h3>
+          <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.projectsTitleLabel}</h3>
           <button 
             onClick={() => {
               const updated = { ...formData };
@@ -640,11 +645,11 @@ export default function AdminDashboard() {
             }}
             className="px-3.5 py-1.5 rounded-lg bg-[var(--primary)]/10 hover:bg-[var(--primary)]/20 border border-[var(--primary)]/30 text-[var(--primary)] font-bold text-xs flex items-center gap-1 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" /> Add Project
+            <Plus className="w-3.5 h-3.5" /> {t.cms.addNewProject}
           </button>
         </div>
 
-        {renderListFilterBar("Search projects by name...")}
+        {renderListFilterBar(t.cms.searchProjectsPlaceholder)}
 
         <div className="space-y-4">
           {filteredProjects.map((proj, idx) => {
@@ -678,10 +683,10 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-white flex items-center gap-2">
-                        {proj.title || 'Untitled Project'}
-                        {isFeatured && <span className="text-[9px] font-black uppercase bg-[var(--primary)]/10 border border-[var(--primary)]/30 text-[var(--primary)] px-2 py-0.5 rounded">Featured</span>}
+                        {proj.title || t.cms.untitledProject || 'Untitled Project'}
+                        {isFeatured && <span className="text-[9px] font-black uppercase bg-[var(--primary)]/10 border border-[var(--primary)]/30 text-[var(--primary)] px-2 py-0.5 rounded">{t.cms.featured}</span>}
                       </h4>
-                      <p className="text-[10px] text-zinc-500">ID: {proj.id} | Type: {proj.projectType || 'N/A'} | Status: {proj.status || 'N/A'}</p>
+                      <p className="text-[10px] text-zinc-500">{t.cms.projectId}: {proj.id} | {t.cms.projectType}: {proj.projectType || 'N/A'} | {t.cms.projectStatus}: {proj.status || 'N/A'}</p>
                     </div>
                   </div>
 
@@ -709,12 +714,12 @@ export default function AdminDashboard() {
                           : 'border-zinc-800 text-zinc-500 hover:text-white'
                       }`}
                     >
-                      {isFeatured ? 'Featured' : 'Make Featured'}
+                      {isFeatured ? t.cms.featured : t.cms.makeFeatured}
                     </button>
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
-                        if (window.confirm(`Are you sure you want to delete project: "${proj.title}"?`)) {
+                        if (window.confirm(t.cms.confirmDelete)) {
                           const updated = { ...formData };
                           updated.projects = updated.projects.filter(p => p.id !== proj.id);
                           updated.settings.featuredProjects = updated.settings.featuredProjects.filter(id => id !== proj.id);
@@ -732,12 +737,12 @@ export default function AdminDashboard() {
                 {isExpanded && (
                   <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <AdminInput label="Project Slug ID (Unique key)" value={proj.id} onChange={(e) => {
+                      <AdminInput label={t.cms.projectIdLabel} value={proj.id} onChange={(e) => {
                         const updated = { ...formData };
                         updated.projects[globalIndex].id = e.target.value.toLowerCase().replace(/\s+/g, '-');
                         setFormData(updated);
                       }} />
-                      <AdminInput label="Project Name" value={proj.title} onChange={(e) => {
+                      <AdminInput label={t.cms.projectTitle} value={proj.title} onChange={(e) => {
                         const updated = { ...formData };
                         updated.projects[globalIndex].title = e.target.value;
                         setFormData(updated);
@@ -745,12 +750,12 @@ export default function AdminDashboard() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <AdminInput label="Project Type (e.g. personal, commercial, enterprise)" value={proj.projectType || ''} onChange={(e) => {
+                      <AdminInput label={t.cms.projectTypeLabel} value={proj.projectType || ''} onChange={(e) => {
                         const updated = { ...formData };
                         updated.projects[globalIndex].projectType = e.target.value;
                         setFormData(updated);
                       }} />
-                      <AdminInput label="Project Status (e.g. completed, active, in-development)" value={proj.status || ''} onChange={(e) => {
+                      <AdminInput label={t.cms.projectStatusLabel} value={proj.status || ''} onChange={(e) => {
                         const updated = { ...formData };
                         updated.projects[globalIndex].status = e.target.value;
                         setFormData(updated);
@@ -758,12 +763,12 @@ export default function AdminDashboard() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <AdminInput label="Live Demo URL" value={proj.demoLink || ''} onChange={(e) => {
+                      <AdminInput label={t.cms.demoUrl} value={proj.demoLink || ''} onChange={(e) => {
                         const updated = { ...formData };
                         updated.projects[globalIndex].demoLink = e.target.value;
                         setFormData(updated);
                       }} />
-                      <AdminInput label="GitHub Link" value={proj.githubLink || ''} onChange={(e) => {
+                      <AdminInput label={t.cms.sourceUrl} value={proj.githubLink || ''} onChange={(e) => {
                         const updated = { ...formData };
                         updated.projects[globalIndex].githubLink = e.target.value;
                         setFormData(updated);
@@ -771,37 +776,37 @@ export default function AdminDashboard() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <AdminInput label="Icon type (shield, hardhat, server, monitor)" value={proj.iconType || 'shield'} onChange={(e) => {
+                      <AdminInput label={t.cms.projectIconLabel || t.cms.skillIcon} value={proj.iconType || 'shield'} onChange={(e) => {
                         const updated = { ...formData };
                         updated.projects[globalIndex].iconType = e.target.value;
                         setFormData(updated);
                       }} />
-                      <AdminMultiLangInput label="Category" valueObj={proj.category} onChangeKey={(key, val) => {
+                      <AdminMultiLangInput label={t.cms.projectCategory} valueObj={proj.category} onChangeKey={(key, val) => {
                         const updated = { ...formData };
                         updated.projects[globalIndex].category[key] = val;
                         setFormData(updated);
                       }} />
                     </div>
 
-                    <AdminMultiLangInput label="Description Overview" textarea valueObj={proj.description} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.projectDescLabel} textarea valueObj={proj.description} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.projects[globalIndex].description[key] = val;
                       setFormData(updated);
                     }} />
 
-                    <AdminMultiLangInput label="Technical Challenges / Problems" textarea valueObj={proj.challenges} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.projectChallenges} textarea valueObj={proj.challenges} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.projects[globalIndex].challenges[key] = val;
                       setFormData(updated);
                     }} />
 
-                    <AdminMultiLangInput label="Solution / System Architecture" textarea valueObj={proj.architecture} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.projectArch} textarea valueObj={proj.architecture} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.projects[globalIndex].architecture[key] = val;
                       setFormData(updated);
                     }} />
 
-                    <AdminMultiLangInput label="Business Value / Outcomes" textarea valueObj={proj.businessValue} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.projectImpact} textarea valueObj={proj.businessValue} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.projects[globalIndex].businessValue[key] = val;
                       setFormData(updated);
@@ -809,12 +814,12 @@ export default function AdminDashboard() {
 
                     {/* Features List */}
                     <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-950/20 space-y-3">
-                      <h5 className="font-extrabold text-xs text-zinc-400 uppercase">Key Features</h5>
+                      <h5 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.projectKeyFeatures}</h5>
                       <div className="space-y-3">
                         {proj.features.map((feat, fIdx) => (
                           <div key={fIdx} className="p-3 border border-zinc-800 rounded bg-black/40 flex items-center justify-between gap-3">
                             <div className="flex-1">
-                              <AdminMultiLangInput label={`Feature #${fIdx + 1}`} valueObj={feat} onChangeKey={(key, val) => {
+                              <AdminMultiLangInput label={`${t.cms.featureLabel || 'Feature'} #${fIdx + 1}`} valueObj={feat} onChangeKey={(key, val) => {
                                 const updated = { ...formData };
                                 updated.projects[globalIndex].features[fIdx][key] = val;
                                 setFormData(updated);
@@ -841,20 +846,20 @@ export default function AdminDashboard() {
                         }}
                         className="w-full py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
                       >
-                        <Plus className="w-3.5 h-3.5" /> Add Feature
+                        <Plus className="w-3.5 h-3.5" /> {t.cms.addNewFeature}
                       </button>
                     </div>
 
                     {/* Tech Stack List */}
                     <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-950/20 space-y-3">
-                      <h5 className="font-extrabold text-xs text-zinc-400 uppercase">Tech Stack Details</h5>
+                      <h5 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.techStackDetails}</h5>
                       <div className="space-y-3">
                         {proj.tech.map((tItem, tIdx) => {
                           const valObj = typeof tItem === 'string' ? { ar: tItem, en: tItem, ur: tItem } : tItem;
                           return (
                             <div key={tIdx} className="p-3 border border-zinc-800 rounded bg-black/40 flex items-center justify-between gap-3">
                               <div className="flex-1">
-                                <AdminMultiLangInput label={`Technology #${tIdx + 1}`} valueObj={valObj} onChangeKey={(key, val) => {
+                                <AdminMultiLangInput label={`${t.cms.technologyLabel || 'Technology'} #${tIdx + 1}`} valueObj={valObj} onChangeKey={(key, val) => {
                                   const updated = { ...formData };
                                   if (typeof updated.projects[globalIndex].tech[tIdx] === 'string') {
                                     const prevVal = updated.projects[globalIndex].tech[tIdx];
@@ -886,7 +891,7 @@ export default function AdminDashboard() {
                         }}
                         className="w-full py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
                       >
-                        <Plus className="w-3.5 h-3.5" /> Add Technology
+                        <Plus className="w-3.5 h-3.5" /> {t.cms.addNewTech}
                       </button>
                     </div>
 
@@ -910,7 +915,7 @@ export default function AdminDashboard() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
-          <h3 className="text-lg font-black uppercase text-[var(--primary)]">Skills categories</h3>
+          <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.skillsTitleLabel}</h3>
           <button 
             onClick={() => {
               const updated = { ...formData };
@@ -921,11 +926,11 @@ export default function AdminDashboard() {
             }}
             className="px-3.5 py-1.5 rounded-lg bg-[var(--primary)]/10 hover:bg-[var(--primary)]/20 border border-[var(--primary)]/30 text-[var(--primary)] font-bold text-xs flex items-center gap-1 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" /> Add Category
+            <Plus className="w-3.5 h-3.5" /> {t.cms.addNewSkillCategory || 'Add Category'}
           </button>
         </div>
 
-        {renderListFilterBar("Search skill categories...")}
+        {renderListFilterBar(t.cms.searchSkillsPlaceholder)}
 
         <div className="space-y-4">
           {filteredSkills.map((group, idx) => {
@@ -944,15 +949,15 @@ export default function AdminDashboard() {
                       <button disabled={globalIndex === formData.skills.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('skills', globalIndex, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-white">{group.category?.en || 'Untitled Group'}</h4>
-                      <p className="text-[10px] text-zinc-500">{group.items?.length || 0} skills inside</p>
+                      <h4 className="font-bold text-sm text-white">{group.category?.[lang] || group.category?.en || t.cms.untitledGroup || 'Untitled Group'}</h4>
+                      <p className="text-[10px] text-zinc-500">{group.items?.length || 0} {t.cms.skillsInside}</p>
                     </div>
                   </div>
 
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (window.confirm(`Are you sure you want to delete category: "${group.category?.en}"?`)) {
+                      if (window.confirm(t.cms.confirmDelete)) {
                         const updated = { ...formData };
                         updated.skills = updated.skills.filter(s => s.id !== group.id);
                         setFormData(updated);
@@ -967,12 +972,12 @@ export default function AdminDashboard() {
                 {isExpanded && (
                   <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <AdminMultiLangInput label="Category Title" valueObj={group.category} onChangeKey={(key, val) => {
+                      <AdminMultiLangInput label={t.cms.skillCategory} valueObj={group.category} onChangeKey={(key, val) => {
                         const updated = { ...formData };
                         updated.skills[globalIndex].category[key] = val;
                         setFormData(updated);
                       }} />
-                      <AdminInput label="Icon type (shield, server, monitor)" value={group.iconType} onChange={(e) => {
+                      <AdminInput label={t.cms.skillIcon} value={group.iconType} onChange={(e) => {
                         const updated = { ...formData };
                         updated.skills[globalIndex].iconType = e.target.value;
                         setFormData(updated);
@@ -981,12 +986,12 @@ export default function AdminDashboard() {
 
                     {/* Skill items list */}
                     <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-950/20 space-y-3">
-                      <h5 className="font-extrabold text-xs text-zinc-400 uppercase">Individual Skills</h5>
+                      <h5 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.individualSkills}</h5>
                       <div className="space-y-3">
                         {group.items.map((item, itemIdx) => (
                           <div key={itemIdx} className="p-3 border border-zinc-800 rounded bg-black/40 flex items-center justify-between gap-3">
                             <div className="flex-1">
-                              <AdminMultiLangInput label={`Skill #${itemIdx + 1}`} valueObj={item} onChangeKey={(key, val) => {
+                              <AdminMultiLangInput label={`${t.cms.skillLabel} #${itemIdx + 1}`} valueObj={item} onChangeKey={(key, val) => {
                                 const updated = { ...formData };
                                 updated.skills[globalIndex].items[itemIdx][key] = val;
                                 setFormData(updated);
@@ -1013,7 +1018,7 @@ export default function AdminDashboard() {
                         }}
                         className="w-full py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
                       >
-                        <Plus className="w-3.5 h-3.5" /> Add Skill Item
+                        <Plus className="w-3.5 h-3.5" /> {t.cms.addNewSkillItem}
                       </button>
                     </div>
                   </div>
@@ -1036,7 +1041,7 @@ export default function AdminDashboard() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
-          <h3 className="text-lg font-black uppercase text-[var(--primary)]">Experience Milestones</h3>
+          <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.experienceTitleLabel}</h3>
           <button 
             onClick={() => {
               const updated = { ...formData };
@@ -1053,11 +1058,11 @@ export default function AdminDashboard() {
             }}
             className="px-3.5 py-1.5 rounded-lg bg-[var(--primary)]/10 hover:bg-[var(--primary)]/20 border border-[var(--primary)]/30 text-[var(--primary)] font-bold text-xs flex items-center gap-1 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" /> Add Job
+            <Plus className="w-3.5 h-3.5" /> {t.cms.addNewExp}
           </button>
         </div>
 
-        {renderListFilterBar("Search experience by company/role...")}
+        {renderListFilterBar(t.cms.searchExperiencePlaceholder)}
 
         <div className="space-y-4">
           {filteredExp.map((exp, idx) => {
@@ -1076,15 +1081,15 @@ export default function AdminDashboard() {
                       <button disabled={globalIndex === formData.experience.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('experience', globalIndex, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-white">{exp.role?.en || 'Untitled Job'}</h4>
-                      <p className="text-[10px] text-zinc-500">{exp.company?.en} • {exp.period?.en}</p>
+                      <h4 className="font-bold text-sm text-white">{exp.role?.[lang] || exp.role?.en || t.cms.untitledJob}</h4>
+                      <p className="text-[10px] text-zinc-500">{exp.company?.[lang] || exp.company?.en} • {exp.period?.[lang] || exp.period?.en}</p>
                     </div>
                   </div>
 
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (window.confirm(`Are you sure you want to delete experience: "${exp.role?.en}"?`)) {
+                      if (window.confirm(t.cms.confirmDelete)) {
                         const updated = { ...formData };
                         updated.experience = updated.experience.filter(e => e.id !== exp.id);
                         setFormData(updated);
@@ -1098,22 +1103,22 @@ export default function AdminDashboard() {
 
                 {isExpanded && (
                   <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-6">
-                    <AdminMultiLangInput label="Job Title" valueObj={exp.role} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.roleTitle} valueObj={exp.role} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.experience[globalIndex].role[key] = val;
                       setFormData(updated);
                     }} />
-                    <AdminMultiLangInput label="Company Name" valueObj={exp.company} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.companyName} valueObj={exp.company} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.experience[globalIndex].company[key] = val;
                       setFormData(updated);
                     }} />
-                    <AdminMultiLangInput label="Timeline / Period" valueObj={exp.period} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.periodDates} valueObj={exp.period} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.experience[globalIndex].period[key] = val;
                       setFormData(updated);
                     }} />
-                    <AdminMultiLangInput label="Job Description" textarea valueObj={exp.description} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.responsibilities} textarea valueObj={exp.description} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.experience[globalIndex].description[key] = val;
                       setFormData(updated);
@@ -1138,7 +1143,7 @@ export default function AdminDashboard() {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
-          <h3 className="text-lg font-black uppercase text-[var(--primary)]">Licenses & Certifications</h3>
+          <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.certsTitleLabel}</h3>
           <button 
             onClick={() => {
               const updated = { ...formData };
@@ -1157,17 +1162,17 @@ export default function AdminDashboard() {
             }}
             className="px-3.5 py-1.5 rounded-lg bg-[var(--primary)]/10 hover:bg-[var(--primary)]/20 border border-[var(--primary)]/30 text-[var(--primary)] font-bold text-xs flex items-center gap-1 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" /> Add Certificate
+            <Plus className="w-3.5 h-3.5" /> {t.cms.addNewCert}
           </button>
         </div>
 
-        {renderListFilterBar("Search certifications...")}
+        {renderListFilterBar(t.cms.searchCertsPlaceholder)}
 
         <div className="space-y-4">
           {filteredCerts.map((cert, idx) => {
             const isExpanded = !!expandedItems[cert.id];
             const globalIndex = formData.certifications.findIndex(c => c.id === cert.id);
-            const name = cert.name?.en || cert.en || 'Untitled Cert';
+            const name = cert.name?.[lang] || cert[lang] || t.cms.untitledCert;
 
             return (
               <div key={cert.id} id={`item-${cert.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
@@ -1182,14 +1187,14 @@ export default function AdminDashboard() {
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-white">{name}</h4>
-                      <p className="text-[10px] text-zinc-500">Provider: {cert.provider?.en || 'N/A'}</p>
+                      <p className="text-[10px] text-zinc-500">{t.cms.providerLabel}: {cert.provider?.[lang] || cert.provider?.en || 'N/A'}</p>
                     </div>
                   </div>
 
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (window.confirm(`Are you sure you want to delete certification: "${name}"?`)) {
+                      if (window.confirm(t.cms.confirmDelete)) {
                         const updated = { ...formData };
                         updated.certifications = updated.certifications.filter(c => c.id !== cert.id);
                         setFormData(updated);
@@ -1203,13 +1208,13 @@ export default function AdminDashboard() {
 
                 {isExpanded && (
                   <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-6">
-                    <AdminInput label="Unique Identifier ID" value={cert.id} onChange={(e) => {
+                    <AdminInput label={t.cms.certIdLabel} value={cert.id} onChange={(e) => {
                       const updated = { ...formData };
                       updated.certifications[globalIndex].id = e.target.value;
                       setFormData(updated);
                     }} />
 
-                    <AdminMultiLangInput label="Certification Name" valueObj={cert.name || { ar: cert.ar, en: cert.en, ur: cert.ur }} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.certName} valueObj={cert.name || { ar: cert.ar, en: cert.en, ur: cert.ur }} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       if (!updated.certifications[globalIndex].name) {
                         updated.certifications[globalIndex].name = { ar: cert.ar, en: cert.en, ur: cert.ur };
@@ -1219,7 +1224,7 @@ export default function AdminDashboard() {
                       setFormData(updated);
                     }} />
 
-                    <AdminMultiLangInput label="Provider" valueObj={cert.provider || { ar: '', en: '', ur: '' }} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.certProvider} valueObj={cert.provider || { ar: '', en: '', ur: '' }} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       if (!updated.certifications[globalIndex].provider) {
                         updated.certifications[globalIndex].provider = { ar: '', en: '', ur: '' };
@@ -1228,7 +1233,7 @@ export default function AdminDashboard() {
                       setFormData(updated);
                     }} />
 
-                    <AdminMultiLangInput label="Acquisition Date" valueObj={cert.date || { ar: '', en: '', ur: '' }} onChangeKey={(key, val) => {
+                    <AdminMultiLangInput label={t.cms.certDate} valueObj={cert.date || { ar: '', en: '', ur: '' }} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       if (!updated.certifications[globalIndex].date) {
                         updated.certifications[globalIndex].date = { ar: '', en: '', ur: '' };
@@ -1250,7 +1255,7 @@ export default function AdminDashboard() {
   const renderAchievementsTab = () => (
     <div className="space-y-6">
       <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
-        <h3 className="text-lg font-black uppercase text-[var(--primary)]">Achievements / Stats</h3>
+        <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.achievementsTitleLabel}</h3>
         <button 
           onClick={() => {
             const updated = { ...formData };
@@ -1266,7 +1271,7 @@ export default function AdminDashboard() {
           }}
           className="px-3.5 py-1.5 rounded-lg bg-[var(--primary)]/10 hover:bg-[var(--primary)]/20 border border-[var(--primary)]/30 text-[var(--primary)] font-bold text-xs flex items-center gap-1 cursor-pointer"
         >
-          <Plus className="w-3.5 h-3.5" /> Add Counter
+          <Plus className="w-3.5 h-3.5" /> {t.cms.addNewAch}
         </button>
       </div>
 
@@ -1285,15 +1290,15 @@ export default function AdminDashboard() {
                     <button disabled={idx === formData.achievements.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('achievements', idx, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-white">{ach.value}{ach.suffix} {ach.label?.en || 'Untitled'}</h4>
-                    <p className="text-[10px] text-zinc-500">ID: {ach.id}</p>
+                    <h4 className="font-bold text-sm text-white">{ach.value}{ach.suffix} {ach.label?.[lang] || ach.label?.en || t.cms.untitled}</h4>
+                    <p className="text-[10px] text-zinc-500">{t.cms.achIdLabel}: {ach.id}</p>
                   </div>
                 </div>
 
                 <button 
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (window.confirm("Are you sure you want to delete this stat counter?")) {
+                    if (window.confirm(t.cms.confirmDelete)) {
                       const updated = { ...formData };
                       updated.achievements = updated.achievements.filter(a => a.id !== ach.id);
                       setFormData(updated);
@@ -1308,18 +1313,18 @@ export default function AdminDashboard() {
               {isExpanded && (
                 <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <AdminInput label="Counter Value (Number)" type="number" value={ach.value} onChange={(e) => {
+                    <AdminInput label={t.cms.achValue} type="number" value={ach.value} onChange={(e) => {
                       const updated = { ...formData };
                       updated.achievements[idx].value = Number(e.target.value);
                       setFormData(updated);
                     }} />
-                    <AdminInput label="Suffix (e.g. +, %)" value={ach.suffix} onChange={(e) => {
+                    <AdminInput label={t.cms.achSuffix} value={ach.suffix} onChange={(e) => {
                       const updated = { ...formData };
                       updated.achievements[idx].suffix = e.target.value;
                       setFormData(updated);
                     }} />
                   </div>
-                  <AdminMultiLangInput label="Counter Label text" valueObj={ach.label} onChangeKey={(key, val) => {
+                  <AdminMultiLangInput label={t.cms.achLabel} valueObj={ach.label} onChangeKey={(key, val) => {
                     const updated = { ...formData };
                     updated.achievements[idx].label[key] = val;
                     setFormData(updated);
@@ -1336,23 +1341,23 @@ export default function AdminDashboard() {
   // Tab 10: Contact
   const renderContactTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">Contact Channels</h3>
-      <AdminInput label="Email Address" value={formData.contact.email} onChange={(e) => {
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.contactTitleLabel}</h3>
+      <AdminInput label={t.cms.contactEmail} value={formData.contact.email} onChange={(e) => {
         const updated = { ...formData };
         updated.contact.email = e.target.value;
         setFormData(updated);
       }} />
-      <AdminInput label="GitHub Link" value={formData.contact.github} onChange={(e) => {
+      <AdminInput label={t.cms.githubUrl} value={formData.contact.github} onChange={(e) => {
         const updated = { ...formData };
         updated.contact.github = e.target.value;
         setFormData(updated);
       }} />
-      <AdminInput label="WhatsApp Number" value={formData.contact.whatsapp} onChange={(e) => {
+      <AdminInput label={t.cms.contactPhone} value={formData.contact.whatsapp} onChange={(e) => {
         const updated = { ...formData };
         updated.contact.whatsapp = e.target.value.replace(/\D/g, '');
         setFormData(updated);
       }} />
-      <AdminInput label="LinkedIn URL" value={formData.contact.linkedin || ''} onChange={(e) => {
+      <AdminInput label={t.cms.linkedinUrl} value={formData.contact.linkedin || ''} onChange={(e) => {
         const updated = { ...formData };
         updated.contact.linkedin = e.target.value;
         setFormData(updated);
@@ -1363,20 +1368,20 @@ export default function AdminDashboard() {
   // Tab 11: Translations Editor
   const renderTranslationsTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">General Translations</h3>
-      <p className="text-xs text-zinc-500">Edit every static label, navigation title, or button text on the website directly without editing any source code.</p>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.translationsTitle}</h3>
+      <p className="text-xs text-zinc-500">{t.cms.translationsDesc}</p>
       
-      {renderListFilterBar("Search translation keys...")}
+      {renderListFilterBar(t.cms.searchTranslationsPlaceholder)}
 
       <div className="space-y-5 max-h-[60vh] overflow-y-auto pr-2">
         {Object.keys(formData.translations?.en || {})
           .filter(key => key.toLowerCase().includes(localListFilter.toLowerCase()) || (formData.translations.en[key] || '').toLowerCase().includes(localListFilter.toLowerCase()))
           .map(key => (
             <div key={key} id={`item-${key}`} className="p-4 border border-zinc-800 rounded-xl bg-zinc-950/20 space-y-3">
-              <span className="text-xs font-bold text-[var(--primary)] font-mono block border-b border-zinc-900 pb-1.5">Key: {key}</span>
+              <span className="text-xs font-bold text-[var(--primary)] font-mono block border-b border-zinc-900 pb-1.5">{t.cms.transKey}: {key}</span>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
-                  <span className="text-[9px] text-zinc-500 font-bold uppercase mb-0.5 block">Arabic</span>
+                  <span className="text-[9px] text-zinc-500 font-bold uppercase mb-0.5 block">{t.cms.arabicLabel}</span>
                   <input type="text" dir="rtl" value={formData.translations.ar?.[key] || ''} onChange={(e) => {
                     const updated = { ...formData };
                     updated.translations.ar[key] = e.target.value;
@@ -1384,7 +1389,7 @@ export default function AdminDashboard() {
                   }} className="w-full p-2 bg-black/60 border border-zinc-800 text-xs rounded text-white" />
                 </div>
                 <div>
-                  <span className="text-[9px] text-zinc-500 font-bold uppercase mb-0.5 block">English</span>
+                  <span className="text-[9px] text-zinc-500 font-bold uppercase mb-0.5 block">{t.cms.englishLabel}</span>
                   <input type="text" dir="ltr" value={formData.translations.en?.[key] || ''} onChange={(e) => {
                     const updated = { ...formData };
                     updated.translations.en[key] = e.target.value;
@@ -1392,12 +1397,12 @@ export default function AdminDashboard() {
                   }} className="w-full p-2 bg-black/60 border border-zinc-800 text-xs rounded text-white" />
                 </div>
                 <div>
-                  <span className="text-[9px] text-zinc-500 font-bold uppercase mb-0.5 block">Urdu</span>
+                  <span className="text-[9px] text-zinc-500 font-bold uppercase mb-0.5 block">{t.cms.urduLabel}</span>
                   <input type="text" dir="rtl" value={formData.translations.ur?.[key] || ''} onChange={(e) => {
                     const updated = { ...formData };
                     updated.translations.ur[key] = e.target.value;
                     setFormData(updated);
-                  }} className="w-full p-2 bg-black/60 border border-zinc-800 text-xs rounded text-white" />
+                  }} className="w-full p-2 bg-black/60 border border-zinc-800 text-xs text-white rounded" />
                 </div>
               </div>
             </div>
@@ -1409,12 +1414,12 @@ export default function AdminDashboard() {
   // Tab 12: Theme Settings & Theme Builder
   const renderThemeTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">Themes & Theme Builder</h3>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.themeSettingsTitle}</h3>
       
       <div className="p-4 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">Default Visual Settings</h4>
+        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.defaultVisualSettings}</h4>
         <div className="mb-4">
-          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">Default Selected Theme</label>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.defaultTheme}</label>
           <select 
             value={formData.themeSettings.defaultTheme} 
             onChange={(e) => {
@@ -1424,30 +1429,30 @@ export default function AdminDashboard() {
             }}
             className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
           >
-            <option value="dark">Dark Obsidian</option>
-            <option value="ocean">Ocean Blue</option>
-            <option value="aurora">Aurora Green</option>
-            <option value="platinum">Platinum Silver</option>
-            <option value="midnight">Midnight Purple</option>
+            <option value="dark">{t.cms.themeDark || 'Dark Obsidian'}</option>
+            <option value="ocean">{t.cms.themeOcean || 'Ocean Blue'}</option>
+            <option value="aurora">{t.cms.themeAurora || 'Aurora Green'}</option>
+            <option value="platinum">{t.cms.themePlatinum || 'Platinum Silver'}</option>
+            <option value="midnight">{t.cms.themeMidnight || 'Midnight Purple'}</option>
           </select>
         </div>
       </div>
 
       <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-5">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">Theme Builder (Liquid Glass Tune)</h4>
-        <p className="text-xs text-zinc-500">Fine-tune glass transparency, blurs, and glow properties in real-time without writing code.</p>
+        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.themeBuilderTitle}</h4>
+        <p className="text-xs text-zinc-500">{t.cms.themeBuilderDesc}</p>
         
         {/* Accent Color picker */}
         <div className="flex items-center gap-4">
           <div className="flex-1">
-            <AdminInput label="Theme Accent Color (Hex)" value={formData.themeSettings.accentColor} onChange={(e) => {
+            <AdminInput label={t.cms.accentColor} value={formData.themeSettings.accentColor} onChange={(e) => {
               const updated = { ...formData };
               updated.themeSettings.accentColor = e.target.value;
               setFormData(updated);
             }} />
           </div>
           <div className="shrink-0 flex flex-col items-center">
-            <span className="text-[10px] text-zinc-500 font-bold uppercase mb-1">Picker</span>
+            <span className="text-[10px] text-zinc-500 font-bold uppercase mb-1">{t.cms.picker}</span>
             <input type="color" value={formData.themeSettings.accentColor} onChange={(e) => {
               const updated = { ...formData };
               updated.themeSettings.accentColor = e.target.value;
@@ -1459,7 +1464,7 @@ export default function AdminDashboard() {
         {/* Glass opacity slider */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">Glass Opacity</span>
+            <span className="text-zinc-400">{t.cms.glassOpacity}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.glassOpacity}</span>
           </div>
           <input type="range" min="0.0" max="0.3" step="0.01" value={formData.themeSettings.glassOpacity} onChange={(e) => {
@@ -1472,7 +1477,7 @@ export default function AdminDashboard() {
         {/* Glass blur strength */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">Backdrop Blur Strength</span>
+            <span className="text-zinc-400">{t.cms.backdropBlur}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.blurStrength}px</span>
           </div>
           <input type="range" min="0" max="40" step="1" value={formData.themeSettings.blurStrength} onChange={(e) => {
@@ -1485,7 +1490,7 @@ export default function AdminDashboard() {
         {/* Glass border opacity */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">Border Opacity</span>
+            <span className="text-zinc-400">{t.cms.borderOpacity}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.borderOpacity}</span>
           </div>
           <input type="range" min="0.0" max="0.2" step="0.01" value={formData.themeSettings.borderOpacity} onChange={(e) => {
@@ -1498,7 +1503,7 @@ export default function AdminDashboard() {
         {/* Mouse Glow intensity */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">Cursor Spotlight Glow Intensity</span>
+            <span className="text-zinc-400">{t.cms.cursorGlow}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.glowIntensity}</span>
           </div>
           <input type="range" min="0.0" max="1.0" step="0.05" value={formData.themeSettings.glowIntensity} onChange={(e) => {
@@ -1511,7 +1516,7 @@ export default function AdminDashboard() {
         {/* Background ambient blobs intensity */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">Ambient Background Blob opacity</span>
+            <span className="text-zinc-400">{t.cms.ambientBlob}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.bgIntensity}</span>
           </div>
           <input type="range" min="0.0" max="0.5" step="0.01" value={formData.themeSettings.bgIntensity} onChange={(e) => {
@@ -1521,34 +1526,148 @@ export default function AdminDashboard() {
           }} className="w-full accent-[var(--primary)]" />
         </div>
       </div>
+
+      {/* Typography settings controls */}
+      <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-5">
+        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.typographySettingsTitle}</h4>
+        
+        {/* Font Family */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.fontFamily}</label>
+          <select 
+            value={formData.themeSettings.fontFamily || 'Inter'} 
+            onChange={(e) => {
+              const updated = { ...formData };
+              updated.themeSettings.fontFamily = e.target.value;
+              setFormData(updated);
+            }}
+            className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+          >
+            <option value="Inter">Inter</option>
+            <option value="Cairo">Cairo</option>
+            <option value="Tajawal">Tajawal</option>
+            <option value="IBM Plex Sans">IBM Plex Sans</option>
+            <option value="Poppins">Poppins</option>
+          </select>
+        </div>
+
+        {/* Font Scale slider */}
+        <div>
+          <div className="flex justify-between text-xs font-bold uppercase mb-1">
+            <span className="text-zinc-400">{t.cms.fontScale}</span>
+            <span className="text-[var(--primary)]">{formData.themeSettings.fontScale || 1.0}x</span>
+          </div>
+          <input type="range" min="0.8" max="1.4" step="0.05" value={formData.themeSettings.fontScale || 1.0} onChange={(e) => {
+            const updated = { ...formData };
+            updated.themeSettings.fontScale = Number(e.target.value);
+            setFormData(updated);
+          }} className="w-full accent-[var(--primary)]" />
+        </div>
+
+        {/* Heading Weight selection */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.headingWeight}</label>
+          <select 
+            value={formData.themeSettings.headingWeight || '800'} 
+            onChange={(e) => {
+              const updated = { ...formData };
+              updated.themeSettings.headingWeight = e.target.value;
+              setFormData(updated);
+            }}
+            className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+          >
+            <option value="400">400 ({t.cms.weightRegular || 'Regular'})</option>
+            <option value="500">500 ({t.cms.weightMedium || 'Medium'})</option>
+            <option value="600">600 ({t.cms.weightSemibold || 'Semibold'})</option>
+            <option value="700">700 ({t.cms.weightBold || 'Bold'})</option>
+            <option value="800">800 ({t.cms.weightExtraBold || 'Extra Bold'})</option>
+          </select>
+        </div>
+
+        {/* Body Weight selection */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.bodyWeight}</label>
+          <select 
+            value={formData.themeSettings.bodyWeight || '300'} 
+            onChange={(e) => {
+              const updated = { ...formData };
+              updated.themeSettings.bodyWeight = e.target.value;
+              setFormData(updated);
+            }}
+            className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+          >
+            <option value="300">300 ({t.cms.weightLight || 'Light'})</option>
+            <option value="400">400 ({t.cms.weightRegular || 'Regular'})</option>
+            <option value="500">500 ({t.cms.weightMedium || 'Medium'})</option>
+          </select>
+        </div>
+
+        {/* Font Color picker */}
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <AdminInput label={t.cms.fontColor} value={formData.themeSettings.fontColor || '#fafafa'} onChange={(e) => {
+              const updated = { ...formData };
+              updated.themeSettings.fontColor = e.target.value;
+              setFormData(updated);
+            }} />
+          </div>
+          <div className="shrink-0 flex flex-col items-center">
+            <span className="text-[10px] text-zinc-500 font-bold uppercase mb-1">{t.cms.picker}</span>
+            <input type="color" value={formData.themeSettings.fontColor || '#fafafa'} onChange={(e) => {
+              const updated = { ...formData };
+              updated.themeSettings.fontColor = e.target.value;
+              setFormData(updated);
+            }} className="w-12 h-12 rounded border border-zinc-800 bg-transparent cursor-pointer" />
+          </div>
+        </div>
+
+        {/* Heading Color picker */}
+        <div className="flex items-center gap-4">
+          <div className="flex-1">
+            <AdminInput label={t.cms.headingColor} value={formData.themeSettings.headingColor || '#fafafa'} onChange={(e) => {
+              const updated = { ...formData };
+              updated.themeSettings.headingColor = e.target.value;
+              setFormData(updated);
+            }} />
+          </div>
+          <div className="shrink-0 flex flex-col items-center">
+            <span className="text-[10px] text-zinc-500 font-bold uppercase mb-1">{t.cms.picker}</span>
+            <input type="color" value={formData.themeSettings.headingColor || '#fafafa'} onChange={(e) => {
+              const updated = { ...formData };
+              updated.themeSettings.headingColor = e.target.value;
+              setFormData(updated);
+            }} className="w-12 h-12 rounded border border-zinc-800 bg-transparent cursor-pointer" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 
   // Tab 13: Media & Branding
   const renderBrandingTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">Media & Branding Assets</h3>
-      <AdminInput label="Preloader Reveal Text Logo" value={formData.mediaBranding.preloaderLogo || ''} onChange={(e) => {
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.mediaBrandingTitle}</h3>
+      <AdminInput label={t.cms.preloaderLogo} value={formData.mediaBranding.preloaderLogo || ''} onChange={(e) => {
         const updated = { ...formData };
         updated.mediaBranding.preloaderLogo = e.target.value;
         setFormData(updated);
       }} />
-      <AdminInput label="Favicon Icon Path" value={formData.mediaBranding.favicon || ''} onChange={(e) => {
+      <AdminInput label={t.cms.faviconPath} value={formData.mediaBranding.favicon || ''} onChange={(e) => {
         const updated = { ...formData };
         updated.mediaBranding.favicon = e.target.value;
         setFormData(updated);
       }} />
-      <AdminInput label="SEO Page Sharing Image Path" value={formData.mediaBranding.seoImage || ''} onChange={(e) => {
+      <AdminInput label={t.cms.seoImagePath} value={formData.mediaBranding.seoImage || ''} onChange={(e) => {
         const updated = { ...formData };
         updated.mediaBranding.seoImage = e.target.value;
         setFormData(updated);
       }} />
-      <AdminInput label="OpenGraph Image Path" value={formData.mediaBranding.openGraphImage || ''} onChange={(e) => {
+      <AdminInput label={t.cms.ogImagePath} value={formData.mediaBranding.openGraphImage || ''} onChange={(e) => {
         const updated = { ...formData };
         updated.mediaBranding.openGraphImage = e.target.value;
         setFormData(updated);
       }} />
-      <AdminInput label="Custom Brand Logo Image (Empty to use site name text)" value={formData.mediaBranding.logo || ''} onChange={(e) => {
+      <AdminInput label={t.cms.brandLogo} value={formData.mediaBranding.logo || ''} onChange={(e) => {
         const updated = { ...formData };
         updated.mediaBranding.logo = e.target.value;
         setFormData(updated);
@@ -1582,9 +1701,22 @@ export default function AdminDashboard() {
         className="w-full h-full p-6 border border-zinc-800 bg-[#070709] rounded-2xl relative overflow-hidden flex flex-col justify-center min-h-[300px]"
         style={{
           '--accent-color': formData.themeSettings.accentColor,
+          '--primary': formData.themeSettings.accentColor,
           '--glass-opacity': formData.themeSettings.glassOpacity,
           '--border-opacity': formData.themeSettings.borderOpacity,
-          '--blur-strength': `${formData.themeSettings.blurStrength}px`
+          '--blur-strength': `${formData.themeSettings.blurStrength}px`,
+          '--font-family-setting': formData.themeSettings.fontFamily ? `'${formData.themeSettings.fontFamily}', sans-serif` : 'sans-serif',
+          '--font-scale-setting': formData.themeSettings.fontScale !== undefined ? formData.themeSettings.fontScale : 1.0,
+          '--heading-weight-setting': formData.themeSettings.headingWeight || '800',
+          '--body-weight-setting': formData.themeSettings.bodyWeight || '300',
+          '--font-color-setting': formData.themeSettings.fontColor || '#fafafa',
+          '--heading-color-setting': formData.themeSettings.headingColor || '#fafafa',
+          'fontFamily': formData.themeSettings.fontFamily ? `'${formData.themeSettings.fontFamily}', sans-serif` : 'sans-serif',
+          'fontSize': `calc(100% * ${formData.themeSettings.fontScale || 1.0})`,
+          '--heading-weight': formData.themeSettings.headingWeight || '800',
+          '--body-weight': formData.themeSettings.bodyWeight || '300',
+          '--font-color': formData.themeSettings.fontColor || '#fafafa',
+          '--heading-color': formData.themeSettings.headingColor || '#fafafa'
         }}
       >
         {/* Glow ambient spot */}
@@ -1596,30 +1728,30 @@ export default function AdminDashboard() {
           }}
         />
 
-        <div className="relative z-10 space-y-4">
+        <div className="relative z-10 space-y-4" style={{ color: 'var(--font-color)' }}>
           <div className="flex items-center justify-between border-b border-zinc-900 pb-2 text-[10px] uppercase font-bold text-zinc-500 tracking-wider">
-            <span>Live visual preview card</span>
-            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" /> Realtime</span>
+            <span>{t.cms?.previewCardTitle}</span>
+            <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" /> {t.cms?.realtime}</span>
           </div>
 
           {activeTab === 'general' && (
             <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-2">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">Dynamic Logo Preview</span>
-              <div className="text-lg font-black text-white">{formData.general.logoText[lang] || formData.general.logoText.en}</div>
-              <div className="text-xs text-zinc-400">{formData.general.brandIdentity[lang] || formData.general.brandIdentity.en}</div>
+              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms?.previewLogo}</span>
+              <div className="text-lg font-black text-white" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>{formData.general.logoText[lang] || formData.general.logoText.en}</div>
+              <div className="text-xs text-zinc-400" style={{ fontWeight: 'var(--body-weight)' }}>{formData.general.brandIdentity[lang] || formData.general.brandIdentity.en}</div>
             </div>
           )}
 
           {activeTab === 'structure' && (
             <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">Homepage flow</span>
+              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms?.previewFlow}</span>
               <div className="space-y-1.5">
                 {formData.websiteStructure.sections.map(s => (
                   <div key={s.id} className={`p-2 rounded text-[10px] font-bold border flex items-center justify-between ${
                     s.visible ? 'bg-[var(--accent-color)]/5 border-[var(--accent-color)]/20 text-white' : 'bg-black/10 border-zinc-900 text-zinc-500'
                   }`}>
                     <span className="capitalize">{s.id}</span>
-                    <span>{s.visible ? 'ON' : 'OFF'}</span>
+                    <span>{s.visible ? t.cms.on : t.cms.off}</span>
                   </div>
                 ))}
               </div>
@@ -1628,25 +1760,25 @@ export default function AdminDashboard() {
 
           {activeTab === 'hero' && (
             <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
-              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[8px] font-bold text-emerald-400 uppercase">Available</div>
-              <h4 className="text-xl font-black text-white leading-tight">
+              <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[8px] font-bold text-emerald-400 uppercase">{t.cms.availableBadge}</div>
+              <h4 className="text-xl font-black text-white leading-tight" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>
                 {formData.hero.title1[lang] || formData.hero.title1.en}<br />
                 <span style={{ color: formData.themeSettings.accentColor }}>{formData.hero.title2[lang] || formData.hero.title2.en}</span>
               </h4>
-              <p className="text-xs text-zinc-400 leading-relaxed font-light line-clamp-3">
+              <p className="text-xs text-zinc-400 leading-relaxed font-light line-clamp-3" style={{ fontWeight: 'var(--body-weight)' }}>
                 {formData.hero.tagline[lang] || formData.hero.tagline.en}
               </p>
               <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest pt-2">
-                Stats: {formData.hero.statistics.experienceYears} Years • {formData.hero.statistics.projectsBuilt} Projects
+                {t.cms.statsLabel}: {formData.hero.statistics.experienceYears} {t.yearsExp} • {formData.hero.statistics.projectsBuilt} {t.projectsBuilt}
               </div>
             </div>
           )}
 
           {activeTab === 'about' && (
             <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
-              <h4 className="text-base font-bold text-white">{formData.about.title[lang] || formData.about.title.en}</h4>
+              <h4 className="text-base font-bold text-white" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>{formData.about.title[lang] || formData.about.title.en}</h4>
               <p className="text-[11px] text-[var(--accent-color)] font-medium">{formData.about.subtitle[lang] || formData.about.subtitle.en}</p>
-              <p className="text-xs text-zinc-400 leading-relaxed font-light line-clamp-5 whitespace-pre-line">
+              <p className="text-xs text-zinc-400 leading-relaxed font-light line-clamp-5 whitespace-pre-line" style={{ fontWeight: 'var(--body-weight)' }}>
                 {formData.about.text[lang] || formData.about.text.en}
               </p>
             </div>
@@ -1658,11 +1790,11 @@ export default function AdminDashboard() {
               style={{ borderColor: `rgba(255,255,255,var(--border-opacity))` }}
             >
               <div className="flex justify-between items-center text-[10px] font-bold text-zinc-500">
-                <span>{formData.projects[0]?.category[lang] || 'HSE Product'}</span>
-                <span className="text-[var(--accent-color)]">Preview</span>
+                <span>{formData.projects[0]?.category[lang] || t.cms.projectPlaceholderCategory}</span>
+                <span className="text-[var(--accent-color)]">{t.cms.previewLabel || 'Preview'}</span>
               </div>
-              <h4 className="text-base font-extrabold text-white">{formData.projects[0]?.title || 'Safety System'}</h4>
-              <p className="text-xs text-zinc-400 leading-relaxed font-light line-clamp-3">
+              <h4 className="text-base font-extrabold text-white" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>{formData.projects[0]?.title || 'Safety System'}</h4>
+              <p className="text-xs text-zinc-400 leading-relaxed font-light line-clamp-3" style={{ fontWeight: 'var(--body-weight)' }}>
                 {formData.projects[0]?.description[lang] || formData.projects[0]?.description.en}
               </p>
               <div className="flex flex-wrap gap-1">
@@ -1676,7 +1808,7 @@ export default function AdminDashboard() {
 
           {activeTab === 'skills' && (
             <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
-              <h4 className="text-xs font-bold text-[var(--accent-color)] uppercase tracking-wider">{formData.skills[0]?.category[lang] || 'Skills'}</h4>
+              <h4 className="text-xs font-bold text-[var(--accent-color)] uppercase tracking-wider">{formData.skills[0]?.category[lang] || t.cms.sidebarSkills}</h4>
               <div className="flex flex-wrap gap-1.5">
                 {formData.skills[0]?.items.slice(0, 5).map((item, i) => (
                   <span key={i} className="text-[10px] font-medium bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg text-white/80">{item[lang] || item.en}</span>
@@ -1687,7 +1819,7 @@ export default function AdminDashboard() {
 
           {activeTab === 'experience' && (
             <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">Timeline Snapshot</span>
+              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms.previewTimeline}</span>
               <div className="border-l border-zinc-800 pl-3 space-y-3">
                 {formData.experience.slice(0, 2).map((exp) => (
                   <div key={exp.id} className="text-xs">
@@ -1708,9 +1840,9 @@ export default function AdminDashboard() {
                 <Award className="w-5 h-5" />
               </div>
               <h5 className="font-bold text-white text-xs px-2 leading-snug">
-                {formData.certifications[0]?.name?.[lang] || formData.certifications[0]?.[lang] || 'OSHA Safety Accreditation'}
+                {formData.certifications[0]?.name?.[lang] || formData.certifications[0]?.[lang] || t.cms.certPlaceholderName}
               </h5>
-              <p className="text-[9px] text-zinc-500 mt-1">{formData.certifications[0]?.provider?.[lang] || 'OSHA'}</p>
+              <p className="text-[9px] text-zinc-500 mt-1">{formData.certifications[0]?.provider?.[lang] || t.cms.certPlaceholderProvider}</p>
             </div>
           )}
 
@@ -1727,9 +1859,9 @@ export default function AdminDashboard() {
 
           {activeTab === 'contact' && (
             <div className="grid grid-cols-2 gap-2">
-              {formData.contact.email && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-white">Email</div>}
-              {formData.contact.whatsapp && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-emerald-400">WhatsApp</div>}
-              {formData.contact.github && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-zinc-400">GitHub</div>}
+              {formData.contact.email && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-white">{t.emailLabel}</div>}
+              {formData.contact.whatsapp && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-emerald-400">{t.whatsappLabel}</div>}
+              {formData.contact.github && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-zinc-400">{t.githubLabel}</div>}
               {formData.contact.linkedin && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-blue-400">LinkedIn</div>}
             </div>
           )}
@@ -1750,16 +1882,16 @@ export default function AdminDashboard() {
                   opacity: formData.themeSettings.glowIntensity * 0.15
                 }}
               />
-              <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: formData.themeSettings.accentColor }}>Liquid Glass Theme Mockup</span>
+              <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: formData.themeSettings.accentColor }}>{t.cms.previewMockup}</span>
               <p className="text-xs text-white/70 mt-3 font-light leading-relaxed">
-                This card shows your active settings. Opacity, border glow, backdrop blurs, and accent colors adapt in real-time.
+                {t.cms.previewThemeDesc}
               </p>
             </div>
           )}
 
           {activeTab === 'translations' && (
             <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-2">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">Static Translation preview</span>
+              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms.previewTranslation}</span>
               <div className="text-xs text-white"><span className="opacity-55">workTitle:</span> "{formData.translations[lang]?.workTitle || ''}"</div>
               <div className="text-xs text-white"><span className="opacity-55">footerText:</span> "{formData.translations[lang]?.footerText || ''}"</div>
             </div>
@@ -1767,7 +1899,7 @@ export default function AdminDashboard() {
 
           {activeTab === 'branding' && (
             <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 text-center space-y-2">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">Preloader reveal text</span>
+              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms.previewBranding}</span>
               <div className="text-xl font-bold tracking-widest text-white animate-pulse uppercase">{formData.mediaBranding.preloaderLogo || 'Mohamed Okash'}</div>
             </div>
           )}
@@ -1778,7 +1910,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050507] text-white flex flex-col font-sans">
+    <div dir={isRtl ? 'rtl' : 'ltr'} className="min-h-screen bg-[#050507] text-white flex flex-col font-sans">
       
       {/* CMS Header Bar */}
       <header className="fixed top-0 inset-x-0 h-16 bg-black/80 border-b border-zinc-800 backdrop-blur-md flex items-center justify-between px-6 z-40">
@@ -1788,12 +1920,22 @@ export default function AdminDashboard() {
             className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800 text-xs font-bold flex items-center gap-1.5 cursor-pointer text-zinc-300"
           >
             <ArrowLeft className="w-4 h-4" />
-            {lang === 'ar' ? 'العودة للموقع' : 'View Site'}
+            {t.cms?.viewSite || 'View Site'}
           </button>
+          
+          <select 
+            value={lang} 
+            onChange={(e) => setLanguage(e.target.value)} 
+            className="px-2.5 py-1.5 rounded-lg border border-zinc-800 bg-zinc-900 text-xs text-white outline-none cursor-pointer hover:border-zinc-700 transition-colors"
+          >
+            <option value="ar">{t.cms?.arabic || 'العربية'}</option>
+            <option value="en">{t.cms?.english || 'English'}</option>
+            <option value="ur">{t.cms?.urdu || 'اردو'}</option>
+          </select>
           
           <h1 className="text-sm font-black text-white tracking-widest uppercase hidden md:flex items-center gap-2">
             <Cpu className="w-4.5 h-4.5 text-[var(--primary)]" />
-            Portfolio Enterprise CMS
+            {t.cms?.panelTitle || 'Portfolio Enterprise CMS'}
           </h1>
         </div>
 
@@ -1804,16 +1946,16 @@ export default function AdminDashboard() {
             type="text" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search everywhere..."
+            placeholder={t.cms?.searchPlaceholder || 'Search everywhere...'}
             className="w-full pl-9 pr-3 py-1.5 bg-black/60 border border-zinc-800 rounded-lg text-xs text-white placeholder-zinc-500 outline-none focus:border-[var(--primary)] transition-all"
           />
 
           {/* Search Dropdown Overlay */}
           {searchQuery && (
             <div className="absolute top-full right-0 w-80 mt-1 border border-zinc-800 bg-black/95 rounded-xl shadow-2xl overflow-hidden z-50 py-1.5">
-              <div className="px-3 py-1 text-[9px] uppercase font-bold text-zinc-500 tracking-wider border-b border-zinc-900">Search Results</div>
+              <div className="px-3 py-1 text-[9px] uppercase font-bold text-zinc-500 tracking-wider border-b border-zinc-900">{t.cms?.searchResults || 'Search Results'}</div>
               {searchResults.length === 0 ? (
-                <div className="px-4 py-3 text-xs text-zinc-500">No matches found.</div>
+                <div className="px-4 py-3 text-xs text-zinc-500">{t.cms?.noResults || 'No matches found.'}</div>
               ) : (
                 <div className="max-h-60 overflow-y-auto">
                   {searchResults.map((res, i) => (
@@ -1823,7 +1965,7 @@ export default function AdminDashboard() {
                       className="px-4 py-2.5 hover:bg-zinc-900 cursor-pointer flex flex-col gap-0.5 border-b border-zinc-900 last:border-b-0"
                     >
                       <span className="text-xs font-bold text-white">{res.name}</span>
-                      <span className="text-[9px] text-zinc-500 capitalize">{res.desc} (Tab: {res.tab})</span>
+                      <span className="text-[9px] text-zinc-500 capitalize">{res.desc} ({t.cms?.tabLabel || 'Tab'}: {res.tab})</span>
                     </div>
                   ))}
                 </div>
@@ -1836,7 +1978,7 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-2.5">
           <button
             onClick={handleExportJSON}
-            title="Export Portfolio JSON Backup"
+            title={t.cms?.exportBackup || 'Export Portfolio JSON Backup'}
             className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800 text-zinc-400 hover:text-white cursor-pointer"
           >
             <Download className="w-4 h-4" />
@@ -1844,7 +1986,7 @@ export default function AdminDashboard() {
           
           <button
             onClick={() => fileInputRef.current?.click()}
-            title="Import Portfolio JSON Backup"
+            title={t.cms?.importBackup || 'Import Portfolio JSON Backup'}
             className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800 text-zinc-400 hover:text-white cursor-pointer"
           >
             <Upload className="w-4 h-4" />
@@ -1860,7 +2002,7 @@ export default function AdminDashboard() {
           {data?.settings?.backup && (
             <button
               onClick={handleRollback}
-              title="Restore Previous Backup Version"
+              title={t.cms?.rollbackBackup || 'Restore Previous Backup Version'}
               className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800 text-amber-500 hover:bg-amber-500/10 cursor-pointer"
             >
               <Undo className="w-4 h-4" />
@@ -1869,14 +2011,14 @@ export default function AdminDashboard() {
 
           <button 
             onClick={async () => {
-              if (isDirty && !window.confirm('You have unsaved changes. Logging out will discard them. Proceed?')) {
+              if (isDirty && !window.confirm(t.cms?.tabDirtyConfirm || 'You have unsaved changes in this tab. Switch tabs anyway?')) {
                 return;
               }
               await logout();
               navigate('/admin/login', { replace: true });
             }}
             className="p-2 rounded-lg border border-red-500/10 text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
-            title="Log Out"
+            title={t.cms?.logOut || 'Log Out'}
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -1888,98 +2030,98 @@ export default function AdminDashboard() {
         
         {/* Navigation Sidebar */}
         <aside className="w-full md:w-64 bg-black/60 border-b md:border-b-0 md:border-r border-zinc-800 md:h-[calc(100vh-64px)] overflow-y-auto shrink-0 flex md:flex-col p-4 gap-1 flex-wrap md:flex-nowrap">
-          <div className="px-3 py-2 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">Settings</div>
+          <div className="px-3 py-2 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">{t.cms?.sidebarHeaderSettings || 'Settings'}</div>
           <button 
             onClick={() => handleTabChange('general')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'general' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Settings className="w-3.5 h-3.5" /> General Settings
+            <Settings className="w-3.5 h-3.5" /> {t.cms?.sidebarSettings || 'General Settings'}
           </button>
 
           <button 
             onClick={() => handleTabChange('structure')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'structure' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Globe className="w-3.5 h-3.5" /> Website Structure
+            <Globe className="w-3.5 h-3.5" /> {t.cms?.sidebarStructure || 'Website Structure'}
           </button>
 
           <button 
             onClick={() => handleTabChange('branding')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'branding' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Image className="w-3.5 h-3.5" /> Media & Branding
+            <Image className="w-3.5 h-3.5" /> {t.cms?.sidebarBranding || 'Media & Branding'}
           </button>
 
-          <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">Components</div>
+          <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">{t.cms?.sidebarHeaderComponents || 'Components'}</div>
           <button 
             onClick={() => handleTabChange('hero')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'hero' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <User className="w-3.5 h-3.5" /> Hero Section
+            <User className="w-3.5 h-3.5" /> {t.cms?.sidebarHero || 'Hero Section'}
           </button>
 
           <button 
             onClick={() => handleTabChange('about')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'about' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Star className="w-3.5 h-3.5" /> About Section
+            <Star className="w-3.5 h-3.5" /> {t.cms?.sidebarAbout || 'About Section'}
           </button>
 
           <button 
             onClick={() => handleTabChange('projects')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'projects' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Briefcase className="w-3.5 h-3.5" /> Projects Showcase
+            <Briefcase className="w-3.5 h-3.5" /> {t.cms?.sidebarProjects || 'Projects Showcase'}
           </button>
 
           <button 
             onClick={() => handleTabChange('skills')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'skills' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Monitor className="w-3.5 h-3.5" /> Toolbox / Skills
+            <Monitor className="w-3.5 h-3.5" /> {t.cms?.sidebarSkills || 'Toolbox / Skills'}
           </button>
 
           <button 
             onClick={() => handleTabChange('experience')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'experience' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Briefcase className="w-3.5 h-3.5" /> Job Experience
+            <Briefcase className="w-3.5 h-3.5" /> {t.cms?.sidebarExperience || 'Job Experience'}
           </button>
 
           <button 
             onClick={() => handleTabChange('certifications')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'certifications' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Award className="w-3.5 h-3.5" /> Certifications
+            <Award className="w-3.5 h-3.5" /> {t.cms?.sidebarCertifications || 'Certifications'}
           </button>
 
           <button 
             onClick={() => handleTabChange('achievements')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'achievements' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Award className="w-3.5 h-3.5" /> Achievements
+            <Award className="w-3.5 h-3.5" /> {t.cms?.sidebarAchievements || 'Achievements'}
           </button>
 
           <button 
             onClick={() => handleTabChange('contact')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'contact' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Mail className="w-3.5 h-3.5" /> Contact Details
+            <Mail className="w-3.5 h-3.5" /> {t.cms?.sidebarContact || 'Contact Details'}
           </button>
 
-          <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">Theme & Language</div>
+          <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">{t.cms?.sidebarHeaderThemeLang || 'Theme & Language'}</div>
           <button 
             onClick={() => handleTabChange('theme')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'theme' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Palette className="w-3.5 h-3.5" /> Theme Settings
+            <Palette className="w-3.5 h-3.5" /> {t.cms?.sidebarTheme || 'Theme Settings'}
           </button>
 
           <button 
             onClick={() => handleTabChange('translations')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'translations' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
-            <Languages className="w-3.5 h-3.5" /> Dictionary Texts
+            <Languages className="w-3.5 h-3.5" /> {t.cms?.sidebarTranslations || 'Dictionary Texts'}
           </button>
         </aside>
 
@@ -2020,8 +2162,8 @@ export default function AdminDashboard() {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping" />
             <div>
-              <p className="text-xs font-bold text-white">Unsaved Changes</p>
-              <p className="text-[10px] text-zinc-500">Press "Save Changes" to publish your edits.</p>
+              <p className="text-xs font-bold text-white">{t.cms?.unsavedTitle || 'Unsaved Changes'}</p>
+              <p className="text-[10px] text-zinc-500">{t.cms?.unsavedSubtitle || 'Press Save Changes to publish.'}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -2029,7 +2171,7 @@ export default function AdminDashboard() {
               onClick={() => setFormData(JSON.parse(JSON.stringify(data)))}
               className="px-4 py-2 border border-zinc-800 hover:bg-zinc-900 rounded-lg text-xs font-extrabold text-zinc-400 hover:text-white transition-all cursor-pointer"
             >
-              Reset
+              {t.cms?.reset || 'Reset'}
             </button>
             <button 
               onClick={handleSave} 
@@ -2037,7 +2179,7 @@ export default function AdminDashboard() {
               className="px-5 py-2.5 bg-[var(--primary)] text-black hover:opacity-90 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-[var(--primary)]/10"
             >
               {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-              {isSaving ? 'Saving...' : 'Save Changes'}
+              {isSaving ? (t.cms?.saving || 'Saving...') : (t.cms?.saveChanges || 'Save Changes')}
             </button>
           </div>
         </div>

@@ -587,7 +587,13 @@ export const DEFAULT_PORTFOLIO_DATA = {
     blurStrength: 16,
     borderOpacity: 0.06,
     glowIntensity: 0.2,
-    bgIntensity: 0.1
+    bgIntensity: 0.1,
+    fontFamily: "Inter",
+    fontScale: 1.0,
+    headingWeight: "800",
+    bodyWeight: "300",
+    fontColor: "#fafafa",
+    headingColor: "#fafafa"
   },
   languageSettings: {
     languages: ["ar", "en", "ur"]

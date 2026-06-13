@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@300;400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @import "./styles/theme-vars.css";
 @import "./styles/animations.css";
@@ -7,12 +7,26 @@
   --font-sans: 'Plus Jakarta Sans', 'Cairo', 'Noto Nastaliq Urdu', system-ui, -apple-system, sans-serif;
 }
 
+/* Global Typography Controls */
+body, p, li, span, a, input, textarea, select, button {
+  font-family: var(--font-family-setting, var(--font-sans)) !important;
+}
+
 body {
   background-color: var(--bg);
-  color: var(--text);
-  font-family: var(--font-sans);
+  color: var(--font-color-setting, var(--text)) !important;
+  font-size: calc(1rem * var(--font-scale-setting, 1.0)) !important;
   overflow-x: hidden;
   transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s ease;
+}
+
+body, p, .tagline {
+  font-weight: var(--body-weight-setting, 300) !important;
+}
+
+h1, h2, h3, h4, h5, h6, h1 span, h2 span, h3 span, h4 span, h5 span, h6 span {
+  font-weight: var(--heading-weight-setting, 800) !important;
+  color: var(--heading-color-setting, inherit) !important;
 }
 
 /* Custom scrollbar for Stripe-like aesthetics */

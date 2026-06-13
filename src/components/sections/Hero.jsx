@@ -54,17 +54,50 @@ export const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="text-sm sm:text-base md:text-lg opacity-60 max-w-2xl leading-relaxed mb-12 px-4 font-light"
+        className="text-sm sm:text-base md:text-lg opacity-60 max-w-2xl leading-relaxed mb-8 px-4 font-light"
       >
         {data?.translations?.[lang]?.tagline || t.tagline}
       </motion.p>
+
+      {/* Elegant Animated Statistics Row */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+        className="grid grid-cols-3 gap-6 sm:gap-12 md:gap-16 max-w-2xl mx-auto mb-10 text-center z-20"
+      >
+        <div className="flex flex-col items-center">
+          <span className="text-2xl sm:text-3xl font-black text-white leading-tight">
+            {(data?.hero?.statistics?.projectsBuilt || 8)}+
+          </span>
+          <span className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
+            {t.cms?.projectsBuiltLabel || 'Projects'}
+          </span>
+        </div>
+        <div className="flex flex-col items-center border-x border-white/[0.08] px-4 sm:px-8 md:px-12">
+          <span className="text-2xl sm:text-3xl font-black text-white leading-tight">
+            4
+          </span>
+          <span className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
+            {t.cms?.industriesCountLabel || 'Industries'}
+          </span>
+        </div>
+        <div className="flex flex-col items-center">
+          <span className="text-2xl sm:text-3xl font-black text-white leading-tight">
+            {(data?.hero?.statistics?.experienceYears || 7)}+
+          </span>
+          <span className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
+            {t.cms?.yearsExpLabel || 'Years Experience'}
+          </span>
+        </div>
+      </motion.div>
 
       {/* Call to action buttons */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-wrap gap-4 justify-center mb-16 z-20"
+        className="flex flex-wrap gap-4 justify-center mb-12 z-20"
       >
         <button
           onClick={() => handleScrollTo('projects')}
