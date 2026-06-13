@@ -1,4 +1,4 @@
-/* Custom variables for Obsidian, Ocean, and Aurora themes */
+/* Custom variables for Obsidian, Ocean, Aurora, Platinum, and Midnight themes */
 :root {
   /* Default fallbacks */
   --bg: #050505;
@@ -55,3 +55,32 @@
   --blob2: rgba(109, 40, 217, 0.3);
   --blob3: rgba(249, 115, 22, 0.2);
 }
+
+[data-theme='platinum'] {
+  --bg: #f8f9fa;
+  --text: #0f172a;
+  --muted: #475569;
+  --border: rgba(15, 23, 42, 0.08);
+  --accent: #0f172a;
+  --accent-text: #ffffff;
+  --primary: #334155;
+  --spotlight: rgba(15, 23, 42, 0.05);
+  --blob1: rgba(203, 213, 225, 0.4);
+  --blob2: rgba(241, 245, 249, 0.4);
+  --blob3: rgba(226, 232, 240, 0.4);
+}
+
+[data-theme='midnight'] {
+  --bg: #030712;
+  --text: #f3f4f6;
+  --muted: #9ca3af;
+  --border: rgba(59, 130, 246, 0.15);
+  --accent: #3b82f6;
+  --accent-text: #ffffff;
+  --primary: #60a5fa;
+  --spotlight: rgba(59, 130, 246, 0.15);
+  --blob1: rgba(30, 58, 138, 0.3);
+  --blob2: rgba(17, 24, 39, 0.3);
+  --blob3: rgba(29, 78, 216, 0.2);
+}
+

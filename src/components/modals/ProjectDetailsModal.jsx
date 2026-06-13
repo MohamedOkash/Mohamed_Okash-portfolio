@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, CheckCircle2, ShieldAlert, Cpu, HardHat } from 'lucide-react';
+import { X, ExternalLink, CheckCircle2, ShieldAlert, Cpu, HardHat, Code2, AlertTriangle, Lightbulb, BarChart3, Binary } from 'lucide-react';
 import { useLanguageStore } from '../../store/languageStore';
 import { translations } from '../../data/translations';
 
@@ -86,35 +86,45 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
             {/* Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Left Column: Details & Narrative (2/3 width) */}
+              {/* Left Column: Details & Case Study Narrative (2/3 width) */}
               <div className="lg:col-span-2 space-y-8">
-                {/* Description */}
+                {/* Description Overview */}
                 <div>
                   <h4 className="text-xs uppercase tracking-widest font-bold opacity-40 mb-3">{t.overview}</h4>
-                  <p className="text-base md:text-lg opacity-80 leading-relaxed font-light">
+                  <p className="text-base md:text-lg opacity-85 leading-relaxed font-light">
                     {project.description[lang] || project.description.en}
                   </p>
                 </div>
 
-                {/* Narrative split: Problem vs Solution */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/[0.04]">
-                  <div className="p-5 rounded-2xl bg-red-500/5 border border-red-500/10">
-                    <h5 className="text-xs font-bold uppercase tracking-wider text-red-400 mb-2">{t.problemLabel}</h5>
-                    <p className="text-sm opacity-75 leading-relaxed">
-                      {project.challenges[lang] || project.challenges.en}
-                    </p>
+                {/* Problem & Challenges Section */}
+                <div className="pt-6 border-t border-white/[0.04] space-y-4">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-5 h-5 text-red-400" />
+                    <h4 className="text-sm uppercase tracking-wider font-extrabold text-red-400">
+                      {t.problemLabel} & {t.techChallenges}
+                    </h4>
                   </div>
-                  <div className="p-5 rounded-2xl bg-green-500/5 border border-green-500/10">
-                    <h5 className="text-xs font-bold uppercase tracking-wider text-green-400 mb-2">{t.solutionLabel}</h5>
-                    <p className="text-sm opacity-75 leading-relaxed">
-                      {project.architecture[lang] || project.architecture.en}
-                    </p>
+                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-red-500/5 border border-red-500/10 p-5 rounded-2xl">
+                    {project.challenges[lang] || project.challenges.en}
+                  </p>
+                </div>
+
+                {/* Solution & Architecture Section */}
+                <div className="pt-6 border-t border-white/[0.04] space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Lightbulb className="w-5 h-5 text-green-400" />
+                    <h4 className="text-sm uppercase tracking-wider font-extrabold text-green-400">
+                      {t.solutionLabel} & {t.architecture}
+                    </h4>
                   </div>
+                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-green-500/5 border border-green-500/10 p-5 rounded-2xl">
+                    {project.architecture[lang] || project.architecture.en}
+                  </p>
                 </div>
 
                 {/* Key Features List */}
-                <div className="pt-4 border-t border-white/[0.04]">
-                  <h4 className="text-xs uppercase tracking-widest font-bold opacity-40 mb-4">{t.keyFeatures}</h4>
+                <div className="pt-6 border-t border-white/[0.04] space-y-4">
+                  <h4 className="text-xs uppercase tracking-widest font-bold opacity-40">{t.keyFeatures}</h4>
                   <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {project.features.map((feature, idx) => (
                       <li key={idx} className="flex gap-3 items-start text-sm">
@@ -127,11 +137,14 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                   </ul>
                 </div>
 
-                {/* Business Value */}
+                {/* Business Impact */}
                 {project.businessValue && (
-                  <div className="pt-4 border-t border-white/[0.04]">
-                    <h4 className="text-xs uppercase tracking-widest font-bold opacity-40 mb-3">{t.businessImpactLabel}</h4>
-                    <p className="text-sm opacity-75 leading-relaxed">
+                  <div className="pt-6 border-t border-white/[0.04] space-y-4">
+                    <div className="flex items-center gap-2">
+                      <BarChart3 className="w-5 h-5 text-yellow-400" />
+                      <h4 className="text-xs uppercase tracking-widest font-bold opacity-40">{t.businessImpactLabel}</h4>
+                    </div>
+                    <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-yellow-500/5 border border-yellow-500/10 p-5 rounded-2xl">
                       {project.businessValue[lang] || project.businessValue.en}
                     </p>
                   </div>
@@ -140,29 +153,30 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
               {/* Right Column: Sidebar (1/3 width) */}
               <div className="space-y-6 lg:border-l lg:border-white/[0.05] lg:pl-8">
-                {/* Tech Environment */}
+                {/* Tech Environment / Tech Stack */}
                 <div>
                   <h4 className="text-xs uppercase tracking-widest font-bold opacity-40 mb-4">{t.techStack}</h4>
                   <div className="flex flex-wrap gap-2">
                     {project.tech.map((techItem, index) => (
                       <span 
                         key={index}
-                        className="px-3 py-1.5 text-xs rounded-xl bg-white/[0.02] border border-white/[0.05] font-medium opacity-90"
+                        className="px-3 py-1.5 text-xs rounded-xl bg-white/[0.02] border border-white/[0.05] font-medium opacity-90 flex items-center gap-1.5"
                       >
+                        <Binary className="w-3.5 h-3.5 opacity-60" />
                         {techItem[lang] || techItem.en || techItem}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                {/* Project links */}
+                {/* Project links: Live Demo & GitHub */}
                 <div className="pt-6 border-t border-white/[0.05] space-y-3">
                   {project.demoLink && (
                     <a
                       href={project.demoLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 shadow-lg cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 shadow-lg cursor-pointer transition-all hover:-translate-y-0.5"
                     >
                       <ExternalLink className="w-4.5 h-4.5" />
                       {t.demoLink}
@@ -174,7 +188,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                       href={project.githubLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm border border-white/20 hover:bg-white/5 transition-all cursor-pointer"
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm border border-white/20 hover:bg-white/5 transition-all cursor-pointer hover:-translate-y-0.5"
                     >
                       <GithubIcon className="w-4.5 h-4.5" />
                       {t.sourceLink}

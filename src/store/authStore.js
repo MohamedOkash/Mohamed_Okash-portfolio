@@ -11,11 +11,13 @@ export const useAuthStore = create((set) => {
     user: null,
     loading: true,
     error: null,
+    loginModalOpen: false,
+    setLoginModalOpen: (open) => set({ loginModalOpen: open }),
     login: async (email, password) => {
       set({ loading: true, error: null });
       try {
         const user = await loginAdmin(email, password);
-        set({ user, loading: false });
+        set({ user, loading: false, loginModalOpen: false });
         return user;
       } catch (err) {
         set({ error: err.code || err.message, loading: false });
@@ -35,3 +37,4 @@ export const useAuthStore = create((set) => {
     clearError: () => set({ error: null })
   };
 });
+
