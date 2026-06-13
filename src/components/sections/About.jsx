@@ -3,13 +3,13 @@ import { motion } from 'framer-motion';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
-import { Server, ShieldAlert, Cpu, HardHat, TrendingUp } from 'lucide-react';
+import { SpotlightCard } from '../ui/SpotlightCard';
+import { Server, HardHat, TrendingUp } from 'lucide-react';
 
 export const About = () => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
   const t = translations[lang] || translations.ar;
-  const isRtl = t.dir === 'rtl';
 
   const aboutData = data?.about || {
     title: { en: "My Journey.", ar: "مسيرتي المهنية.", ur: "میرا سفر۔" },
@@ -24,7 +24,7 @@ export const About = () => {
       {/* Section Header */}
       <div className="mb-16">
         <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3">
-          {t.whyMeTitle}
+          {lang === 'ar' ? 'نبذة شخصية' : lang === 'ur' ? 'میرا تعارف' : 'BIOGRAPHY'}
         </span>
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
           {aboutData.title[lang] || t.aboutTitle}
@@ -36,7 +36,7 @@ export const About = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
         {/* Storytelling Narrative Column (3/5 width) */}
-        <div className="lg:col-span-3 space-y-6 text-base md:text-lg opacity-80 leading-relaxed font-light">
+        <div className="lg:col-span-3 space-y-6 text-base md:text-lg opacity-85 leading-relaxed font-light">
           {paragraphs.map((p, idx) => (
             <p key={idx} className="whitespace-pre-line">
               {p}
@@ -46,10 +46,10 @@ export const About = () => {
 
         {/* Visual Comparative Bridge Card (2/5 width) */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="p-8 border border-[var(--border)] bg-white/[0.01] rounded-2xl relative overflow-hidden liquid-glass">
+          <SpotlightCard className="border border-[var(--border)] bg-white/[0.03] backdrop-blur-2xl rounded-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-40 h-40 bg-[var(--primary)] rounded-full blur-[80px] opacity-10 pointer-events-none" />
 
-            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+            <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-white">
               <TrendingUp className="w-5 h-5 text-[var(--primary)]" />
               {lang === 'ar' ? 'التحول والتكامل المهني' : lang === 'ur' ? 'پیشہ ورانہ انضمام' : 'The Structural Bridge'}
             </h3>
@@ -65,7 +65,7 @@ export const About = () => {
                   <h4 className="font-bold text-sm mb-1 text-white">
                     {lang === 'ar' ? 'البنية التحتية والشبكات (2016 - 2023)' : lang === 'ur' ? 'آئی ٹی انفراسٹرکچر' : 'IT Infrastructure Engineering (2016 - 2023)'}
                   </h4>
-                  <p className="text-xs opacity-60 leading-relaxed">
+                  <p className="text-xs opacity-60 leading-relaxed text-zinc-300">
                     {lang === 'ar' ? 'تجهيز السيرفرات، الشبكات اللاسلكية المعقدة، الفايبر، وكاميرات المراقبة للشبكات الأمنية الضخمة.' : 'Servers, complex routing, fiber cabling, CCTV security nodes, access controls, and multi-endpoint software integration.'}
                   </p>
                 </div>
@@ -80,13 +80,13 @@ export const About = () => {
                   <h4 className="font-bold text-sm mb-1 text-white">
                     {lang === 'ar' ? 'إدارة السلامة وهندسة الأمن (2023 - الآن)' : lang === 'ur' ? 'کام کی جگہ کی حفاظت' : 'HSE Workplace safety (2023 - Present)'}
                   </h4>
-                  <p className="text-xs opacity-60 leading-relaxed">
+                  <p className="text-xs opacity-60 leading-relaxed text-zinc-300">
                     {lang === 'ar' ? 'رقمنة عمليات السلامة بالكامل، تتبع الامتثال، القضاء على الورقيات، وتحليل المخاطر الميدانية.' : 'OSHA compliance audits, risk mitigation structures, site-level incident protocols, and digitizing paper processes using custom software.'}
                   </p>
                 </div>
               </div>
             </div>
-          </div>
+          </SpotlightCard>
         </div>
       </div>
     </section>

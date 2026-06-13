@@ -187,9 +187,9 @@ export default function AdminDashboard() {
         setFormData(updated);
       }} />
 
-      <div className="p-6 border border-white/10 rounded-2xl bg-white/[0.01] space-y-4">
+      <div className="p-6 border border-zinc-800 rounded-xl bg-zinc-900/40 space-y-4 shadow-sm">
         <h4 className="font-extrabold text-sm text-[var(--primary)] uppercase mb-2">إحصائيات المقدمة (Hero Counters)</h4>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <AdminInput label="سنوات الخبرة" type="number" value={formData.hero.statistics.experienceYears} onChange={(e) => {
             const updated = { ...formData };
             updated.hero.statistics.experienceYears = Number(e.target.value);
@@ -233,14 +233,18 @@ export default function AdminDashboard() {
   const renderSkillsForm = () => (
     <div className="space-y-8">
       {formData.skills.map((group, idx) => (
-        <div key={group.id} className="p-6 bg-white/[0.01] rounded-2xl border border-white/10 relative shadow">
-          <div className="flex justify-between items-center mb-6">
+        <div key={group.id} className="p-6 bg-zinc-900/40 border border-zinc-800 rounded-xl space-y-6 shadow-sm">
+          <div className="flex justify-between items-center mb-2">
             <h4 className="font-black text-sm uppercase text-[var(--primary)]">تصنيف مهارات {idx + 1}</h4>
-            <button onClick={() => {
-              const updated = { ...formData };
-              updated.skills = updated.skills.filter(g => g.id !== group.id);
-              setFormData(updated);
-            }} className="p-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl hover:bg-red-500/25 transition-colors cursor-pointer">
+            <button 
+              onClick={() => {
+                const updated = { ...formData };
+                updated.skills = updated.skills.filter(g => g.id !== group.id);
+                setFormData(updated);
+              }} 
+              className="p-2 bg-zinc-900 hover:bg-red-500/10 border border-zinc-800 hover:border-red-500/20 text-zinc-400 hover:text-red-400 rounded-lg transition-all cursor-pointer"
+              title="حذف التصنيف"
+            >
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
@@ -251,49 +255,56 @@ export default function AdminDashboard() {
               updated.skills[idx].category[key] = val;
               setFormData(updated);
             }} />
-            <AdminInput label="نوع الأيقونة (shield, server, monitor)" value={group.iconType} onChange={(e) => {
-              const updated = { ...formData };
-              updated.skills[idx].iconType = e.target.value;
-              setFormData(updated);
-            }} />
+            <div className="mb-6 p-6 rounded-xl border border-zinc-800 bg-zinc-950/40 shadow-sm flex flex-col justify-end">
+              <AdminInput label="نوع الأيقونة (shield, server, monitor)" value={group.iconType} onChange={(e) => {
+                const updated = { ...formData };
+                updated.skills[idx].iconType = e.target.value;
+                setFormData(updated);
+              }} />
+            </div>
           </div>
 
-          <div className="border-t border-white/10 pt-6 space-y-4">
+          <div className="border-t border-zinc-800 pt-6 space-y-4">
             <h5 className="font-bold text-xs opacity-75">المهارات داخل هذا التصنيف:</h5>
             {group.items.map((item, itemIdx) => (
-              <div key={itemIdx} className="flex items-center gap-4 relative">
-                <div className="flex-1">
-                  <AdminMultiLangInput label={`مهارة ${itemIdx + 1}`} valueObj={item} onChangeKey={(key, val) => {
-                    const updated = { ...formData };
-                    updated.skills[idx].items[itemIdx][key] = val;
-                    setFormData(updated);
-                  }} />
-                </div>
-                <button onClick={() => {
+              <AdminMultiLangInput
+                key={itemIdx}
+                label={`مهارة ${itemIdx + 1}`}
+                valueObj={item}
+                onChangeKey={(key, val) => {
+                  const updated = { ...formData };
+                  updated.skills[idx].items[itemIdx][key] = val;
+                  setFormData(updated);
+                }}
+                onDelete={() => {
                   const updated = { ...formData };
                   updated.skills[idx].items = updated.skills[idx].items.filter((_, i) => i !== itemIdx);
                   setFormData(updated);
-                }} className="p-2.5 bg-red-500/10 text-red-400 border border-red-500/25 rounded-xl hover:bg-red-500/20 cursor-pointer self-center">
-                  <Trash2 className="w-4.5 h-4.5" />
-                </button>
-              </div>
+                }}
+              />
             ))}
-            <button onClick={() => {
-              const updated = { ...formData };
-              updated.skills[idx].items.push({ ar: '', en: '', ur: '' });
-              setFormData(updated);
-            }} className="py-2.5 w-full bg-white/5 hover:bg-white/10 rounded-xl font-bold text-xs flex justify-center items-center gap-1.5 transition-all border border-white/10 cursor-pointer">
+            <button 
+              onClick={() => {
+                const updated = { ...formData };
+                updated.skills[idx].items.push({ ar: '', en: '', ur: '' });
+                setFormData(updated);
+              }} 
+              className="py-2.5 w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg font-bold text-xs flex justify-center items-center gap-1.5 transition-all cursor-pointer text-zinc-300"
+            >
               <Plus className="w-4 h-4" /> إضافة مهارة جديدة
             </button>
           </div>
         </div>
       ))}
 
-      <button onClick={() => {
-        const updated = { ...formData };
-        updated.skills.push({ id: Date.now().toString(), category: { ar: '', en: '', ur: '' }, iconType: 'shield', items: [] });
-        setFormData(updated);
-      }} className="py-4 w-full bg-[var(--primary)]/10 text-[var(--primary)] hover:bg-[var(--primary)]/20 rounded-xl font-bold text-sm flex justify-center items-center gap-2 transition-all border border-[var(--primary)]/20 cursor-pointer">
+      <button 
+        onClick={() => {
+          const updated = { ...formData };
+          updated.skills.push({ id: Date.now().toString(), category: { ar: '', en: '', ur: '' }, iconType: 'shield', items: [] });
+          setFormData(updated);
+        }} 
+        className="py-4 w-full bg-[var(--primary)]/5 hover:bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] rounded-xl font-bold text-sm flex justify-center items-center gap-2 transition-all cursor-pointer"
+      >
         <Plus className="w-5 h-5" /> إضافة تصنيف مهارات جديد
       </button>
     </div>
@@ -302,50 +313,64 @@ export default function AdminDashboard() {
   const renderProjectsForm = () => (
     <div className="space-y-8">
       {formData.projects.map((proj, idx) => (
-        <div key={proj.id} className="p-6 bg-white/[0.01] rounded-2xl border border-white/10 relative shadow">
-          <div className="flex justify-between items-center mb-6">
+        <div key={proj.id} className="p-6 bg-zinc-900/40 border border-zinc-800 rounded-xl space-y-6 shadow-sm">
+          <div className="flex justify-between items-center mb-2">
             <h4 className="font-black text-sm uppercase text-[var(--primary)]">مشروع: {proj.title || 'جديد'}</h4>
-            <button onClick={() => {
-              const updated = { ...formData };
-              updated.projects = updated.projects.filter(p => p.id !== proj.id);
-              setFormData(updated);
-            }} className="p-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl hover:bg-red-500/25 transition-colors cursor-pointer">
+            <button 
+              onClick={() => {
+                const updated = { ...formData };
+                updated.projects = updated.projects.filter(p => p.id !== proj.id);
+                setFormData(updated);
+              }} 
+              className="p-2 bg-zinc-900 hover:bg-red-500/10 border border-zinc-800 hover:border-red-500/20 text-zinc-400 hover:text-red-400 rounded-lg transition-all cursor-pointer"
+              title="حذف المشروع"
+            >
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <AdminInput label="معرف المشروع الفريد (Unique Slug ID)" value={proj.id} onChange={(e) => {
-              const updated = { ...formData };
-              updated.projects[idx].id = e.target.value;
-              setFormData(updated);
-            }} />
-            <AdminInput label="عنوان المشروع (Title)" value={proj.title} onChange={(e) => {
-              const updated = { ...formData };
-              updated.projects[idx].title = e.target.value;
-              setFormData(updated);
-            }} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-zinc-950/20 border border-zinc-800 rounded-lg">
+              <AdminInput label="معرف المشروع الفريد (Unique Slug ID)" value={proj.id} onChange={(e) => {
+                const updated = { ...formData };
+                updated.projects[idx].id = e.target.value;
+                setFormData(updated);
+              }} />
+            </div>
+            <div className="p-4 bg-zinc-950/20 border border-zinc-800 rounded-lg">
+              <AdminInput label="عنوان المشروع (Title)" value={proj.title} onChange={(e) => {
+                const updated = { ...formData };
+                updated.projects[idx].title = e.target.value;
+                setFormData(updated);
+              }} />
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <AdminInput label="رابط العرض (Demo Link)" value={proj.demoLink || ''} onChange={(e) => {
-              const updated = { ...formData };
-              updated.projects[idx].demoLink = e.target.value;
-              setFormData(updated);
-            }} />
-            <AdminInput label="كود سورس (GitHub Link)" value={proj.githubLink || ''} onChange={(e) => {
-              const updated = { ...formData };
-              updated.projects[idx].githubLink = e.target.value;
-              setFormData(updated);
-            }} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-zinc-950/20 border border-zinc-800 rounded-lg">
+              <AdminInput label="رابط العرض (Demo Link)" value={proj.demoLink || ''} onChange={(e) => {
+                const updated = { ...formData };
+                updated.projects[idx].demoLink = e.target.value;
+                setFormData(updated);
+              }} />
+            </div>
+            <div className="p-4 bg-zinc-950/20 border border-zinc-800 rounded-lg">
+              <AdminInput label="كود سورس (GitHub Link)" value={proj.githubLink || ''} onChange={(e) => {
+                const updated = { ...formData };
+                updated.projects[idx].githubLink = e.target.value;
+                setFormData(updated);
+              }} />
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <AdminInput label="أيقونة الموديل (shield, hardhat, code)" value={proj.iconType || 'shield'} onChange={(e) => {
-              const updated = { ...formData };
-              updated.projects[idx].iconType = e.target.value;
-              setFormData(updated);
-            }} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-zinc-950/20 border border-zinc-800 rounded-lg flex flex-col justify-end">
+              <AdminInput label="أيقونة الموديل (shield, hardhat, code)" value={proj.iconType || 'shield'} onChange={(e) => {
+                const updated = { ...formData };
+                updated.projects[idx].iconType = e.target.value;
+                setFormData(updated);
+              }} />
+            </div>
             <AdminMultiLangInput label="التصنيف (Category)" valueObj={proj.category} onChangeKey={(key, val) => {
               const updated = { ...formData };
               updated.projects[idx].category[key] = val;
@@ -380,89 +405,96 @@ export default function AdminDashboard() {
           )}
 
           {/* Dynamic list of features */}
-          <div className="border-t border-white/10 pt-6 space-y-4">
+          <div className="border-t border-zinc-800 pt-6 space-y-4">
             <h5 className="font-bold text-xs opacity-75">الميزات الرئيسية (Key Features):</h5>
             {proj.features.map((feat, fIdx) => (
-              <div key={fIdx} className="flex gap-4">
-                <div className="flex-1">
-                  <AdminMultiLangInput label={`ميزة ${fIdx + 1}`} valueObj={feat} onChangeKey={(key, val) => {
-                    const updated = { ...formData };
-                    updated.projects[idx].features[fIdx][key] = val;
-                    setFormData(updated);
-                  }} />
-                </div>
-                <button onClick={() => {
+              <AdminMultiLangInput
+                key={fIdx}
+                label={`ميزة ${fIdx + 1}`}
+                valueObj={feat}
+                onChangeKey={(key, val) => {
+                  const updated = { ...formData };
+                  updated.projects[idx].features[fIdx][key] = val;
+                  setFormData(updated);
+                }}
+                onDelete={() => {
                   const updated = { ...formData };
                   updated.projects[idx].features = updated.projects[idx].features.filter((_, i) => i !== fIdx);
                   setFormData(updated);
-                }} className="p-2.5 bg-red-500/10 text-red-400 border border-red-500/25 rounded-xl hover:bg-red-500/20 cursor-pointer self-center">
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
+                }}
+              />
             ))}
-            <button onClick={() => {
-              const updated = { ...formData };
-              updated.projects[idx].features.push({ ar: '', en: '' });
-              setFormData(updated);
-            }} className="py-2.5 w-full bg-white/5 hover:bg-white/10 rounded-xl font-bold text-xs flex justify-center items-center gap-1.5 transition-all border border-white/10 cursor-pointer">
+            <button 
+              onClick={() => {
+                const updated = { ...formData };
+                updated.projects[idx].features.push({ ar: '', en: '', ur: '' });
+                setFormData(updated);
+              }} 
+              className="py-2.5 w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg font-bold text-xs flex justify-center items-center gap-1.5 transition-all cursor-pointer text-zinc-300"
+            >
               <Plus className="w-4 h-4" /> إضافة ميزة رئيسية
             </button>
           </div>
 
           {/* Dynamic list of technologies */}
-          <div className="border-t border-white/10 pt-6 space-y-4 mt-6">
+          <div className="border-t border-zinc-800 pt-6 space-y-4 mt-6">
             <h5 className="font-bold text-xs opacity-75">التقنيات المستخدمة (Tech Stack):</h5>
             {proj.tech.map((tItem, tIdx) => (
-              <div key={tIdx} className="flex gap-4">
-                <div className="flex-1">
-                  <AdminMultiLangInput label={`تقنية ${tIdx + 1}`} valueObj={typeof tItem === 'string' ? { ar: tItem, en: tItem, ur: tItem } : tItem} onChangeKey={(key, val) => {
-                    const updated = { ...formData };
-                    if (typeof updated.projects[idx].tech[tIdx] === 'string') {
-                      const prevVal = updated.projects[idx].tech[tIdx];
-                      updated.projects[idx].tech[tIdx] = { ar: prevVal, en: prevVal, ur: prevVal };
-                    }
-                    updated.projects[idx].tech[tIdx][key] = val;
-                    setFormData(updated);
-                  }} />
-                </div>
-                <button onClick={() => {
+              <AdminMultiLangInput
+                key={tIdx}
+                label={`تقنية ${tIdx + 1}`}
+                valueObj={typeof tItem === 'string' ? { ar: tItem, en: tItem, ur: tItem } : tItem}
+                onChangeKey={(key, val) => {
+                  const updated = { ...formData };
+                  if (typeof updated.projects[idx].tech[tIdx] === 'string') {
+                    const prevVal = updated.projects[idx].tech[tIdx];
+                    updated.projects[idx].tech[tIdx] = { ar: prevVal, en: prevVal, ur: prevVal };
+                  }
+                  updated.projects[idx].tech[tIdx][key] = val;
+                  setFormData(updated);
+                }}
+                onDelete={() => {
                   const updated = { ...formData };
                   updated.projects[idx].tech = updated.projects[idx].tech.filter((_, i) => i !== tIdx);
                   setFormData(updated);
-                }} className="p-2.5 bg-red-500/10 text-red-400 border border-red-500/25 rounded-xl hover:bg-red-500/20 cursor-pointer self-center">
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
+                }}
+              />
             ))}
-            <button onClick={() => {
-              const updated = { ...formData };
-              updated.projects[idx].tech.push({ ar: '', en: '', ur: '' });
-              setFormData(updated);
-            }} className="py-2.5 w-full bg-white/5 hover:bg-white/10 rounded-xl font-bold text-xs flex justify-center items-center gap-1.5 transition-all border border-white/10 cursor-pointer">
+            <button 
+              onClick={() => {
+                const updated = { ...formData };
+                updated.projects[idx].tech.push({ ar: '', en: '', ur: '' });
+                setFormData(updated);
+              }} 
+              className="py-2.5 w-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg font-bold text-xs flex justify-center items-center gap-1.5 transition-all cursor-pointer text-zinc-300"
+            >
               <Plus className="w-4 h-4" /> إضافة تقنية
             </button>
           </div>
         </div>
       ))}
 
-      <button onClick={() => {
-        const updated = { ...formData };
-        updated.projects.push({
-          id: Date.now().toString(),
-          title: 'New Product',
-          category: { ar: '', en: '', ur: '' },
-          description: { ar: '', en: '', ur: '' },
-          challenges: { ar: '', en: '', ur: '' },
-          architecture: { ar: '', en: '', ur: '' },
-          businessValue: { ar: '', en: '', ur: '' },
-          features: [],
-          tech: [],
-          iconType: 'shield',
-          demoLink: '',
-          githubLink: ''
-        });
-        setFormData(updated);
-      }} className="py-4 w-full bg-[var(--primary)]/10 text-[var(--primary)] hover:bg-[var(--primary)]/20 rounded-xl font-bold text-sm flex justify-center items-center gap-2 transition-all border border-[var(--primary)]/20 cursor-pointer">
+      <button 
+        onClick={() => {
+          const updated = { ...formData };
+          updated.projects.push({
+            id: Date.now().toString(),
+            title: 'New Product',
+            category: { ar: '', en: '', ur: '' },
+            description: { ar: '', en: '', ur: '' },
+            challenges: { ar: '', en: '', ur: '' },
+            architecture: { ar: '', en: '', ur: '' },
+            businessValue: { ar: '', en: '', ur: '' },
+            features: [],
+            tech: [],
+            iconType: 'shield',
+            demoLink: '',
+            githubLink: ''
+          });
+          setFormData(updated);
+        }} 
+        className="py-4 w-full bg-[var(--primary)]/5 hover:bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] rounded-xl font-bold text-sm flex justify-center items-center gap-2 transition-all cursor-pointer"
+      >
         <Plus className="w-5 h-5" /> إضافة مشروع جديد
       </button>
     </div>
@@ -471,14 +503,18 @@ export default function AdminDashboard() {
   const renderExperienceForm = () => (
     <div className="space-y-8">
       {formData.experience.map((exp, idx) => (
-        <div key={exp.id} className="p-6 bg-white/[0.01] rounded-2xl border border-white/10 relative shadow">
-          <div className="flex justify-between items-center mb-6">
+        <div key={exp.id} className="p-6 bg-zinc-900/40 border border-zinc-800 rounded-xl space-y-6 shadow-sm">
+          <div className="flex justify-between items-center mb-2">
             <h4 className="font-black text-sm uppercase text-[var(--primary)]">خبرة {idx + 1}</h4>
-            <button onClick={() => {
-              const updated = { ...formData };
-              updated.experience = updated.experience.filter(e => e.id !== exp.id);
-              setFormData(updated);
-            }} className="p-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl hover:bg-red-500/25 transition-colors cursor-pointer">
+            <button 
+              onClick={() => {
+                const updated = { ...formData };
+                updated.experience = updated.experience.filter(e => e.id !== exp.id);
+                setFormData(updated);
+              }} 
+              className="p-2 bg-zinc-900 hover:bg-red-500/10 border border-zinc-800 hover:border-red-500/20 text-zinc-400 hover:text-red-400 rounded-lg transition-all cursor-pointer"
+              title="حذف خبرة"
+            >
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
@@ -506,17 +542,20 @@ export default function AdminDashboard() {
         </div>
       ))}
 
-      <button onClick={() => {
-        const updated = { ...formData };
-        updated.experience.push({
-          id: Date.now().toString(),
-          role: { ar: '', en: '', ur: '' },
-          company: { ar: '', en: '', ur: '' },
-          period: { ar: '', en: '', ur: '' },
-          description: { ar: '', en: '', ur: '' }
-        });
-        setFormData(updated);
-      }} className="py-4 w-full bg-[var(--primary)]/10 text-[var(--primary)] hover:bg-[var(--primary)]/20 rounded-xl font-bold text-sm flex justify-center items-center gap-2 transition-all border border-[var(--primary)]/20 cursor-pointer">
+      <button 
+        onClick={() => {
+          const updated = { ...formData };
+          updated.experience.push({
+            id: Date.now().toString(),
+            role: { ar: '', en: '', ur: '' },
+            company: { ar: '', en: '', ur: '' },
+            period: { ar: '', en: '', ur: '' },
+            description: { ar: '', en: '', ur: '' }
+          });
+          setFormData(updated);
+        }} 
+        className="py-4 w-full bg-[var(--primary)]/5 hover:bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] rounded-xl font-bold text-sm flex justify-center items-center gap-2 transition-all cursor-pointer"
+      >
         <Plus className="w-5 h-5" /> إضافة خبرة عمل جديدة
       </button>
     </div>
@@ -525,19 +564,23 @@ export default function AdminDashboard() {
   const renderCertificationsForm = () => (
     <div className="space-y-8">
       {formData.certifications.map((cert, idx) => (
-        <div key={cert.id} className="p-6 bg-white/[0.01] rounded-2xl border border-white/10 relative shadow">
-          <div className="flex justify-between items-center mb-6">
+        <div key={cert.id} className="p-6 bg-zinc-900/40 border border-zinc-800 rounded-xl space-y-6 shadow-sm">
+          <div className="flex justify-between items-center mb-2">
             <h4 className="font-black text-sm uppercase text-[var(--primary)]">شهادة {idx + 1}</h4>
-            <button onClick={() => {
-              const updated = { ...formData };
-              updated.certifications = updated.certifications.filter(c => c.id !== cert.id);
-              setFormData(updated);
-            }} className="p-2 bg-red-500/10 text-red-400 border border-red-500/20 rounded-xl hover:bg-red-500/25 transition-colors cursor-pointer">
+            <button 
+              onClick={() => {
+                const updated = { ...formData };
+                updated.certifications = updated.certifications.filter(c => c.id !== cert.id);
+                setFormData(updated);
+              }} 
+              className="p-2 bg-zinc-900 hover:bg-red-500/10 border border-zinc-800 hover:border-red-500/20 text-zinc-400 hover:text-red-400 rounded-lg transition-all cursor-pointer"
+              title="حذف الشهادة"
+            >
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="mb-4">
+          <div className="p-4 bg-zinc-950/20 border border-zinc-800 rounded-lg">
             <AdminInput label="المعرف الفريد للشهادة (Unique ID)" value={cert.id} onChange={(e) => {
               const updated = { ...formData };
               updated.certifications[idx].id = e.target.value;
@@ -553,23 +596,26 @@ export default function AdminDashboard() {
         </div>
       ))}
 
-      <button onClick={() => {
-        const updated = { ...formData };
-        updated.certifications.push({
-          id: Date.now().toString(),
-          ar: 'شهادة جديدة',
-          en: 'New Certificate',
-          ur: 'نئی سند'
-        });
-        setFormData(updated);
-      }} className="py-4 w-full bg-[var(--primary)]/10 text-[var(--primary)] hover:bg-[var(--primary)]/20 rounded-xl font-bold text-sm flex justify-center items-center gap-2 transition-all border border-[var(--primary)]/20 cursor-pointer">
+      <button 
+        onClick={() => {
+          const updated = { ...formData };
+          updated.certifications.push({
+            id: Date.now().toString(),
+            ar: 'شهادة جديدة',
+            en: 'New Certificate',
+            ur: 'نئی سند'
+          });
+          setFormData(updated);
+        }} 
+        className="py-4 w-full bg-[var(--primary)]/5 hover:bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] rounded-xl font-bold text-sm flex justify-center items-center gap-2 transition-all cursor-pointer"
+      >
         <Plus className="w-5 h-5" /> إضافة شهادة جديدة
       </button>
     </div>
   );
 
   const renderContactForm = () => (
-    <div className="p-6 bg-white/[0.01] rounded-2xl border border-white/10 space-y-6">
+    <div className="p-6 bg-zinc-900/40 border border-zinc-800 rounded-xl space-y-6 shadow-sm">
       <AdminInput label="البريد الإلكتروني (Email Address)" value={formData.contact.email} onChange={(e) => {
         const updated = { ...formData };
         updated.contact.email = e.target.value;
@@ -591,9 +637,9 @@ export default function AdminDashboard() {
   );
 
   const renderSettingsForm = () => (
-    <div className="p-6 bg-white/[0.01] rounded-2xl border border-white/10 space-y-6">
+    <div className="p-6 bg-zinc-900/40 border border-zinc-800 rounded-xl space-y-6 shadow-sm">
       {/* Maintenance Mode Toggle */}
-      <div className="flex items-center justify-between p-4 rounded-xl bg-black/40 border border-white/5">
+      <div className="flex items-center justify-between p-4 rounded-xl bg-zinc-950/30 border border-zinc-800">
         <div>
           <h5 className="font-bold text-sm text-white mb-1">وضع الصيانة (Maintenance Mode)</h5>
           <p className="text-xs opacity-55">تفعيل وضع الصيانة لغلق تصفح الموقع</p>
@@ -617,7 +663,7 @@ export default function AdminDashboard() {
           {formData.projects.map((proj) => {
             const isFeatured = formData.settings.featuredProjects.includes(proj.id);
             return (
-              <div key={proj.id} className="flex items-center justify-between p-4 rounded-xl bg-black/40 border border-white/5">
+              <div key={proj.id} className="flex items-center justify-between p-4 rounded-xl bg-zinc-950/30 border border-zinc-800">
                 <span className="text-xs font-bold text-white">{proj.title}</span>
                 <input 
                   type="checkbox" 

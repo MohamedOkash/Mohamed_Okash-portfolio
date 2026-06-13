@@ -7,9 +7,7 @@ import { useAuthStore } from '../../store/authStore';
 import { getJsonLdSchema } from '../../utils/seo';
 import { RootLayout } from '../../app/layouts/RootLayout';
 import { Hero } from '../../components/sections/Hero';
-import { WhyOkash } from '../../components/sections/WhyOkash';
 import { About } from '../../components/sections/About';
-import { Achievements } from '../../components/sections/Achievements';
 import { Skills } from '../../components/sections/Skills';
 import { Experience } from '../../components/sections/Experience';
 import { Certifications } from '../../components/sections/Certifications';
@@ -85,25 +83,24 @@ export default function Home() {
         {/* Hero Intro */}
         <Hero />
 
-        {/* Brand Storytelling Pillars */}
-        <WhyOkash />
-
         {/* About Biography & Career Transition */}
         <About />
-
-        {/* Interactive Stats Counters */}
-        <Achievements />
 
         {/* Projects Showcase - Presented as Premium Products & Case Studies */}
         <section id="projects" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-white/[0.04]">
           <div className="mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 flex items-center gap-1.5">
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 flex items-center gap-1.5 animate-pulse">
               <Sparkles className="w-4 h-4 text-[var(--primary)]" />
               {t.workTitle}
             </span>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
-              {lang === 'ar' ? 'الأنظمة والتطبيقات المطورة.' : lang === 'ur' ? 'میرے پروجیکٹس۔' : 'Systems & Engineered Apps.'}
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
+              {data?.translations?.[lang]?.workTitle || t.workTitle}
             </h2>
+            {t.workSubtitle && (
+              <p className="text-lg opacity-65 max-w-3xl leading-relaxed">
+                {data?.translations?.[lang]?.workSubtitle || t.workSubtitle}
+              </p>
+            )}
           </div>
 
           {/* Featured Products Track */}

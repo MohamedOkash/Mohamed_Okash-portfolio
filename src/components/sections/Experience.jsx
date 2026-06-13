@@ -2,13 +2,13 @@ import React from 'react';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
+import { SpotlightCard } from '../ui/SpotlightCard';
 import { Briefcase, Calendar, Building2 } from 'lucide-react';
 
 export const Experience = () => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
   const t = translations[lang] || translations.ar;
-  const isRtl = t.dir === 'rtl';
 
   const experienceList = data?.experience || [];
 
@@ -32,12 +32,12 @@ export const Experience = () => {
         {experienceList.map((exp) => (
           <div key={exp.id} className="relative ps-8 md:ps-10 group">
             {/* Dot indicator aligned with logical start border */}
-            <div className={`absolute top-1.5 -start-[11px] w-5 h-5 rounded-full bg-[#0a0a0c] border-2 border-white/20 group-hover:border-[var(--primary)] transition-colors duration-300 flex items-center justify-center z-10`}>
+            <div className="absolute top-1.5 -start-[11px] w-5 h-5 rounded-full bg-[#050505] border-2 border-white/20 group-hover:border-[var(--primary)] transition-colors duration-300 flex items-center justify-center z-10">
               <div className="w-1.5 h-1.5 rounded-full bg-white/40 group-hover:bg-[var(--primary)] transition-all duration-300" />
             </div>
 
             {/* Experience Card */}
-            <div className="p-6 md:p-8 border border-[var(--border)] bg-white/[0.015] hover:bg-white/[0.03] transition-all duration-300 rounded-2xl relative overflow-hidden group-hover:border-[var(--primary)]/20 shadow-md">
+            <SpotlightCard className="p-6 md:p-8 hover:border-[var(--primary)]/20 transition-all duration-300 shadow-md">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--primary)] rounded-full blur-[80px] opacity-5 pointer-events-none" />
 
               <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
@@ -66,7 +66,7 @@ export const Experience = () => {
               <p className="text-sm md:text-base opacity-70 leading-relaxed whitespace-pre-line font-light">
                 {exp.description[lang] || exp.description.en}
               </p>
-            </div>
+            </SpotlightCard>
           </div>
         ))}
       </div>
