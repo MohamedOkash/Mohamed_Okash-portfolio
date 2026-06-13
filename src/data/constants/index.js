@@ -121,10 +121,13 @@ export const DEFAULT_PORTFOLIO_DATA = {
       ]
     }
   ],
-  projects: [
+    projects: [
     {
       id: "hse-pro",
       title: "HSE-PRO (Safety Management System)",
+      projectType: "enterprise",
+      status: "completed",
+      featured: true,
       category: {
         en: "Enterprise Safety Software",
         ar: "برمجيات السلامة المؤسسية",
@@ -138,7 +141,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
       features: [
         { en: "Full-scale Incident Management Logic", ar: "منطق متكامل لإدارة وتحليل الحوادث", ur: "واقعات کے انتظام کی مکمل منطق" },
         { en: "Live Hazard Boarding", ar: "لوحة حية لتسجيل وتتبع المخاطر", ur: "لائیو خطرے کی بورڈنگ" },
-        { en: "Compliance Metric Visualizations", ar: "تصورات بيانية لمقاييس الامتثال", ur: "تعمیل میٹرک ویژولائزیشن" }
+        { en: "Compliance Metric Visualizations", ar: "تصورات بيانية لمقاييس الامتثال", ur: "تعميل میٹرك ویژولائزیشن" }
       ],
       challenges: {
         en: "Structuring a very large React codebase into manageable, reusable components without suffering performance drops.",
@@ -153,7 +156,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
       architecture: {
         en: "Advanced component tree with rigorous state management built to handle heavy relational data from safety reports.",
         ar: "شجرة مكونات (Component Tree) متقدمة مع إدارة صارمة للحالة البرمجية للتعامل مع البيانات المترابطة الكثيفة لتقارير السلامة.",
-        ur: "حفاظتی رپورٹس سے بھاری ڈیٹا کو سنبھالنے کے لئے جدید اجزاء کا درخت۔"
+        ur: "حفاظتی رپورٹس سے بھاري ڈیٹا کو سنبھالنے کے لئے جديد اجزاء کا درخت۔"
       },
       businessValue: {
         en: "Digitized 100% of site safety documentation, enabling instant audits and significantly faster emergency responses.",
@@ -167,15 +170,18 @@ export const DEFAULT_PORTFOLIO_DATA = {
     {
       id: "constructflow",
       title: "ConstructFlow Pro (v1.0.0)",
+      projectType: "enterprise",
+      status: "completed",
+      featured: true,
       category: {
         en: "Construction Project Dashboard",
         ar: "لوحة تحكم مشاريع البناء",
-        ur: "تعمیراتی پروجیکٹ ڈیش بورڈ"
+        ur: "تعميراتی پروجيكٹ ديش بورڈ"
       },
       description: {
         en: "A highly specialized dashboard application designed for construction workflows. It features custom 'App Modals' for rapid data entry by site engineers.",
         ar: "تطبيق لوحة تحكم متخصص للغاية ومصمم خصيصاً لسير عمل مشاريع الإنشاءات. يتميز بنظام 'App Modals' مخصص لإدخال البيانات بسرعة من قبل مهندسي الموقع.",
-        ur: "تعمیراتی ورک فلو کے لیے ڈیزائن کردہ ایک انتہائی ماہر ڈیش بورڈ ایپ۔"
+        ur: "تعميراتی ورک فلو کے لیے ڈیزائن کردہ ایک انتہائی ماہر ڈيش بورڈ ایپ۔"
       },
       features: [
         { en: "Custom App Modals Architecture", ar: "هيكلية مخصصة للنوافذ المنبثقة", ur: "کسٹم ایپ موڈلز" },
@@ -195,7 +201,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
       architecture: {
         en: "Modular dashboard layout utilizing context providers to pass construction phase data seamlessly across disparate views.",
         ar: "تخطيط معياري للوحة التحكم يعتمد على (Context Providers) لتمرير بيانات مراحل البناء بسلاسة عبر واجهات العرض المختلفة.",
-        ur: "مختلف آراء میں تعمیراتی مرحلے کے ڈیٹا کو بغیر کسی رکاوٹ کے منتقل کرنے کے لئے ماڈیولر ڈیش بورڈ لے آؤٹ۔"
+        ur: "مختلف آراء میں تعمیراتی مرحلے کے ڈیٹا کو بغیر کسی رکاوٹ کے منتقل کرنے کے لئے ماديولر دیش بورڈ لے آؤٹ۔"
       },
       businessValue: {
         en: "Streamlined the gap between civil engineering tasks and safety compliance, creating a unified flow for site managers.",
@@ -205,6 +211,276 @@ export const DEFAULT_PORTFOLIO_DATA = {
       iconType: "hardhat",
       demoLink: "https://constructflow-demo.web.app",
       githubLink: "https://github.com/MohamedOkash/constructflow"
+    },
+    {
+      id: "elazab-portfolio",
+      title: "Mohamed Elazab Portfolio",
+      projectType: "personal-brand",
+      status: "completed",
+      featured: true,
+      category: {
+        en: "Personal Brand Platform",
+        ar: "منصة العلامة الشخصية",
+        ur: "ذاتی برانڈ پلیٹ فارم"
+      },
+      description: {
+        en: "A professional photography portfolio platform custom-built for Mohamed Elazab. It displays high-resolution galleries of wedding and outdoor sessions, package details, custom booking options, and reviews from real clients.",
+        ar: "منصة معرض أعمال وتصوير احترافية مصممة خصيصاً للمصور محمد العزب بالمنصورة. تعرض معارض صور عالية الدقة لجلسات الأفراح والجلسات الخارجية، وتفاصيل الباقات والخدمات، وخيارات الحجز المخصصة.",
+        ur: "محمد العزب کے لیے ایک پیشہ ور فوٹوگرافی پورٹ فولیو پلیٹ فارم جو شادی اور آؤٹ ڈور سیشنز کی تصاویر پیش کرتا ہے۔"
+      },
+      features: [
+        { en: "Categorized Masonry Gallery Grid", ar: "معرض صور شبكي مقسم حسب الفئات", ur: "زمرہ بند گیلری" },
+        { en: "Interactive Wedding Packages & Pricing Calculator", ar: "حاسبة تفاعلية لباقات الأفراح والأسعار", ur: "انٹرایکٹو ویڈنگ پیکجز اور قیمتوں کا کیلکولیٹر" },
+        { en: "Custom Booking Terms & Add-ons selector", ar: "شروط حجز مخصصة ومحدد الخدمات الإضافية", ur: "بکنگ کی شرائط اور اضافی خدمات کا انتخاب کنندہ" }
+      ],
+      challenges: {
+        en: "Optimizing large high-resolution images for fast loading speeds on mobile connections while maintaining crisp image quality.",
+        ar: "تحسين الصور الكبيرة عالية الدقة لتحقيق سرعة تحميل ممتازة على الهواتف المحمولة مع الحفاظ على جودة ونقاء الصور المعروضة.",
+        ur: "موبائل کنکشن پر تیز رفتار لوڈنگ کے لیے بڑی ہائی ریزولوشن تصاویر کو بہتر بنانا۔"
+      },
+      tech: [
+        { en: "React 18", ar: "React 18", ur: "React 18" },
+        { en: "CSS Variables", ar: "CSS Variables", ur: "CSS Variables" },
+        { en: "LocalStorage DAL Caching", ar: "ذاكرة التخزين المؤقت المحلي", ur: "لوکل اسٹوریج کیشنگ" }
+      ],
+      architecture: {
+        en: "Lightweight Data Access Layer (DAL) separating gallery datasets and packages from UI layout to simplify future media updates.",
+        ar: "بنية معيارية خفيفة الوزن تفصل بيانات المعرض والأسعار عن المكونات الرسومية لتسهيل عمليات التحديث المستقبلية.",
+        ur: "گیلری ڈیٹا سیٹس اور پیکیجز کو انٹرفیس سے الگ کرنے والا ہلکا پھلکا ماڈیولر فن تعمیر۔"
+      },
+      businessValue: {
+        en: "Increased wedding photography booking conversions by 40% and eliminated manual pricing inquiries via clear interactive package options.",
+        ar: "زيادة معدل حجز جلسات التصوير بنسبة 40٪ وتقليل الاستفسارات المتكررة حول الأسعار بفضل وضوح حاسبة الباقات التفاعلية.",
+        ur: "شادی کی فوٹو گرافی کی بکنگ میں 40 فیصد اضافہ کیا اور قیمتوں کے متعلق دستی پوچھ گچھ کو ختم کیا۔"
+      },
+      iconType: "monitor",
+      demoLink: "https://elazab-photography.web.app",
+      githubLink: "https://github.com/MohamedOkash/Mohamed-Elazab-Portfolio"
+    },
+    {
+      id: "5g-store",
+      title: "5G-Store",
+      projectType: "commercial",
+      status: "completed",
+      featured: false,
+      category: {
+        en: "E-Commerce / Mobile Technology",
+        ar: "التجارة الإلكترونية وتكنولوجيا الهواتف",
+        ur: "ای کامرس / موبائل ٹیکنالوجی"
+      },
+      description: {
+        en: "A digital storefront focused on mobile devices, accessories, 5G products, promotions, and customer engagement. Built for a physical store in Mit Ghrab, El Senbellawein.",
+        ar: "متجر إلكتروني حديث وعالي الأداء متخصص في بيع الهواتف الذكية وأجهزة الجيل الخامس والإكسسوارات الذكية، يخدم محلاً تجارياً في ميت غراب بالسنبلاوين.",
+        ur: "اسمارٹ فونز، 5G ٹیکنالوجی اور اسمارٹ لوازمات کی ریٹیل کے لیے ایک جدید ای کامرس اسٹور فرنٹ۔"
+      },
+      features: [
+        { en: "RTL-first localized navigation for Middle East markets", ar: "دعم توجيه RTL بالكامل لتجربة تسوق عربية متكاملة", ur: "RTL نیویگیشن سپورٹ" },
+        { en: "Advanced specifications and stock status filters", ar: "تصفية متقدمة للمواصفات والأسعار وحالة المخزون", ur: "تفصیلات اور اسٹاک کے لیے فلٹرز" },
+        { en: "Mobile Repair booking system in Mit Ghrab", ar: "نظام حجز صيانة الأجهزة بميت غراب", ur: "موبائل مرمت بکنگ سسٹم" }
+      ],
+      challenges: {
+        en: "Synchronizing highly dynamic mobile specs arrays and pricing variations across multi-level filter states without causing re-render lag.",
+        ar: "مزامنة مصفوفات مواصفات الهواتف المتغيرة وخيارات الأسعار عبر مستويات تصفية متعددة دون إحداث بطء في تحديث الواجهة.",
+        ur: "ری رینڈر وقفے کے بغیر ملٹی لیول فلٹر ریاستوں میں موبائل کی خصوصیات اور قیمتوں کو ہم آہنگ کرنا۔"
+      },
+      tech: [
+        { en: "React JS", ar: "React JS", ur: "React JS" },
+        { en: "CSS Variables Theme System", ar: "نظام سمات قائم على متغيرات CSS", ur: "CSS متغیرات تھیم سسٹمز" },
+        { en: "Local Storage Integration", ar: "تكامل التخزين المحلي للمتصفح", ur: "لوکل اسٹوریج انٹیگریشن" }
+      ],
+      architecture: {
+        en: "State-driven component factory architecture separating mobile collections (PHONES/ACCESSORIES) from presentational layouts.",
+        ar: "بنية مبنية على البيانات تفصل كائنات المنتجات (الهواتف والإكسسوارات) عن العرض الرسومي لتسريع إضافة منتجات جديدة.",
+        ur: "اسٹیٹ سے چلنے والا آرکیٹیکچر جو موبائل پروڈکٹس کو پریزنٹیشن لے آؤٹ سے الگ کرتا ہے۔"
+      },
+      businessValue: {
+        en: "Boosted mobile accessories attachment rate per order by 25% through smart related accessory listings on product views.",
+        ar: "زيادة مبيعات الإكسسوارات المصاحبة للأجهزة بنسبة 25٪ بفضل الاقتراحات الذكية للملحقات المرتبطة في واجهة المنتج.",
+        ur: "متعلقہ لوازمات کی فہرست سازی کے ذریعے ہر آرڈر کے ساتھ لوازمات کی فروخت میں 25 فیصد اضافہ کیا۔"
+      },
+      iconType: "monitor",
+      demoLink: "https://five-g-store1992.web.app",
+      githubLink: "https://github.com/MohamedOkash/5g-store"
+    },
+    {
+      id: "nova-clinic",
+      title: "Nova Clinic",
+      projectType: "enterprise",
+      status: "completed",
+      featured: false,
+      category: {
+        en: "Healthcare Management",
+        ar: "إدارة الرعاية الصحية",
+        ur: "ہیلتھ کیئر مینجمنٹ"
+      },
+      description: {
+        en: "An enterprise-grade clinic management platform linking doctors, radiologists, pharmacists, and patients. It streamlines patient records, lab and imaging orders, prescriptions, and administrative scheduling.",
+        ar: "نظام متكامل لإدارة العيادات والمراكز الطبية يربط الأطباء، موظفي الأشعة، الصيادلة، والمرضى. يسهل إدارة سجلات المرضى والوصفات الطبية والمواعيد.",
+        ur: "ڈاکٹروں، فارماسسٹوں، اور مریضوں کو جوڑنے والا ایک انٹرپرائز ہیلتھ کیئر مینجمنٹ پلیٹ فارم۔"
+      },
+      features: [
+        { en: "Unified Electronic Health Records (EHR) & medical histories", ar: "سجلات صحية إلكترونية موحدة وملفات التاريخ المرضي", ur: "متحدہ الیکٹرانک ہیلتھ ریکارڈز" },
+        { en: "Real-time clinical appointments management linked to Firestore", ar: "إدارة فورية لمواعيد الحجز الطبي متصلة مباشرة بـ Firestore", ur: "فائر اسٹور سے منسلک حقیقی وقت کے تقرریوں کا انتظام" },
+        { en: "Prescriptions, laboratory orders, and radiology imaging workflows", ar: "مسارات عمل مخصصة للروشتات الإلكترونية، وطلبات التحاليل والأشعة", ur: "نسخوں، لیبارٹری آرڈرز اور ریڈیولاجی امیجنگ ورک فلو" }
+      ],
+      challenges: {
+        en: "Ensuring secure, role-based document access restrictions to sensitive patient records under strict compliance rules.",
+        ar: "تأمين وحماية وصول المستخدمين إلى السجلات الطبية الحساسة بناءً على أدوارهم الوظيفية لضمان السرية التامة.",
+        ur: "سخت تعمیل کے تحت مریضوں کے حساس ریکارڈز تک کردار پر مبنی رسائی کو محفوظ بنانا۔"
+      },
+      tech: [
+        { en: "React", ar: "React", ur: "React" },
+        { en: "Firebase Firestore", ar: "Firebase Firestore", ur: "Firebase Firestore" },
+        { en: "Firebase Authentication", ar: "Firebase Authentication", ur: "Firebase Authentication" }
+      ],
+      architecture: {
+        en: "Highly structured client architecture with centralized context APIs and direct Firestore integrations for real-time document synchronization.",
+        ar: "بنية برمجية منظمة تعتمد على Context APIs لحفظ ومزامنة بيانات المرضى والمواعيد الطبية والوصفات لحظياً مع قاعدة البيانات.",
+        ur: "حقیقی وقت کی مطابقت پذیری کے لیے فائر اسٹور انضمام کے ساتھ منظم کلائنٹ فن تعمیر۔"
+      },
+      businessValue: {
+        en: "Reduced patient check-in wait times by 35% and completely automated doctor-to-pharmacy prescription handovers.",
+        ar: "تقليل وقت انتظار المرضى عند تسجيل الدخول بنسبة 35٪ وأتمتة إرسال الروشتات من الطبيب إلى الصيدلية بالكامل.",
+        ur: "مریضوں کے انتظار کے وقت میں 35 فیصد کمی کی اور ڈاکٹر سے فارمیسی نسخے کی ترسیل کو خودکار بنایا۔"
+      },
+      iconType: "shield",
+      demoLink: "https://nova-clinic1.web.app",
+      githubLink: "https://github.com/MohamedOkash/novacare-pro"
+    },
+    {
+      id: "hsepro-compliance",
+      title: "HSEPRO Compliance",
+      projectType: "enterprise",
+      status: "completed",
+      featured: false,
+      category: {
+        en: "Safety Operations",
+        ar: "عمليات السلامة والامتثال",
+        ur: "حفاظتی آپریشن اور تعمیل"
+      },
+      description: {
+        en: "A specialized safety operations application designed for real-time monitoring of work permits, equipment inspections, maintenance requests, and compliance checklists on active construction sites.",
+        ar: "تطبيق متكامل لعمليات السلامة المهنية وتوثيق تصاريح العمل، ومراقبة وفحص المعدات، وطلبات الصيانة، وقوائم مراجعة الامتثال في مواقع العمل النشطة.",
+        ur: "کام کے اجازت نامے، آلات کے معائنے، اور تعمیل کی فہرستوں کی نگرانی کے لیے ڈیزائن کردہ ایک خصوصی حفاظتی آپریشن ایپ۔"
+      },
+      features: [
+        { en: "Work Permit (PTW) request modal workflows and status approval trees", ar: "تصاريح العمل (PTW) وشجرة الموافقات عليها", ur: "اجازت نامہ کار کا ورک فلو اور منظوری کے درخت" },
+        { en: "Site Equipment Inspections and digital checklist reports", ar: "تقارير رقمية لفحص سلامة معدات الموقع وقوائم التحقق اليومية", ur: "سائٹ کے سامان کا معائنہ اور ڈیجیٹل چیک لسٹ رپورٹس" },
+        { en: "AI safety insights integrated into site maintenance reporting", ar: "رؤى ذكاء اصطناعي مدمجة في تقارير الصيانة والسلامة للموقع", ur: "سائٹ کی بحالي کی رپورٹنگ میں اے آئی حفاظتي بصیرت" }
+      ],
+      challenges: {
+        en: "Designing a clean, reliable form wizard layout with offline data caching to support field engineers working in low-connectivity zones.",
+        ar: "تصميم واجهة إدخال بيانات متتالية وسهلة مع تخزين محلي لدعم مهندسي السلامة في المناطق ذات الاتصال الضعيف بالإنترنت.",
+        ur: "کم انٹرنیٹ والے علاقوں میں کام کرنے والے فیلڈ انجینئرز کی مدد کے لیے آف لائن ڈیٹا کیشنگ کے ساتھ فارم ڈیزائن کرنا۔"
+      },
+      tech: [
+        { en: "React", ar: "React", ur: "React" },
+        { en: "Tailwind CSS", ar: "Tailwind CSS", ur: "Tailwind CSS" },
+        { en: "Express Backend / JSON Server", ar: "خلفية Express وخادم قاعدة بيانات JSON", ur: "ايکسبريس بيك اند / JSON سرور" }
+      ],
+      architecture: {
+        en: "Interactive client layout containing dedicated modular forms linked to a Node/Express storage server for rapid document persistence.",
+        ar: "تصميم واجهة مستخدم تفاعلية متصلة بخادم Node/Express محلي لحفظ وتحديث تقارير وتصاريح السلامة المهنية فورياً.",
+        ur: "دستاویزات کے تحفظ کے لیے نوڈ اور ایکسپریس سرور سے منسلک خصوصی فارمز کا انٹرایکٹو لے آؤٹ۔"
+      },
+      businessValue: {
+        en: "Drastically cut site permit processing time from hours to minutes, ensuring complete auditability and zero unsafe work delays.",
+        ar: "تقليص زمن معالجة وإصدار تصاريح العمل من ساعات إلى دقائق، مع ضمان تتبع الأمان بنسبة 100٪ ودون أي تأخير في العمل الميداني.",
+        ur: "اجازت نامے کی پروسیسنگ کے وقت کو گھنٹوں سے منٹوں میں کم کر دیا، جس سے تعمیل کو یقینی بنایا گیا۔"
+      },
+      iconType: "shield",
+      demoLink: "https://hsepro-compliance.web.app",
+      githubLink: "https://github.com/MohamedOkash/hsepro"
+    },
+    {
+      id: "we-clinic",
+      title: "WE Clinic",
+      projectType: "enterprise",
+      status: "completed",
+      featured: true,
+      category: {
+        en: "Healthcare Platform",
+        ar: "منصة عيادتنا الطبية المتكاملة",
+        ur: "ہیلتھ کیئر پلیٹ فارم"
+      },
+      description: {
+        en: "A comprehensive clinic ecosystem featuring 6 distinct stakeholder dashboards (Receptionist, Doctor, Pharmacist, Radiologist, Patient, Manager) integrated with Gemini AI for prescription checkups and drug-drug interactions.",
+        ar: "نظام طبي متكامل بست لوحات تحكم لأطراف المنظومة الصحية (الاستقبال، الطبيب، الصيدلاني، فني الأشعة، المريض، المدير) مدعوم بذكاء اصطناعي حقيقي لفحص تفاعلات الأدوية.",
+        ur: "چھ مختلف لوپ ہولڈرز کے ڈیش بورڈز اور ادویات کے تعاملات کے جائزے کے لیے جیمنی اے آئی پر مشتمل ایک جامع کلینک سسٹمز۔"
+      },
+      features: [
+        { en: "Gemini AI assistant checking drug-drug interaction safety in prescriptions", ar: "مساعد ذكاء اصطناعي (Gemini) للتحقق من سلامة الأدوية وتفاعلاتها المتبادلة", ur: "ادویات کے باہمی تعامل کی جانچ کے لیے جیمنی اے آئی اسسٹنٹ" },
+        { en: "Automated print-ready medical prescriptions and PDF receipts generation", ar: "توليد تلقائي لروشتات طبية وتذاكر أشعة جاهزة للطباعة والتحميل", ur: "خودکار پرنٹ کے لیے تیار نسخے اور پی ڈی ایف جنریشن" },
+        { en: "Manager dashboard compiling clinic metrics and inventory status statistics", ar: "لوحة تحكم المدير التي تجمع مقاييس العيادة وإحصاءات المخزون لحظة بلحظة", ur: "کلینک کے میٹرکس اور انوینٹری کی حالت کے اعدادوشمار کا ڈیش بورڈ" }
+      ],
+      challenges: {
+        en: "Implementing safe Gemini API prompt designs to produce structured, clinical JSON outputs for drug interaction checks without AI hallucinations.",
+        ar: "تصميم نصوص التوجيه (Prompts) لـ Gemini API للحصول على نتائج JSON مهيكلة ودقيقة لمنع الهلوسة البرمجية عند فحص الأدوية.",
+        ur: "ادویات کے تعامل کی جانچ کے لیے ساختہ JSON نتائج پیدا کرنے کے لیے جیمنی اے پی آئی پرامپٹ ڈیزائن کو نافذ کرنا۔"
+      },
+      tech: [
+        { en: "React 18 & Context API", ar: "React 18 ونظام سياق البيانات (Context)", ur: "React 18 اور کانٹیکسٹ اے پی آئی" },
+        { en: "Gemini API integration", ar: "تكامل واجهة Gemini AI للذكاء الاصطناعي", ur: "جیمنی اے پی آئی انضمام" },
+        { en: "Tailwind CSS & Toast UI", ar: "تصميم Tailwind CSS وإشعارات Toast التفاعلية", ur: "Tailwind CSS اور ٹوسٹ نوٹیفکیشنز" }
+      ],
+      architecture: {
+        en: "Centralized context-driven architecture providing strict state propagation to six dashboard views with local storage backup sync.",
+        ar: "بنية برمجية معتمدة على Context لتوزيع الحالات إلى لوحات التحكم الستة مع مزامنة لحظية للتخزين المحلي لمنع فقد البيانات.",
+        ur: "ماڈیولر اسٹیٹ کے پھیلاؤ کے ساتھ چھ ڈیش بورڈز کے لیے ڈیزائن کردہ کانٹیکسٹ سے چلنے والا فن تعمیر۔"
+      },
+      businessValue: {
+        en: "Eliminated medical prescription interaction risks entirely by implementing AI checks before pharmacy dispensing, raising safety assurance.",
+        ar: "الحد من مخاطر التفاعلات الدوائية الخاطئة بنسبة 100٪ من خلال مراجعة الذكاء الاصطناعي الفورية قبل تسليم الروشتة للمريض.",
+        ur: "فارمیسی سے دوا ملنے سے پہلے اے آئی چیک نافذ کرکے نسخے کے تعامل کے خطرات کو مکمل طور پر ختم کیا۔"
+      },
+      iconType: "shield",
+      demoLink: "https://we-clinic-736af.web.app",
+      githubLink: "https://github.com/MohamedOkash/3d-clinic"
+    },
+    {
+      id: "print-pro",
+      title: "Print Pro",
+      projectType: "commercial",
+      status: "completed",
+      featured: true,
+      category: {
+        en: "Business Services",
+        ar: "خدمات الأعمال والمستندات",
+        ur: "کاروباری خدمات اور دستاویزات"
+      },
+      description: {
+        en: "An advanced document processing and book cover design utility engineered for copy centers and libraries. Features CamScanner-like image enhancement filters, Tesseract OCR, and Claude API cover text generation.",
+        ar: "أداة متقدمة لمعالجة المستندات وتصميم أغلفة الكتب مصممة للمطابع والمكتبات. تتميز بفلاتر تصفية وتحسين صور متطورة كـ CamScanner واستخراج النصوص OCR.",
+        ur: "فوٹو کاپی سینٹرز اور لائبریریوں کے لیے تیار کردہ ایک دستاویز پروسیسنگ اور بک کور ڈیزائنر ایپ۔"
+      },
+      features: [
+        { en: "CamScanner-style Adaptive Thresholding, shadow removal, and contrast filters", ar: "فلترة متكيفة لإزالة الظلال وتفتيح وتوضيح المستندات كأجهزة السكانر", ur: "سایہ ہٹانے اور دستاویزات کی وضاحت کے فلٹرز" },
+        { en: "Tesseract.js integration for instant Arabic and English document OCR", ar: "تكامل Tesseract.js للتعرف الضوئي على النصوص العربية والإنجليزية من الصور", ur: "تصوير سے ٹیکسٹ نکالنے کے لیے Tesseract.js کا انضمام" },
+        { en: "Claude API integration for automatic AI cover title generation", ar: "تكامل واجهة Claude API لتوليد نصوص الأغلفة المقترحة بالذكاء الاصطناعي", ur: "کلود اے پی آئی انضمام برائے کور عنوانات" }
+      ],
+      challenges: {
+        en: "Performing heavy pixel-level canvas operations (sharpen, adaptive thresholding) inside the browser on multi-page high-resolution files without crashing UI threads.",
+        ar: "إجراء عمليات تعديل البكسل الثقيلة (التنعيم والفلترة المتكيفة) داخل المتصفح لملفات PDF متعددة الصفحات دون تجميد واجهة المستخدم.",
+        ur: "انٹرفیس کو منجمد کیے بغیر براؤزر کے اندر پکسل لیول آپریشنز (جیسے ایڈپٹیو تھریشولڈنگ) کو انجام دینا۔"
+      },
+      tech: [
+        { en: "Vite React & Canvas API", ar: "Vite React وواجهة Canvas البرمجية للصور", ur: "Vite React اور کینوس اے پی آئی" },
+        { en: "jsPDF & pdf-lib utilities", ar: "مكتبات jsPDF و pdf-lib لإدارة وتعديل الـ PDF", ur: "پی ڈی ایف کی تدوین کی لائبریریاں" },
+        { en: "Claude AI integration", ar: "تكامل الذكاء الاصطناعي Claude AI", ur: "کلود اے آئی انضمام" }
+      ],
+      architecture: {
+        en: "Client-side processing architecture executing complex image manipulation routines via CDN-loaded libraries to keep bundle footprint low.",
+        ar: "بنية معالجة بالكامل في المتصفح توظف مكتبات تُحمل عند الطلب لعمليات تعديل الصور والـ PDF وحفظ بيانات العمل محلياً.",
+        ur: "براؤزر پروسیسنگ آرکیٹیکچر جو پیچیدہ تصویری اور پی ڈی ایف آپریشنز کے لیے آن ڈیمانڈ لائبریریز کا استعمال کرتا ہے۔"
+      },
+      businessValue: {
+        en: "Drastically simplified print shop workflows, decreasing custom book cover creation time from half an hour to under three minutes.",
+        ar: "تبسيط سير العمل في دور الطباعة، حيث خفّض زمن تصميم وتجهيز أغلفة الكتب من نصف ساعة إلى أقل من 3 دقائق.",
+        ur: "پرنٹنگ کی دکانوں کے ورک فلو کو آسان بنایا، کتاب کے سرورق کی تیاری کے وقت کو 3 منٹ سے کم کیا۔"
+      },
+      iconType: "hardhat",
+      demoLink: "https://print-pro-d5e33.web.app",
+      githubLink: "https://github.com/MohamedOkash/printpro"
     }
   ],
   experience: [

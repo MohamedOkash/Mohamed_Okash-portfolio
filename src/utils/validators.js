@@ -54,6 +54,15 @@ export const validatePortfolioData = (data) => {
     if (!Array.isArray(proj.features) || !Array.isArray(proj.tech)) {
       throw new Error(`Project [${proj.title}] features or tech stack must be arrays`);
     }
+    if (typeof proj.featured !== 'boolean') {
+      throw new Error(`Project [${proj.title}] is missing featured boolean property`);
+    }
+    if (typeof proj.projectType !== 'string') {
+      throw new Error(`Project [${proj.title}] is missing projectType string property`);
+    }
+    if (typeof proj.status !== 'string') {
+      throw new Error(`Project [${proj.title}] is missing status string property`);
+    }
   }
 
   // Experience validation

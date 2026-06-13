@@ -630,7 +630,10 @@ export default function AdminDashboard() {
                 tech: [],
                 iconType: 'shield',
                 demoLink: '',
-                githubLink: ''
+                githubLink: '',
+                projectType: 'commercial',
+                status: 'completed',
+                featured: false
               });
               setFormData(updated);
               setExpandedItems(prev => ({ ...prev, [newId]: true }));
@@ -646,7 +649,7 @@ export default function AdminDashboard() {
         <div className="space-y-4">
           {filteredProjects.map((proj, idx) => {
             const isExpanded = !!expandedItems[proj.id];
-            const isFeatured = formData.settings.featuredProjects.includes(proj.id);
+            const isFeatured = !!(proj.featured || formData.settings.featuredProjects.includes(proj.id));
             const globalIndex = formData.projects.findIndex(p => p.id === proj.id);
 
             return (
@@ -678,7 +681,7 @@ export default function AdminDashboard() {
                         {proj.title || 'Untitled Project'}
                         {isFeatured && <span className="text-[9px] font-black uppercase bg-[var(--primary)]/10 border border-[var(--primary)]/30 text-[var(--primary)] px-2 py-0.5 rounded">Featured</span>}
                       </h4>
-                      <p className="text-[10px] text-zinc-500">ID: {proj.id}</p>
+                      <p className="text-[10px] text-zinc-500">ID: {proj.id} | Type: {proj.projectType || 'N/A'} | Status: {proj.status || 'N/A'}</p>
                     </div>
                   </div>
 
@@ -687,10 +690,16 @@ export default function AdminDashboard() {
                       onClick={(e) => {
                         e.stopPropagation();
                         const updated = { ...formData };
-                        if (isFeatured) {
-                          updated.settings.featuredProjects = updated.settings.featuredProjects.filter(id => id !== proj.id);
+                        const targetProj = updated.projects[globalIndex];
+                        const nextFeatured = !targetProj.featured;
+                        targetProj.featured = nextFeatured;
+                        
+                        if (nextFeatured) {
+                          if (!updated.settings.featuredProjects.includes(proj.id)) {
+                            updated.settings.featuredProjects.push(proj.id);
+                          }
                         } else {
-                          updated.settings.featuredProjects.push(proj.id);
+                          updated.settings.featuredProjects = updated.settings.featuredProjects.filter(id => id !== proj.id);
                         }
                         setFormData(updated);
                       }}
@@ -731,6 +740,19 @@ export default function AdminDashboard() {
                       <AdminInput label="Project Name" value={proj.title} onChange={(e) => {
                         const updated = { ...formData };
                         updated.projects[globalIndex].title = e.target.value;
+                        setFormData(updated);
+                      }} />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <AdminInput label="Project Type (e.g. personal, commercial, enterprise)" value={proj.projectType || ''} onChange={(e) => {
+                        const updated = { ...formData };
+                        updated.projects[globalIndex].projectType = e.target.value;
+                        setFormData(updated);
+                      }} />
+                      <AdminInput label="Project Status (e.g. completed, active, in-development)" value={proj.status || ''} onChange={(e) => {
+                        const updated = { ...formData };
+                        updated.projects[globalIndex].status = e.target.value;
                         setFormData(updated);
                       }} />
                     </div>

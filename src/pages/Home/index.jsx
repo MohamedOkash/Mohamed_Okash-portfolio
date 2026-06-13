@@ -43,8 +43,8 @@ export default function Home() {
   const featuredIds = data?.settings?.featuredProjects || [];
   const projects = data?.projects || [];
 
-  const featuredProjects = projects.filter(p => featuredIds.includes(p.id));
-  const generalProjects = projects.filter(p => !featuredIds.includes(p.id));
+  const featuredProjects = projects.filter(p => p.featured === true || featuredIds.includes(p.id));
+  const generalProjects = projects.filter(p => p.featured !== true && !featuredIds.includes(p.id));
 
   const pageTitle = `${data?.translations?.[lang]?.name || t.name} | ${data?.translations?.[lang]?.available || t.available}`;
   const pageDesc = data?.translations?.[lang]?.tagline || t.tagline;
