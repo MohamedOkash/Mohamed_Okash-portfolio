@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
@@ -30,7 +31,14 @@ export const Experience = () => {
       {/* Timeline Container - Logical start border (border-s-2) */}
       <div className="relative border-s-2 border-white/[0.06] ms-4 md:ms-8 space-y-12">
         {experienceList.map((exp) => (
-          <div key={exp.id} className="relative ps-8 md:ps-10 group">
+          <motion.div 
+            key={exp.id} 
+            initial={{ opacity: 0, y: 50, scale: 0.97, filter: 'blur(6px)' }}
+            whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="relative ps-8 md:ps-10 group"
+          >
             {/* Dot indicator aligned with logical start border */}
             <div className="absolute top-1.5 -start-[11px] w-5 h-5 rounded-full bg-[#050505] border-2 border-white/20 group-hover:border-[var(--primary)] transition-colors duration-300 flex items-center justify-center z-10">
               <div className="w-1.5 h-1.5 rounded-full bg-white/40 group-hover:bg-[var(--primary)] transition-all duration-300" />
@@ -67,7 +75,7 @@ export const Experience = () => {
                 {exp.description[lang] || exp.description.en}
               </p>
             </SpotlightCard>
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

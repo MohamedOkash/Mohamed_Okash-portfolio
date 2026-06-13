@@ -281,7 +281,24 @@ export const translations = {
       off: "OFF",
       projectPlaceholderCategory: "HSE Product",
       certPlaceholderName: "OSHA Safety Accreditation",
-      certPlaceholderProvider: "OSHA"
+      certPlaceholderProvider: "OSHA",
+      sidebarCustomSections: "Custom Sections",
+      customSectionsTitleLabel: "Custom Sections",
+      addNewCustomSection: "Add Custom Section",
+      customSectionTitle: "Section Title",
+      customSectionSubtitle: "Subtitle",
+      sectionRichTextContent: "Content Narrative",
+      sectionIcon: "Section Icon (Lucide)",
+      layoutTypeLabel: "Layout Type",
+      contactMethodsTitleLabel: "Contact Methods",
+      addNewContactMethod: "Add Contact Method",
+      contactMethodType: "Method Type",
+      contactMethodLabel: "Label",
+      contactMethodValue: "URL / Value",
+      searchCustomSectionsPlaceholder: "Search custom sections...",
+      untitledCustomSection: "Untitled Custom Section",
+      searchContactMethodsPlaceholder: "Search contact methods...",
+      untitledContactMethod: "Untitled Contact Method"
     }
   },
   ar: {
@@ -566,7 +583,24 @@ export const translations = {
       off: "إيقاف",
       projectPlaceholderCategory: "منتج السلامة والصحة المهنية",
       certPlaceholderName: "اعتماد أوشا للسلامة المهنية",
-      certPlaceholderProvider: "أوشا"
+      certPlaceholderProvider: "أوشا",
+      sidebarCustomSections: "أقسام مخصصة",
+      customSectionsTitleLabel: "الأقسام المخصصة",
+      addNewCustomSection: "إضافة قسم مخصص",
+      customSectionTitle: "عنوان القسم",
+      customSectionSubtitle: "العنوان الفرعي",
+      sectionRichTextContent: "المحتوى النصي",
+      sectionIcon: "الأيقونة (Lucide)",
+      layoutTypeLabel: "نوع التنسيق",
+      contactMethodsTitleLabel: "قنوات الاتصال",
+      addNewContactMethod: "إضافة قناة اتصال",
+      contactMethodType: "نوع القناة",
+      contactMethodLabel: "اسم القناة",
+      contactMethodValue: "الرابط أو الرقم",
+      searchCustomSectionsPlaceholder: "البحث في الأقسام المخصصة...",
+      untitledCustomSection: "قسم مخصص بلا عنوان",
+      searchContactMethodsPlaceholder: "البحث في قنوات الاتصال...",
+      untitledContactMethod: "قناة اتصال بلا عنوان"
     }
   },
   ur: {
@@ -851,7 +885,24 @@ export const translations = {
       off: "آف",
       projectPlaceholderCategory: "ایچ ایس ای پروڈکٹ",
       certPlaceholderName: "اوشا سیفٹی سرٹیفکیٹ",
-      certPlaceholderProvider: "اوشا"
+      certPlaceholderProvider: "اوشا",
+      sidebarCustomSections: "حسب ضرورت حصے",
+      customSectionsTitleLabel: "حسب ضرورت حصے",
+      addNewCustomSection: "حسب ضرورت حصہ شامل کریں",
+      customSectionTitle: "سیکشن کا عنوان",
+      customSectionSubtitle: "ذیلی عنوان",
+      sectionRichTextContent: "تفصیلی مواد",
+      sectionIcon: "آئیکن (Lucide)",
+      layoutTypeLabel: "ترتیب کی قسم",
+      contactMethodsTitleLabel: "رابطے کے ذرائع",
+      addNewContactMethod: "رابطہ کا نیا ذریعہ شامل کریں",
+      contactMethodType: "رابطہ کی قسم",
+      contactMethodLabel: "لیبل",
+      contactMethodValue: "لنک یا نمبر",
+      searchCustomSectionsPlaceholder: "حسب ضرورت سیکشن تلاش کریں...",
+      untitledCustomSection: "بغیر عنوان کا سیکشن",
+      searchContactMethodsPlaceholder: "رابطہ تلاش کریں...",
+      untitledContactMethod: "بغیر عنوان کا رابطہ"
     }
   }
 };

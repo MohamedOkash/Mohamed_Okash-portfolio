@@ -12,11 +12,11 @@ export const CinematicBackground = () => {
   return (
     <div 
       className="absolute inset-0 overflow-hidden pointer-events-none z-0 select-none transition-opacity duration-[4000ms] ease-in-out"
-      style={{ opacity: mounted ? 0.35 : 0 }}
+      style={{ opacity: mounted ? 1.0 : 0 }}
     >
       {/* Layer 1: Very Soft Animated Grid */}
       <div 
-        className="absolute inset-0 opacity-[0.03] md:opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.035]"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
@@ -31,7 +31,7 @@ export const CinematicBackground = () => {
 
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
         {/* Layer 2: Extremely Low-Opacity Blueprint Lines & Technical Indicators */}
-        <g className="opacity-[0.03]" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.5">
+        <g className="opacity-[0.04]" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.5">
           {/* Vertical Rulers */}
           <line x1="5%" y1="0" x2="5%" y2="100%" strokeDasharray="3 9" />
           <line x1="95%" y1="0" x2="95%" y2="100%" strokeDasharray="3 9" />
@@ -74,7 +74,7 @@ export const CinematicBackground = () => {
         </g>
 
         {/* Layer 4: Soft Safety Engineering Geometry (HSE Vibe) */}
-        <g className="opacity-[0.035]" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="0.75" fill="none">
+        <g className="opacity-[0.04]" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="0.75" fill="none">
           {/* Subtle hazard stripes pattern in top-right */}
           <line x1="90%" y1="5%" x2="95%" y2="10%" />
           <line x1="91%" y1="5%" x2="96%" y2="10%" />
@@ -95,7 +95,7 @@ export const CinematicBackground = () => {
         </g>
 
         {/* Layer 5: AI Neural-Flow Particles */}
-        <g className="opacity-[0.08]" fill="var(--primary)">
+        <g className="opacity-[0.04]" fill="var(--primary)">
           {/* Slowly drifting neural signal dots */}
           <circle cx="200" cy="200" r="2.5" className="animate-drift-1" />
           <circle cx="850" cy="550" r="2" className="animate-drift-2" />
@@ -105,18 +105,25 @@ export const CinematicBackground = () => {
         </g>
 
         {/* Layer 6: Vibe Coding & Code Flow */}
-        <g className="opacity-[0.025]" fill="none" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.5">
+        <g className="opacity-[0.038]" fill="none" stroke="rgba(255, 255, 255, 0.3)" strokeWidth="0.5">
           {/* Subtle floating brackets and terminal codes */}
-          <text x="75%" y="20%" fill="rgba(255,255,255,0.4)" fontSize="9" fontFamily="monospace" letterSpacing="0.5">const build = (safety, tech) =&gt; &#123;</text>
-          <text x="77%" y="22%" fill="rgba(255,255,255,0.25)" fontSize="8" fontFamily="monospace">  return vibeCoding(safety + tech);</text>
+          <text x="75%" y="20%" fill="rgba(255,255,255,0.4)" fontSize="9" fontFamily="monospace" letterSpacing="0.5">const build = async (safety, tech) =&gt; &#123;</text>
+          <text x="77%" y="22%" fill="rgba(255,255,255,0.25)" fontSize="8" fontFamily="monospace">  return vibeCoding(safety + tech); // AI &amp; API</text>
           <text x="75%" y="24%" fill="rgba(255,255,255,0.4)" fontSize="9" fontFamily="monospace">&#125;;</text>
 
           {/* Floating code symbols / tags */}
-          <text x="12%" y="75%" fill="rgba(255,255,255,0.3)" fontSize="9" fontFamily="monospace">&lt;HsePro /&gt;</text>
-          <text x="12%" y="77%" fill="rgba(255,255,255,0.15)" fontSize="7" fontFamily="monospace">STATUS: 200 OK</text>
+          <text x="12%" y="75%" fill="rgba(255,255,255,0.3)" fontSize="9" fontFamily="monospace">&lt;HsePro /&gt; [SYSTEM_INIT]</text>
+          <text x="12%" y="77%" fill="rgba(255,255,255,0.15)" fontSize="7" fontFamily="monospace">STATUS: 200 OK // &lt;&gt; &#123;&#125; []</text>
           
           <text x="82%" y="45%" fill="rgba(255,255,255,0.3)" fontSize="9" fontFamily="monospace">await aiSystems.compile();</text>
-          <text x="82%" y="47%" fill="rgba(255,255,255,0.15)" fontSize="8" fontFamily="monospace">sys.safetyRank === "A+"</text>
+          <text x="82%" y="47%" fill="rgba(255,255,255,0.15)" fontSize="8" fontFamily="monospace">sys.safetyRank === "A+" // API_CONNECT</text>
+
+          {/* New subtle requested keywords */}
+          <text x="45%" y="12%" fill="rgba(255,255,255,0.25)" fontSize="10" fontFamily="monospace">&lt;&gt; const async API AI &#123;&#125; []</text>
+          <text x="35%" y="85%" fill="rgba(255,255,255,0.2)" fontSize="9" fontFamily="monospace">const safetyGeometry = [] =&gt; async</text>
+          <text x="68%" y="72%" fill="rgba(255,255,255,0.3)" fontSize="8.5" fontFamily="monospace">API.deploy(&#123; mode: 'AI' &#125;) // &lt;&gt;</text>
+          <text x="5%" y="32%" fill="rgba(255,255,255,0.18)" fontSize="8" fontFamily="monospace">[] &#123;&#125; const async API AI &lt;&gt;</text>
+          <text x="88%" y="60%" fill="rgba(255,255,255,0.22)" fontSize="9" fontFamily="monospace">async () =&gt; &lt;SafetyConnect /&gt;</text>
         </g>
       </svg>
 

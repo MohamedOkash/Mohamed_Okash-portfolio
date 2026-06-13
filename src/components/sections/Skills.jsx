@@ -5,6 +5,29 @@ import { translations } from '../../data/translations';
 import { SpotlightCard } from '../ui/SpotlightCard';
 import { Shield, Server, Monitor, Code } from 'lucide-react';
 
+import { motion } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30, scale: 0.98, filter: 'blur(4px)' },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1, 
+    filter: 'blur(0px)',
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
 const getIcon = (type, className) => {
   switch (type) {
     case 'shield': return <Shield className={className} />;
@@ -34,36 +57,43 @@ export const Skills = () => {
       </div>
 
       {/* Skills Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
         {skillGroups.map((group) => (
-          <SpotlightCard 
-            key={group.id}
-            className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300"
-          >
-            {/* Header Icon + Category Title */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-[var(--primary)]">
-                {getIcon(group.iconType, "w-6 h-6")}
+          <motion.div key={group.id} variants={itemVariants} className="h-full">
+            <SpotlightCard 
+              className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300"
+            >
+              {/* Header Icon + Category Title */}
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-[var(--primary)]">
+                  {getIcon(group.iconType, "w-6 h-6")}
+                </div>
+                <h3 className="text-lg md:text-xl font-bold tracking-tight text-white">
+                  {group.category[lang] || group.category.en}
+                </h3>
               </div>
-              <h3 className="text-lg md:text-xl font-bold tracking-tight text-white">
-                {group.category[lang] || group.category.en}
-              </h3>
-            </div>
 
-            {/* List of Skills tags */}
-            <div className="flex flex-wrap gap-2.5 mt-auto">
-              {group.items.map((item, index) => (
-                <span 
-                  key={index}
-                  className="px-3.5 py-1.5 text-xs rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.08] hover:border-[var(--primary)]/30 hover:text-[var(--primary)] transition-all duration-300 font-medium"
-                >
-                  {item[lang] || item.en}
-                </span>
-              ))}
-            </div>
-          </SpotlightCard>
+              {/* List of Skills tags */}
+              <div className="flex flex-wrap gap-2.5 mt-auto">
+                {group.items.map((item, index) => (
+                  <span 
+                    key={index}
+                    className="px-3.5 py-1.5 text-xs rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.08] hover:border-[var(--primary)]/30 hover:text-[var(--primary)] transition-all duration-300 font-medium"
+                  >
+                    {item[lang] || item.en}
+                  </span>
+                ))}
+              </div>
+            </SpotlightCard>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 };

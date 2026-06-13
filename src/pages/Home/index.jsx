@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { useLanguageStore } from '../../store/languageStore';
 import { useAuthStore } from '../../store/authStore';
@@ -21,6 +21,8 @@ import { Preloader } from '../../components/ui/Preloader';
 import { CustomCursor } from '../../components/ui/CustomCursor';
 import { translations } from '../../data/translations';
 import { Sparkles } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
+import { SpotlightCard } from '../../components/ui/SpotlightCard';
 
 export default function Home() {
   const { data, loading, loadPortfolio } = usePortfolioStore();
@@ -90,12 +92,40 @@ export default function Home() {
               case 'hero':
                 return <Hero key="hero" />;
               case 'about':
-                return <About key="about" />;
+                return (
+                  <motion.div
+                    key="about"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={sectionRevealVariants}
+                  >
+                    <About />
+                  </motion.div>
+                );
               case 'why-me':
-                return <WhyOkash key="why-me" />;
+                return (
+                  <motion.div
+                    key="why-me"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={sectionRevealVariants}
+                  >
+                    <WhyOkash />
+                  </motion.div>
+                );
               case 'projects':
                 return (
-                  <section key="projects" id="projects" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-white/[0.04]">
+                  <motion.section 
+                    key="projects" 
+                    id="projects" 
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={sectionRevealVariants}
+                    className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-white/[0.04]"
+                  >
                     <div className="mb-16">
                       <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 flex items-center gap-1.5 animate-pulse">
                         <Sparkles className="w-4 h-4 text-[var(--primary)]" />
@@ -117,9 +147,16 @@ export default function Home() {
                         <h3 className="text-xs uppercase tracking-widest font-bold opacity-45 mb-6">
                           {data?.translations?.[lang]?.featuredBadge || t.featuredBadge}
                         </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                          {featuredProjects.map((project) => (
-                            <div key={project.id} className="relative group cursor-pointer">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ perspective: 1200 }}>
+                          {featuredProjects.map((project, idx) => (
+                            <motion.div 
+                              key={project.id} 
+                              initial={{ opacity: 0, y: 40, scale: 0.96, rotateX: 12, filter: 'blur(6px)' }}
+                              whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0, filter: 'blur(0px)' }}
+                              viewport={{ once: true, margin: "-60px" }}
+                              transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                              className="relative group cursor-pointer"
+                            >
                               <div className="absolute -inset-1 rounded-[1.6rem] bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10 opacity-75 group-hover:opacity-100 blur-sm transition duration-500" />
                               <ProjectCard 
                                 project={project} 
@@ -128,7 +165,7 @@ export default function Home() {
                                   setIsModalOpen(true);
                                 }}
                               />
-                            </div>
+                            </motion.div>
                           ))}
                         </div>
                       </div>
@@ -140,31 +177,96 @@ export default function Home() {
                         <h3 className="text-xs uppercase tracking-widest font-bold opacity-45 mb-6">
                           {data?.translations?.[lang]?.additionalSolutions || t.additionalSolutions || (lang === 'ar' ? 'أدوات وحلول برمجية إضافية' : 'Additional Solutions')}
                         </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                          {generalProjects.map((project) => (
-                            <ProjectCard 
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ perspective: 1200 }}>
+                          {generalProjects.map((project, idx) => (
+                            <motion.div 
                               key={project.id}
-                              project={project} 
-                              onClick={() => {
-                                setSelectedProject(project);
-                                setIsModalOpen(true);
-                              }}
-                            />
+                              initial={{ opacity: 0, y: 40, scale: 0.96, rotateX: 12, filter: 'blur(6px)' }}
+                              whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0, filter: 'blur(0px)' }}
+                              viewport={{ once: true, margin: "-60px" }}
+                              transition={{ duration: 0.8, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                            >
+                              <ProjectCard 
+                                project={project} 
+                                onClick={() => {
+                                  setSelectedProject(project);
+                                  setIsModalOpen(true);
+                                }}
+                              />
+                            </motion.div>
                           ))}
                         </div>
                       </div>
                     )}
-                  </section>
+                  </motion.section>
                 );
               case 'skills':
-                return <Skills key="skills" />;
+                return (
+                  <motion.div
+                    key="skills"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={sectionRevealVariants}
+                  >
+                    <Skills />
+                  </motion.div>
+                );
               case 'experience':
-                return <Experience key="experience" />;
+                return (
+                  <motion.div
+                    key="experience"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={sectionRevealVariants}
+                  >
+                    <Experience />
+                  </motion.div>
+                );
               case 'certifications':
-                return <Certifications key="certifications" />;
+                return (
+                  <motion.div
+                    key="certifications"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={sectionRevealVariants}
+                  >
+                    <Certifications />
+                  </motion.div>
+                );
               case 'contact':
-                return <Contact key="contact" />;
+                return (
+                  <motion.div
+                    key="contact"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-60px" }}
+                    variants={sectionRevealVariants}
+                  >
+                    <Contact />
+                  </motion.div>
+                );
               default:
+                if (sect.id.startsWith('custom-')) {
+                  const customSect = data?.customSections?.find(cs => cs.id === sect.id);
+                  if (customSect && customSect.visible !== false) {
+                    return (
+                      <motion.section 
+                        key={sect.id} 
+                        id={sect.id} 
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-60px" }}
+                        variants={sectionRevealVariants}
+                        className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-white/[0.04]"
+                      >
+                        {renderCustomSection(customSect)}
+                      </motion.section>
+                    );
+                  }
+                }
                 return null;
             }
           })}

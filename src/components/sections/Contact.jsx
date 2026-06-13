@@ -53,6 +53,15 @@ export const Contact = () => {
     linkedin: "https://linkedin.com/in/mohamed-okash"
   };
 
+  const contactMethods = data?.contactMethods || [
+    { id: "method-1", type: "email", label: "Email", value: contactData.email, visible: true },
+    { id: "method-2", type: "whatsapp", label: "WhatsApp", value: contactData.whatsapp, visible: true },
+    { id: "method-3", type: "linkedin", label: "LinkedIn", value: contactData.linkedin, visible: true },
+    { id: "method-4", type: "github", label: "GitHub", value: contactData.github, visible: true }
+  ];
+
+  const visibleMethods = contactMethods.filter(m => m.visible !== false);
+
   const [copiedType, setCopiedType] = useState(null);
 
   const handleCopy = (text, type) => {
@@ -62,6 +71,104 @@ export const Contact = () => {
         setTimeout(() => setCopiedType(null), 2500);
       })
       .catch((err) => console.error(err));
+  };
+
+  const getContactIcon = (type, className) => {
+    switch (type) {
+      case 'email':
+        return <Mail className={className} />;
+      case 'whatsapp':
+        return <MessageSquare className={className} />;
+      case 'linkedin':
+        return <LinkedinIcon className={className} />;
+      case 'github':
+        return <GithubIcon className={className} />;
+      default:
+        // Try resolving other Lucide icons dynamically if possible, or fallback to Link
+        return <ArrowUpRight className={className} />;
+    }
+  };
+
+  const getDisplayValue = (val) => {
+    if (!val) return '';
+    try {
+      if (val.startsWith('http')) {
+        const urlObj = new URL(val);
+        return urlObj.hostname + (urlObj.pathname !== '/' ? urlObj.pathname : '');
+      }
+    } catch (e) {
+      // Ignored
+    }
+    return val;
+  };
+
+  const renderActionArea = (method) => {
+    if (method.type === 'email') {
+      return (
+        <div className="flex gap-2 mt-auto pt-4 border-t border-white/[0.04]">
+          <button
+            onClick={() => handleCopy(method.value, method.id)}
+            className="flex-1 py-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer text-zinc-300"
+          >
+            {copiedType === method.id ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-green-400" />
+                <span className="text-green-400">{data?.translations?.[lang]?.copied || t.copied}</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5" />
+                {data?.translations?.[lang]?.clickToCopy || t.clickToCopy}
+              </>
+            )}
+          </button>
+          <a
+            href={`mailto:${method.value}`}
+            className="p-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all cursor-pointer text-white flex items-center justify-center"
+            title="Compose Email"
+          >
+            <ArrowUpRight className="w-4 h-4" />
+          </a>
+        </div>
+      );
+    }
+
+    if (method.type === 'whatsapp') {
+      const displayVal = method.value.startsWith('+') ? method.value : `+${method.value}`;
+      return (
+        <div className="pt-4 border-t border-white/[0.04] mt-auto">
+          <a
+            href={getWhatsAppLink(method.value)}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-all cursor-pointer"
+          >
+            {data?.translations?.[lang]?.sendWhatsApp || t.sendWhatsApp || (lang === 'ar' ? 'بدء محادثة واتساب' : 'Send WhatsApp')}
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
+      );
+    }
+
+    // Default for linkedin, github, custom links
+    let btnColorClass = "bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] text-zinc-300";
+    if (method.type === 'linkedin') {
+      btnColorClass = "bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20";
+    }
+
+    return (
+      <div className="pt-4 border-t border-white/[0.04] mt-auto">
+        <a
+          href={method.value.startsWith('http') ? method.value : `https://${method.value}`}
+          target="_blank"
+          rel="noreferrer"
+          className={`flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs transition-all cursor-pointer ${btnColorClass}`}
+        >
+          {lang === 'ar' ? 'زيارة الرابط' : lang === 'ur' ? 'رابط کھولیں' : 'Visit Profile'}
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
+    );
   };
 
   return (
@@ -81,127 +188,23 @@ export const Contact = () => {
 
       {/* Grid of Contact Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-        {/* Email Card */}
-        <SpotlightCard className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300">
-          <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] w-fit mb-6">
-            <Mail className="w-6 h-6" />
-          </div>
+        {visibleMethods.map((method) => (
+          <SpotlightCard key={method.id} className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300">
+            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] w-fit mb-6">
+              {getContactIcon(method.type, "w-6 h-6")}
+            </div>
 
-          <h3 className="text-lg font-bold mb-1 text-white">
-            {data?.translations?.[lang]?.emailLabel || t.emailLabel}
-          </h3>
+            <h3 className="text-lg font-bold mb-1 text-white">
+              {method.label}
+            </h3>
 
-          <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
-            {contactData.email}
-          </p>
+            <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
+              {getDisplayValue(method.value)}
+            </p>
 
-          <div className="flex gap-2 mt-auto pt-4 border-t border-white/[0.04]">
-            <button
-              onClick={() => handleCopy(contactData.email, 'email')}
-              className="flex-1 py-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer text-zinc-300"
-            >
-              {copiedType === 'email' ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-green-400" />
-                  <span className="text-green-400">{data?.translations?.[lang]?.copied || t.copied}</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5" />
-                  {data?.translations?.[lang]?.clickToCopy || t.clickToCopy}
-                </>
-              )}
-            </button>
-            <a
-              href={`mailto:${contactData.email}`}
-              className="p-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all cursor-pointer text-white flex items-center justify-center"
-              title="Compose Email"
-            >
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
-          </div>
-        </SpotlightCard>
-
-        {/* GitHub Card */}
-        <SpotlightCard className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300">
-          <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] w-fit mb-6">
-            <GithubIcon className="w-6 h-6" />
-          </div>
-
-          <h3 className="text-lg font-bold mb-1 text-white">
-            {data?.translations?.[lang]?.githubLabel || t.githubLabel}
-          </h3>
-
-          <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
-            github.com/MohamedOkash
-          </p>
-
-          <div className="pt-4 border-t border-white/[0.04] mt-auto">
-            <a
-              href={contactData.github}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] transition-all cursor-pointer text-zinc-300"
-            >
-              {data?.translations?.[lang]?.visitProfile || t.visitProfile || (lang === 'ar' ? 'زيارة الحساب الشخصي' : lang === 'ur' ? 'گٹ ہب کھولیں' : 'Visit Profile')}
-              <GithubIcon className="w-3.5 h-3.5 animate-pulse" />
-            </a>
-          </div>
-        </SpotlightCard>
-
-        {/* WhatsApp Card */}
-        <SpotlightCard className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300">
-          <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] w-fit mb-6">
-            <MessageSquare className="w-6 h-6" />
-          </div>
-
-          <h3 className="text-lg font-bold mb-1 text-white">
-            {data?.translations?.[lang]?.whatsappLabel || t.whatsappLabel}
-          </h3>
-
-          <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
-            +{contactData.whatsapp}
-          </p>
-
-          <div className="pt-4 border-t border-white/[0.04] mt-auto">
-            <a
-              href={getWhatsAppLink(contactData.whatsapp)}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-all cursor-pointer"
-            >
-              {data?.translations?.[lang]?.sendWhatsApp || t.sendWhatsApp || (lang === 'ar' ? 'بدء محادثة واتساب' : lang === 'ur' ? 'واٹس ایپ چیٹ' : 'Send WhatsApp Message')}
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </SpotlightCard>
-
-        {/* LinkedIn Card */}
-        <SpotlightCard className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300">
-          <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] w-fit mb-6">
-            <LinkedinIcon className="w-6 h-6" />
-          </div>
-
-          <h3 className="text-lg font-bold mb-1 text-white">
-            {lang === 'ar' ? 'لينكد إن' : lang === 'ur' ? 'لنکڈ ان' : 'LinkedIn'}
-          </h3>
-
-          <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
-            linkedin.com/in/mohamed-okash
-          </p>
-
-          <div className="pt-4 border-t border-white/[0.04] mt-auto">
-            <a
-              href={contactData.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-all cursor-pointer"
-            >
-              {data?.translations?.[lang]?.connectLinkedIn || t.connectLinkedIn || (lang === 'ar' ? 'زيارة الحساب المهني' : lang === 'ur' ? 'لنکڈ ان دیکھیں' : 'Connect on LinkedIn')}
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </SpotlightCard>
+            {renderActionArea(method)}
+          </SpotlightCard>
+        ))}
       </div>
     </section>
   );

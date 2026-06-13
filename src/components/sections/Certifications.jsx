@@ -5,6 +5,29 @@ import { translations } from '../../data/translations';
 import { SpotlightCard } from '../ui/SpotlightCard';
 import { Award, ShieldCheck, HeartPulse, FlameKindling, HardHat } from 'lucide-react';
 
+import { motion } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 35, scale: 0.98, filter: 'blur(4px)' },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1, 
+    filter: 'blur(0px)',
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
 const getCertIcon = (id, className) => {
   switch (id) {
     case 'osha': return <ShieldCheck className={className} />;
@@ -38,34 +61,41 @@ export const Certifications = () => {
       </div>
 
       {/* Certs Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+      >
         {certsList.map((cert) => (
-          <SpotlightCard
-            key={cert.id}
-            isCertificate={true}
-            className="flex flex-col justify-between h-full hover:border-[var(--primary)]/30 transition-all duration-300 min-h-[200px]"
-          >
-            <div className="p-2 w-fit rounded-xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] mb-6">
-              {getCertIcon(cert.id, "w-6 h-6")}
-            </div>
-
-            <h3 className="text-base md:text-lg font-bold leading-snug text-white tracking-tight">
-              {cert.name?.[lang] || cert[lang] || cert.en}
-            </h3>
-
-            {(cert.provider || cert.date) && (
-              <div className="text-xs text-zinc-400 mt-2 flex flex-col gap-0.5">
-                {cert.provider && <span>{cert.provider[lang] || cert.provider.en}</span>}
-                {cert.date && <span className="text-[10px] text-zinc-500">{cert.date[lang] || cert.date.en}</span>}
+          <motion.div key={cert.id} variants={itemVariants} className="h-full">
+            <SpotlightCard
+              isCertificate={true}
+              className="flex flex-col justify-between h-full hover:border-[var(--primary)]/30 transition-all duration-300 min-h-[200px]"
+            >
+              <div className="p-2 w-fit rounded-xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] mb-6">
+                {getCertIcon(cert.id, "w-6 h-6")}
               </div>
-            )}
 
-            <div className="text-[10px] md:text-xs font-semibold uppercase tracking-widest opacity-40 mt-6 pt-4 border-t border-white/[0.04]">
-              {data?.translations?.[lang]?.verifiedAccreditation || (lang === 'ar' ? 'اعتماد دولي معتمد' : lang === 'ur' ? 'تصدیق شدہ سند' : 'Verified Accreditation')}
-            </div>
-          </SpotlightCard>
+              <h3 className="text-base md:text-lg font-bold leading-snug text-white tracking-tight">
+                {cert.name?.[lang] || cert[lang] || cert.en}
+              </h3>
+
+              {(cert.provider || cert.date) && (
+                <div className="text-xs text-zinc-400 mt-2 flex flex-col gap-0.5">
+                  {cert.provider && <span>{cert.provider[lang] || cert.provider.en}</span>}
+                  {cert.date && <span className="text-[10px] text-zinc-500">{cert.date[lang] || cert.date.en}</span>}
+                </div>
+              )}
+
+              <div className="text-[10px] md:text-xs font-semibold uppercase tracking-widest opacity-40 mt-6 pt-4 border-t border-white/[0.04]">
+                {data?.translations?.[lang]?.verifiedAccreditation || (lang === 'ar' ? 'اعتماد دولي معتمد' : lang === 'ur' ? 'تصدیق شدہ سند' : 'Verified Accreditation')}
+              </div>
+            </SpotlightCard>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 };

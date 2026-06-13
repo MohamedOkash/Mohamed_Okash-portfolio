@@ -47,33 +47,62 @@ export const WhyOkash = () => {
       </div>
 
       {/* Pillars Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.15
+            }
+          }
+        }}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+      >
         {pillars.map((item, idx) => (
-          <SpotlightCard key={idx} className="flex flex-col justify-between h-full bg-white/[0.01] hover:bg-white/[0.03] transition-colors border border-[var(--border)] rounded-[2rem] p-8">
-            <div className="space-y-6">
-              {/* Icon */}
-              <div className="p-4 w-fit rounded-2xl bg-white/[0.02] border border-white/[0.05] shadow-inner">
-                {item.icon}
-              </div>
+          <motion.div 
+            key={idx}
+            variants={{
+              hidden: { opacity: 0, y: 30, scale: 0.98, filter: 'blur(4px)' },
+              visible: { 
+                opacity: 1, 
+                y: 0, 
+                scale: 1, 
+                filter: 'blur(0px)',
+                transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+              }
+            }}
+            className="h-full"
+          >
+            <SpotlightCard className="flex flex-col justify-between h-full bg-white/[0.01] hover:bg-white/[0.03] transition-colors border border-[var(--border)] rounded-[2rem] p-8">
+              <div className="space-y-6">
+                {/* Icon */}
+                <div className="p-4 w-fit rounded-2xl bg-white/[0.02] border border-white/[0.05] shadow-inner">
+                  {item.icon}
+                </div>
 
-              {/* Title & Subtitle */}
-              <div className="space-y-1">
-                <span className="text-xs font-semibold tracking-wider text-[var(--primary)] opacity-60 uppercase block">
-                  {item.subtitle}
-                </span>
-                <h3 className="text-xl md:text-2xl font-bold tracking-tight">
-                  {item.title}
-                </h3>
-              </div>
+                {/* Title & Subtitle */}
+                <div className="space-y-1">
+                  <span className="text-xs font-semibold tracking-wider text-[var(--primary)] opacity-60 uppercase block">
+                    {item.subtitle}
+                  </span>
+                  <h3 className="text-xl md:text-2xl font-bold tracking-tight">
+                    {item.title}
+                  </h3>
+                </div>
 
-              {/* Description */}
-              <p className="text-sm md:text-base opacity-70 leading-relaxed font-light">
-                {item.desc}
-              </p>
-            </div>
-          </SpotlightCard>
+                {/* Description */}
+                <p className="text-sm md:text-base opacity-70 leading-relaxed font-light">
+                  {item.desc}
+                </p>
+              </div>
+            </SpotlightCard>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Comparison Hook / Storytelling Banner */}
       <div className="mt-12 p-8 md:p-10 rounded-[2rem] border border-[var(--border)] bg-gradient-to-br from-white/[0.02] to-transparent backdrop-blur-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">

@@ -44,7 +44,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
     },
     statistics: {
       experienceYears: 7,
-      projectsBuilt: 5,
+      projectsBuilt: 8,
       certificationsCount: 4
     },
     roles: [
@@ -809,6 +809,13 @@ export const DEFAULT_PORTFOLIO_DATA = {
       allRightsReserved: "جملہ حقوق محفوظ ہیں"
     }
   },
+  customSections: [],
+  contactMethods: [
+    { id: "method-1", type: "email", label: "Email", value: "mohamed.okash1998@gmail.com", visible: true },
+    { id: "method-2", type: "whatsapp", label: "WhatsApp", value: "201014128610", visible: true },
+    { id: "method-3", type: "linkedin", label: "LinkedIn", value: "https://linkedin.com/in/mohamed-okash", visible: true },
+    { id: "method-4", type: "github", label: "GitHub", value: "https://github.com/MohamedOkash", visible: true }
+  ],
   settings: {
     maintenanceMode: false,
     featuredProjects: ["hse-pro", "constructflow"],

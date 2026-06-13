@@ -16,17 +16,20 @@ export const Hero = () => {
   };
 
   return (
-    <section id="hero" className="min-h-screen flex flex-col justify-center items-center text-center relative px-6 py-20 overflow-hidden">
+    <section id="hero" className="min-h-[85vh] flex flex-col justify-center items-center text-center relative px-6 py-16 overflow-hidden">
       {/* Background elegant gradient blobs */}
       <div className="absolute top-1/4 left-1/4 w-[350px] h-[350px] rounded-full blur-[120px] opacity-25 pointer-events-none bg-[var(--blob1)]" />
       <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full blur-[140px] opacity-20 pointer-events-none bg-[var(--blob2)]" />
+      
+      {/* Soft radial glow behind Hero */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] max-w-[800px] rounded-full blur-[160px] opacity-30 pointer-events-none bg-[var(--primary)]" />
 
       {/* Brand Availability Status Tag */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="inline-flex items-center gap-2.5 px-4.5 py-1.5 rounded-full border border-[var(--border)] bg-white/[0.02] text-xs font-semibold tracking-wider uppercase mb-8 shadow-sm backdrop-blur-md"
+        className="inline-flex items-center gap-2.5 px-4.5 py-1.5 rounded-full border border-[var(--border)] bg-white/[0.02] text-xs font-semibold tracking-wider uppercase mb-5 shadow-sm backdrop-blur-md"
       >
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
         <span className="opacity-95 text-white">{data?.translations?.[lang]?.name || t.name}</span>
@@ -39,7 +42,7 @@ export const Hero = () => {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tight mb-6 leading-[1.05]"
+        className="text-5xl sm:text-7xl md:text-9xl font-black tracking-tight mb-3 leading-[1.05]"
       >
         <span className="opacity-95 select-none block">
           {data?.translations?.[lang]?.heroTitle1 || t.heroTitle1}
@@ -54,7 +57,7 @@ export const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="text-sm sm:text-base md:text-lg opacity-60 max-w-2xl leading-relaxed mb-8 px-4 font-light"
+        className="text-sm sm:text-base md:text-lg opacity-60 max-w-2xl leading-relaxed mb-5 px-4 font-light"
       >
         {data?.translations?.[lang]?.tagline || t.tagline}
       </motion.p>
@@ -64,11 +67,11 @@ export const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-        className="grid grid-cols-3 gap-6 sm:gap-12 md:gap-16 max-w-2xl mx-auto mb-10 text-center z-20"
+        className="grid grid-cols-3 gap-6 sm:gap-12 md:gap-16 max-w-2xl mx-auto mb-6 text-center z-20"
       >
         <div className="flex flex-col items-center">
           <span className="text-2xl sm:text-3xl font-black text-white leading-tight">
-            {(data?.hero?.statistics?.projectsBuilt || 8)}+
+            {(data?.hero?.statistics?.projectsBuilt && data.hero.statistics.projectsBuilt >= 8) ? data.hero.statistics.projectsBuilt : 8}+
           </span>
           <span className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
             {t.cms?.projectsBuiltLabel || 'Projects'}
@@ -84,7 +87,7 @@ export const Hero = () => {
         </div>
         <div className="flex flex-col items-center">
           <span className="text-2xl sm:text-3xl font-black text-white leading-tight">
-            {(data?.hero?.statistics?.experienceYears || 7)}+
+            {(data?.hero?.statistics?.experienceYears && data.hero.statistics.experienceYears >= 7) ? data.hero.statistics.experienceYears : 7}+
           </span>
           <span className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
             {t.cms?.yearsExpLabel || 'Years Experience'}
@@ -97,7 +100,7 @@ export const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        className="flex flex-wrap gap-4 justify-center mb-12 z-20"
+        className="flex flex-wrap gap-4 justify-center mb-6 z-20"
       >
         <button
           onClick={() => handleScrollTo('projects')}

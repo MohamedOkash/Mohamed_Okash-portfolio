@@ -11,7 +11,8 @@ import {
   HardHat, Monitor, LogOut, ArrowLeft, CheckCircle2,
   Search, ArrowUp, ArrowDown, Upload, Download, Undo, Eye,
   Globe, Palette, Image, ShieldCheck, HeartPulse, FlameKindling,
-  Server, Copy, Check, ArrowUpRight, CheckSquare, Square
+  Server, Copy, Check, ArrowUpRight, CheckSquare, Square,
+  ChevronDown, ChevronUp, EyeOff, Layers
 } from 'lucide-react';
 
 // Form Input UI Helpers
@@ -431,8 +432,16 @@ export default function AdminDashboard() {
                 <button 
                   onClick={() => {
                     const list = [...formData.websiteStructure.sections];
-                    list[idx].visible = !list[idx].visible;
-                    setFormData({ ...formData, websiteStructure: { ...formData.websiteStructure, sections: list } });
+                    const nextVal = !list[idx].visible;
+                    list[idx].visible = nextVal;
+                    const updated = { ...formData, websiteStructure: { ...formData.websiteStructure, sections: list } };
+                    if (sect.id.startsWith('custom-')) {
+                      const cIdx = updated.customSections?.findIndex(cs => cs.id === sect.id);
+                      if (cIdx !== undefined && cIdx !== -1) {
+                        updated.customSections[cIdx].visible = nextVal;
+                      }
+                    }
+                    setFormData(updated);
                   }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                     sect.visible 
@@ -450,7 +459,17 @@ export default function AdminDashboard() {
                     onChange={(e) => {
                       const list = [...formData.websiteStructure.sections];
                       list[idx].title[lang] = e.target.value;
-                      setFormData({ ...formData, websiteStructure: { ...formData.websiteStructure, sections: list } });
+                      const updated = { ...formData, websiteStructure: { ...formData.websiteStructure, sections: list } };
+                      if (sect.id.startsWith('custom-')) {
+                        const cIdx = updated.customSections?.findIndex(cs => cs.id === sect.id);
+                        if (cIdx !== undefined && cIdx !== -1) {
+                          if (!updated.customSections[cIdx].title) {
+                            updated.customSections[cIdx].title = { ar: '', en: '', ur: '' };
+                          }
+                          updated.customSections[cIdx].title[lang] = e.target.value;
+                        }
+                      }
+                      setFormData(updated);
                     }}
                     placeholder={t.cms.sectionTitlePlaceholder}
                     className="p-2 w-full rounded bg-black/60 border border-zinc-800 text-xs text-white outline-none focus:border-[var(--primary)]"
@@ -1338,32 +1357,358 @@ export default function AdminDashboard() {
     </div>
   );
 
-  // Tab 10: Contact
-  const renderContactTab = () => (
-    <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.contactTitleLabel}</h3>
-      <AdminInput label={t.cms.contactEmail} value={formData.contact.email} onChange={(e) => {
-        const updated = { ...formData };
-        updated.contact.email = e.target.value;
-        setFormData(updated);
-      }} />
-      <AdminInput label={t.cms.githubUrl} value={formData.contact.github} onChange={(e) => {
-        const updated = { ...formData };
-        updated.contact.github = e.target.value;
-        setFormData(updated);
-      }} />
-      <AdminInput label={t.cms.contactPhone} value={formData.contact.whatsapp} onChange={(e) => {
-        const updated = { ...formData };
-        updated.contact.whatsapp = e.target.value.replace(/\D/g, '');
-        setFormData(updated);
-      }} />
-      <AdminInput label={t.cms.linkedinUrl} value={formData.contact.linkedin || ''} onChange={(e) => {
-        const updated = { ...formData };
-        updated.contact.linkedin = e.target.value;
-        setFormData(updated);
-      }} />
-    </div>
-  );
+  // Tab 10: Contact (Advanced Contact Builder)
+  const renderContactTab = () => {
+    // Fallback if contactMethods doesn't exist
+    if (!formData.contactMethods) {
+      formData.contactMethods = [
+        { id: "method-1", type: "email", label: "Email", value: formData.contact?.email || '', visible: true },
+        { id: "method-2", type: "whatsapp", label: "WhatsApp", value: formData.contact?.whatsapp || '', visible: true },
+        { id: "method-3", type: "linkedin", label: "LinkedIn", value: formData.contact?.linkedin || '', visible: true },
+        { id: "method-4", type: "github", label: "GitHub", value: formData.contact?.github || '', visible: true }
+      ];
+    }
+
+    const filteredMethods = formData.contactMethods.filter(m => 
+      (m.label || '').toLowerCase().includes(localListFilter.toLowerCase()) ||
+      (m.type || '').toLowerCase().includes(localListFilter.toLowerCase())
+    );
+
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+          <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.contactMethodsTitleLabel || 'Contact Methods'}</h3>
+          <button 
+            type="button"
+            onClick={() => {
+              const updated = { ...formData };
+              const newId = `method-${Date.now()}`;
+              if (!updated.contactMethods) updated.contactMethods = [];
+              updated.contactMethods.push({ id: newId, type: 'link', label: 'Custom Link', value: '', visible: true });
+              setFormData(updated);
+              setExpandedItems(prev => ({ ...prev, [newId]: true }));
+            }}
+            className="px-3.5 py-1.5 rounded-lg bg-[var(--primary)]/10 hover:bg-[var(--primary)]/20 border border-[var(--primary)]/30 text-[var(--primary)] font-bold text-xs flex items-center gap-1 cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5" /> {t.cms.addNewContactMethod || 'Add Method'}
+          </button>
+        </div>
+
+        {renderListFilterBar(t.cms.searchContactMethodsPlaceholder || 'Search contact methods...')}
+
+        <div className="space-y-4">
+          {filteredMethods.map((method, idx) => {
+            const isExpanded = !!expandedItems[method.id];
+            const globalIndex = formData.contactMethods.findIndex(m => m.id === method.id);
+
+            return (
+              <div key={method.id} id={`item-${method.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
+                <div 
+                  onClick={() => toggleAccordion(method.id)}
+                  className="p-4 bg-zinc-950/60 border-b border-zinc-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-950 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'up'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-zinc-400" /></button>
+                      <button disabled={globalIndex === formData.contactMethods.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-white">{method.label || t.cms.untitledContactMethod || 'Untitled Method'}</h4>
+                      <p className="text-[10px] text-zinc-500 capitalize">{method.type} • {method.visible ? (t.cms.visible || 'Visible') : (t.cms.hidden || 'Hidden')}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button 
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const updated = { ...formData };
+                        updated.contactMethods[globalIndex].visible = !updated.contactMethods[globalIndex].visible;
+                        setFormData(updated);
+                      }}
+                      className={`p-1.5 rounded hover:bg-zinc-800 transition-colors cursor-pointer ${method.visible ? 'text-[var(--primary)]' : 'text-zinc-600'}`}
+                    >
+                      {method.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (window.confirm(t.cms.confirmDelete || 'Are you sure you want to delete this item?')) {
+                          const updated = { ...formData };
+                          updated.contactMethods.splice(globalIndex, 1);
+                          setFormData(updated);
+                        }
+                      }}
+                      className="p-1.5 rounded hover:bg-red-950/40 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                    <div className="text-zinc-500">
+                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </div>
+                  </div>
+                </div>
+
+                {isExpanded && (
+                  <div className="p-5 bg-black/40 border-t border-zinc-900 space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.contactMethodType || 'Type'}</label>
+                        <select 
+                          value={method.type} 
+                          onChange={(e) => {
+                            const updated = { ...formData };
+                            updated.contactMethods[globalIndex].type = e.target.value;
+                            setFormData(updated);
+                          }}
+                          className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+                        >
+                          <option value="email">Email</option>
+                          <option value="whatsapp">WhatsApp</option>
+                          <option value="linkedin">LinkedIn</option>
+                          <option value="github">GitHub</option>
+                          <option value="facebook">Facebook</option>
+                          <option value="telegram">Telegram</option>
+                          <option value="twitter">X (Twitter)</option>
+                          <option value="instagram">Instagram</option>
+                          <option value="link">Custom Link</option>
+                        </select>
+                      </div>
+
+                      <AdminInput 
+                        label={t.cms.contactMethodLabel || 'Label'} 
+                        value={method.label} 
+                        onChange={(e) => {
+                          const updated = { ...formData };
+                          updated.contactMethods[globalIndex].label = e.target.value;
+                          setFormData(updated);
+                        }} 
+                      />
+                    </div>
+
+                    <AdminInput 
+                      label={t.cms.contactMethodValue || 'Value/URL'} 
+                      value={method.value} 
+                      onChange={(e) => {
+                        const updated = { ...formData };
+                        updated.contactMethods[globalIndex].value = e.target.value;
+                        setFormData(updated);
+                      }} 
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // Tab 14: Custom Sections
+  const renderCustomSectionsTab = () => {
+    if (!formData.customSections) {
+      formData.customSections = [];
+    }
+
+    const filteredSections = formData.customSections.filter(s => 
+      (s.title?.[lang] || s.title?.en || '').toLowerCase().includes(localListFilter.toLowerCase()) ||
+      (s.layoutType || '').toLowerCase().includes(localListFilter.toLowerCase())
+    );
+
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+          <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.customSectionsTitleLabel || 'Custom Sections'}</h3>
+          <button 
+            type="button"
+            onClick={() => {
+              const updated = { ...formData };
+              const newId = `custom-${Date.now()}`;
+              if (!updated.customSections) updated.customSections = [];
+              const newSect = { 
+                id: newId, 
+                title: { ar: 'قسم مخصص جديد', en: 'New Custom Section', ur: 'نیا کسٹم سیکشن' }, 
+                subtitle: { ar: '', en: '', ur: '' }, 
+                content: { ar: '', en: '', ur: '' }, 
+                icon: 'sparkles', 
+                layoutType: 'glassCard', 
+                visible: true 
+              };
+              updated.customSections.push(newSect);
+              
+              if (!updated.websiteStructure) updated.websiteStructure = { sections: [] };
+              if (!updated.websiteStructure.sections) updated.websiteStructure.sections = [];
+              updated.websiteStructure.sections.push({
+                id: newId,
+                visible: true,
+                title: { ...newSect.title }
+              });
+
+              setFormData(updated);
+              setExpandedItems(prev => ({ ...prev, [newId]: true }));
+            }}
+            className="px-3.5 py-1.5 rounded-lg bg-[var(--primary)]/10 hover:bg-[var(--primary)]/20 border border-[var(--primary)]/30 text-[var(--primary)] font-bold text-xs flex items-center gap-1 cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5" /> {t.cms.addNewCustomSection || 'Add Section'}
+          </button>
+        </div>
+
+        {renderListFilterBar(t.cms.searchCustomSectionsPlaceholder || 'Search custom sections...')}
+
+        <div className="space-y-4">
+          {filteredSections.map((section, idx) => {
+            const isExpanded = !!expandedItems[section.id];
+            const globalIndex = formData.customSections.findIndex(s => s.id === section.id);
+            const titleText = section.title?.[lang] || section.title?.en || t.cms.untitledCustomSection || 'Untitled Section';
+
+            return (
+              <div key={section.id} id={`item-${section.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
+                <div 
+                  onClick={() => toggleAccordion(section.id)}
+                  className="p-4 bg-zinc-950/60 border-b border-zinc-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-950 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'up'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-zinc-400" /></button>
+                      <button disabled={globalIndex === formData.customSections.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-white">{titleText}</h4>
+                      <p className="text-[10px] text-zinc-500 capitalize">{section.layoutType} • {section.visible ? (t.cms.visible || 'Visible') : (t.cms.hidden || 'Hidden')}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button 
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const updated = { ...formData };
+                        const nextVal = !updated.customSections[globalIndex].visible;
+                        updated.customSections[globalIndex].visible = nextVal;
+                        if (updated.websiteStructure?.sections) {
+                          const sIdx = updated.websiteStructure.sections.findIndex(s => s.id === section.id);
+                          if (sIdx !== -1) {
+                            updated.websiteStructure.sections[sIdx].visible = nextVal;
+                          }
+                        }
+                        setFormData(updated);
+                      }}
+                      className={`p-1.5 rounded hover:bg-zinc-800 transition-colors cursor-pointer ${section.visible ? 'text-[var(--primary)]' : 'text-zinc-600'}`}
+                    >
+                      {section.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (window.confirm(t.cms.confirmDelete || 'Are you sure you want to delete this item?')) {
+                          const updated = { ...formData };
+                          updated.customSections.splice(globalIndex, 1);
+                          if (updated.websiteStructure?.sections) {
+                            const sIdx = updated.websiteStructure.sections.findIndex(s => s.id === section.id);
+                            if (sIdx !== -1) {
+                              updated.websiteStructure.sections.splice(sIdx, 1);
+                            }
+                          }
+                          setFormData(updated);
+                        }
+                      }}
+                      className="p-1.5 rounded hover:bg-red-950/40 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                    <div className="text-zinc-500">
+                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </div>
+                  </div>
+                </div>
+
+                {isExpanded && (
+                  <div className="p-5 bg-black/40 border-t border-zinc-900 space-y-4">
+                    <AdminMultiLangInput 
+                      label={t.cms.customSectionTitle || 'Section Title'} 
+                      valueObj={section.title} 
+                      onChangeKey={(langKey, val) => {
+                        const updated = { ...formData };
+                        updated.customSections[globalIndex].title[langKey] = val;
+                        if (updated.websiteStructure?.sections) {
+                          const sIdx = updated.websiteStructure.sections.findIndex(s => s.id === section.id);
+                          if (sIdx !== -1) {
+                            if (!updated.websiteStructure.sections[sIdx].title) {
+                              updated.websiteStructure.sections[sIdx].title = { ar: '', en: '', ur: '' };
+                            }
+                            updated.websiteStructure.sections[sIdx].title[langKey] = val;
+                          }
+                        }
+                        setFormData(updated);
+                      }} 
+                    />
+
+                    <AdminMultiLangInput 
+                      label={t.cms.customSectionSubtitle || 'Subtitle'} 
+                      valueObj={section.subtitle} 
+                      onChangeKey={(langKey, val) => {
+                        const updated = { ...formData };
+                        updated.customSections[globalIndex].subtitle[langKey] = val;
+                        setFormData(updated);
+                      }} 
+                    />
+
+                    <AdminMultiLangInput 
+                      label={t.cms.sectionRichTextContent || 'Content Narrative'} 
+                      textarea 
+                      valueObj={section.content} 
+                      onChangeKey={(langKey, val) => {
+                        const updated = { ...formData };
+                        updated.customSections[globalIndex].content[langKey] = val;
+                        setFormData(updated);
+                      }} 
+                    />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.layoutTypeLabel || 'Layout Type'}</label>
+                        <select 
+                          value={section.layoutType} 
+                          onChange={(e) => {
+                            const updated = { ...formData };
+                            updated.customSections[globalIndex].layoutType = e.target.value;
+                            setFormData(updated);
+                          }}
+                          className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+                        >
+                          <option value="textBlock">Text Block</option>
+                          <option value="glassCard">Glass Card</option>
+                          <option value="timeline">Timeline</option>
+                          <option value="featureGrid">Feature Grid</option>
+                          <option value="contactBlock">Contact Block</option>
+                          <option value="highlightBanner">Highlight Banner</option>
+                        </select>
+                      </div>
+
+                      <AdminInput 
+                        label={t.cms.sectionIcon || 'Section Icon (Lucide)'} 
+                        value={section.icon} 
+                        onChange={(e) => {
+                          const updated = { ...formData };
+                          updated.customSections[globalIndex].icon = e.target.value;
+                          setFormData(updated);
+                        }} 
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
 
   // Tab 11: Translations Editor
   const renderTranslationsTab = () => (
@@ -1687,6 +2032,7 @@ export default function AdminDashboard() {
       case 'certifications': return renderCertificationsTab();
       case 'achievements': return renderAchievementsTab();
       case 'contact': return renderContactTab();
+      case 'customSections': return renderCustomSectionsTab();
       case 'translations': return renderTranslationsTab();
       case 'theme': return renderThemeTab();
       case 'branding': return renderBrandingTab();
@@ -2107,6 +2453,13 @@ export default function AdminDashboard() {
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'contact' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
           >
             <Mail className="w-3.5 h-3.5" /> {t.cms?.sidebarContact || 'Contact Details'}
+          </button>
+
+          <button 
+            onClick={() => handleTabChange('customSections')}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'customSections' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+          >
+            <Layers className="w-3.5 h-3.5" /> {t.cms?.sidebarCustomSections || 'Custom Sections'}
           </button>
 
           <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">{t.cms?.sidebarHeaderThemeLang || 'Theme & Language'}</div>
