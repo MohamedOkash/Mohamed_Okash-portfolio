@@ -51,6 +51,159 @@ export default function Home() {
   const pageTitle = `${data?.translations?.[lang]?.name || t.name} | ${data?.translations?.[lang]?.available || t.available}`;
   const pageDesc = data?.translations?.[lang]?.tagline || t.tagline;
 
+  const renderCustomSection = (sect) => {
+    const title = sect.title?.[lang] || sect.title?.en || '';
+    const subtitle = sect.subtitle?.[lang] || sect.subtitle?.en || '';
+    const content = sect.content?.[lang] || sect.content?.en || '';
+    
+    // Resolve dynamic Lucide icon
+    const getIcon = (iconName, className) => {
+      if (!iconName) return null;
+      const formattedName = iconName
+        .split('-')
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+        .join('');
+      const IconComponent = LucideIcons[formattedName] || LucideIcons[iconName] || LucideIcons.Sparkles;
+      return <IconComponent className={className} />;
+    };
+
+    switch (sect.layoutType) {
+      case 'textBlock':
+        return (
+          <div className="text-center max-w-3xl mx-auto space-y-4">
+            {sect.icon && (
+              <div className="inline-flex p-3 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] mb-2">
+                {getIcon(sect.icon, "w-6 h-6")}
+              </div>
+            )}
+            <h3 className="text-2xl sm:text-4xl font-extrabold text-white">{title}</h3>
+            {subtitle && <p className="text-sm uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
+            <div className="text-zinc-300 leading-relaxed whitespace-pre-wrap font-light text-base text-justify md:text-center mt-4">{content}</div>
+          </div>
+        );
+      case 'glassCard':
+        return (
+          <div className="max-w-4xl mx-auto">
+            <SpotlightCard className="p-8 md:p-12 hover:border-[var(--primary)]/20 transition-all duration-500 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--primary)] rounded-full blur-[100px] opacity-10 pointer-events-none" />
+              <div className="flex flex-col md:flex-row gap-8 items-start relative z-10">
+                {sect.icon && (
+                  <div className="p-4 rounded-2xl bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/20 shrink-0">
+                    {getIcon(sect.icon, "w-8 h-8")}
+                  </div>
+                )}
+                <div className="space-y-4 flex-1">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-white">{title}</h3>
+                  {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
+                  <div className="text-zinc-300 leading-relaxed whitespace-pre-wrap font-light text-base">{content}</div>
+                </div>
+              </div>
+            </SpotlightCard>
+          </div>
+        );
+      case 'timeline': {
+        const items = content.split('\n').filter(line => line.trim() !== '');
+        return (
+          <div className="max-w-4xl mx-auto">
+            <div className="mb-10 text-center md:text-start">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">{title}</h3>
+              {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
+            </div>
+            <div className="relative border-s border-white/[0.06] ms-4 md:ms-8 space-y-8 py-2">
+              {items.map((item, idx) => (
+                <div key={idx} className="relative ps-8 group">
+                  <div className="absolute top-1.5 -start-[6px] w-3 h-3 rounded-full bg-[#050505] border border-white/20 group-hover:border-[var(--primary)] transition-colors duration-300 flex items-center justify-center z-10">
+                    <div className="w-1 h-1 rounded-full bg-white/40 group-hover:bg-[var(--primary)] transition-all duration-300" />
+                  </div>
+                  <SpotlightCard className="p-5 hover:border-[var(--primary)]/20 transition-all duration-300">
+                    <div className="text-zinc-300 leading-relaxed font-light text-sm">{item}</div>
+                  </SpotlightCard>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+      case 'featureGrid': {
+        const items = content.split('\n').filter(line => line.trim() !== '');
+        return (
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-12 text-center">
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">{title}</h3>
+              {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {items.map((item, idx) => (
+                <SpotlightCard key={idx} className="p-6 hover:border-[var(--primary)]/20 transition-all duration-300 flex flex-col justify-between h-full">
+                  <div className="space-y-3">
+                    {sect.icon && <div className="text-[var(--primary)]">{getIcon(sect.icon, "w-5 h-5")}</div>}
+                    <div className="text-zinc-300 leading-relaxed font-light text-sm">{item}</div>
+                  </div>
+                </SpotlightCard>
+              ))}
+            </div>
+          </div>
+        );
+      }
+      case 'contactBlock':
+        return (
+          <div className="max-w-3xl mx-auto text-center p-8 md:p-12 rounded-2xl border border-white/[0.04] bg-white/[0.01] backdrop-blur-md">
+            {sect.icon && (
+              <div className="inline-flex p-3.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] mb-4 animate-bounce">
+                {getIcon(sect.icon, "w-6 h-6")}
+              </div>
+            )}
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">{title}</h3>
+            {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold mb-4">{subtitle}</p>}
+            <div className="text-zinc-300 leading-relaxed font-light text-sm mb-6 max-w-xl mx-auto">{content}</div>
+            <button 
+              onClick={() => {
+                const el = document.getElementById('contact');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-6 py-3 rounded-xl font-bold text-xs bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 shadow-lg transition-all cursor-pointer"
+            >
+              {lang === 'ar' ? 'تواصل معي الآن' : lang === 'ur' ? 'مجھ سے رابطہ کریں' : 'Get In Touch'}
+            </button>
+          </div>
+        );
+      case 'highlightBanner':
+        return (
+          <div className="max-w-5xl mx-auto">
+            <div className="relative rounded-2xl border border-[var(--primary)]/20 bg-gradient-to-r from-[var(--primary)]/5 to-[var(--accent)]/5 p-8 sm:p-10 md:p-12 overflow-hidden shadow-2xl">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--primary)] rounded-full blur-[120px] opacity-10 pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-[var(--accent)] rounded-full blur-[100px] opacity-10 pointer-events-none" />
+              <div className="flex flex-col md:flex-row items-center gap-6 justify-between relative z-10">
+                <div className="space-y-3 text-center md:text-start">
+                  <h3 className="text-2xl sm:text-3xl font-black text-white">{title}</h3>
+                  {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
+                  <div className="text-zinc-300 leading-relaxed font-light text-sm max-w-2xl">{content}</div>
+                </div>
+                {sect.icon && (
+                  <div className="p-4 rounded-xl bg-[var(--primary)]/10 text-[var(--primary)] shrink-0 animate-pulse">
+                    {getIcon(sect.icon, "w-8 h-8")}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const sectionRevealVariants = {
+    hidden: { opacity: 0, y: 60, scale: 0.96, filter: 'blur(8px)' },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1, 
+      filter: 'blur(0px)',
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+    }
+  };
+
   return (
     <>
       {/* Premium Preloader reveal */}
