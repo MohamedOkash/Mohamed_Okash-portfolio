@@ -2,6 +2,30 @@ import { create } from 'zustand';
 import { getPortfolioData, savePortfolioData } from '../firebase/firestore';
 import { DEFAULT_PORTFOLIO_DATA } from '../data/constants';
 
+const isObject = (item) => {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+};
+
+const deepMerge = (target, source) => {
+  if (!source) return target;
+  const output = { ...target };
+  
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach(key => {
+      if (isObject(source[key])) {
+        if (!(key in target)) {
+          output[key] = source[key];
+        } else {
+          output[key] = deepMerge(target[key], source[key]);
+        }
+      } else {
+        output[key] = source[key];
+      }
+    });
+  }
+  return output;
+};
+
 export const usePortfolioStore = create((set, get) => ({
   data: DEFAULT_PORTFOLIO_DATA,
   loading: true,
@@ -13,7 +37,8 @@ export const usePortfolioStore = create((set, get) => ({
     try {
       const dbData = await getPortfolioData();
       if (dbData) {
-        set({ data: dbData, loading: false });
+        const mergedData = deepMerge(DEFAULT_PORTFOLIO_DATA, dbData);
+        set({ data: mergedData, loading: false });
       } else {
         // If data is missing in Firestore and an authenticated admin is active, bootstrap it
         if (currentUser && currentUser.email === 'mohamed.okash1998@gmail.com') {

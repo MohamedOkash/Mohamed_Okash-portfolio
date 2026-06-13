@@ -71,8 +71,10 @@ export const validatePortfolioData = (data) => {
     throw new Error("Certifications section must be an array");
   }
   for (const cert of data.certifications) {
-    if (!cert.id || !cert.en || !cert.ar || !cert.ur) {
-      throw new Error(`Certification [${cert.id}] is missing required name fields`);
+    const hasOldFields = typeof cert.en === 'string' && typeof cert.ar === 'string' && typeof cert.ur === 'string';
+    const hasNewFields = cert.name && validateMultiLang(cert.name);
+    if (!cert.id || (!hasOldFields && !hasNewFields)) {
+      throw new Error(`Certification [${cert.id || 'Unknown'}] is missing required name fields`);
     }
   }
 

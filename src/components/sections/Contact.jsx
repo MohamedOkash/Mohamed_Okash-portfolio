@@ -23,6 +23,24 @@ const GithubIcon = (props) => (
   </svg>
 );
 
+const LinkedinIcon = (props) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    width="24" 
+    height="24" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    fill="none" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    {...props}
+  >
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect x="2" y="9" width="4" height="12" />
+    <circle cx="4" cy="4" r="2" />
+  </svg>
+);
+
 export const Contact = () => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
@@ -31,7 +49,8 @@ export const Contact = () => {
   const contactData = data?.contact || {
     email: "mohamed.okash1998@gmail.com",
     github: "https://github.com/MohamedOkash",
-    whatsapp: "201014128610"
+    whatsapp: "201014128610",
+    linkedin: "https://linkedin.com/in/mohamed-okash"
   };
 
   const [copiedType, setCopiedType] = useState(null);
@@ -49,8 +68,8 @@ export const Contact = () => {
     <section id="contact" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
       {/* Section Header */}
       <div className="mb-16 text-center max-w-3xl mx-auto">
-        <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3">
-          {t.contactTitle}
+        <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 animate-pulse">
+          {data?.translations?.[lang]?.contactTitle || t.contactTitle}
         </span>
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
           {lang === 'ar' ? 'دعنا نبني شيئاً معاً.' : lang === 'ur' ? 'آئیں مل کر کام کریں۔' : "Let's connect."}
@@ -61,7 +80,7 @@ export const Contact = () => {
       </div>
 
       {/* Grid of Contact Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
         {/* Email Card */}
         <SpotlightCard className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300">
           <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] w-fit mb-6">
@@ -69,7 +88,7 @@ export const Contact = () => {
           </div>
 
           <h3 className="text-lg font-bold mb-1 text-white">
-            {t.emailLabel}
+            {data?.translations?.[lang]?.emailLabel || t.emailLabel}
           </h3>
 
           <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
@@ -79,23 +98,23 @@ export const Contact = () => {
           <div className="flex gap-2 mt-auto pt-4 border-t border-white/[0.04]">
             <button
               onClick={() => handleCopy(contactData.email, 'email')}
-              className="flex-1 py-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer"
+              className="flex-1 py-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer text-zinc-300"
             >
               {copiedType === 'email' ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-green-400" />
-                  <span className="text-green-400">{t.copied}</span>
+                  <span className="text-green-400">{data?.translations?.[lang]?.copied || t.copied}</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-3.5 h-3.5" />
-                  {t.clickToCopy}
+                  {data?.translations?.[lang]?.clickToCopy || t.clickToCopy}
                 </>
               )}
             </button>
             <a
               href={`mailto:${contactData.email}`}
-              className="p-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all cursor-pointer text-white"
+              className="p-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all cursor-pointer text-white flex items-center justify-center"
               title="Compose Email"
             >
               <ArrowUpRight className="w-4 h-4" />
@@ -110,7 +129,7 @@ export const Contact = () => {
           </div>
 
           <h3 className="text-lg font-bold mb-1 text-white">
-            {t.githubLabel}
+            {data?.translations?.[lang]?.githubLabel || t.githubLabel}
           </h3>
 
           <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
@@ -122,10 +141,10 @@ export const Contact = () => {
               href={contactData.github}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] transition-all cursor-pointer"
+              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] transition-all cursor-pointer text-zinc-300"
             >
-              {lang === 'ar' ? 'زيارة الحساب الشخصي' : lang === 'ur' ? 'گٹ ہب کھولیں' : 'Visit Profile'}
-              <GithubIcon className="w-3.5 h-3.5" />
+              {data?.translations?.[lang]?.visitProfile || t.visitProfile || (lang === 'ar' ? 'زيارة الحساب الشخصي' : lang === 'ur' ? 'گٹ ہب کھولیں' : 'Visit Profile')}
+              <GithubIcon className="w-3.5 h-3.5 animate-pulse" />
             </a>
           </div>
         </SpotlightCard>
@@ -137,7 +156,7 @@ export const Contact = () => {
           </div>
 
           <h3 className="text-lg font-bold mb-1 text-white">
-            {t.whatsappLabel}
+            {data?.translations?.[lang]?.whatsappLabel || t.whatsappLabel}
           </h3>
 
           <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
@@ -151,7 +170,34 @@ export const Contact = () => {
               rel="noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-all cursor-pointer"
             >
-              {lang === 'ar' ? 'بدء محادثة واتساب' : lang === 'ur' ? 'واٹس ایپ چیٹ' : 'Send WhatsApp Message'}
+              {data?.translations?.[lang]?.sendWhatsApp || t.sendWhatsApp || (lang === 'ar' ? 'بدء محادثة واتساب' : lang === 'ur' ? 'واٹس ایپ چیٹ' : 'Send WhatsApp Message')}
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </SpotlightCard>
+
+        {/* LinkedIn Card */}
+        <SpotlightCard className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300">
+          <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] w-fit mb-6">
+            <LinkedinIcon className="w-6 h-6" />
+          </div>
+
+          <h3 className="text-lg font-bold mb-1 text-white">
+            {lang === 'ar' ? 'لينكد إن' : lang === 'ur' ? 'لنکڈ ان' : 'LinkedIn'}
+          </h3>
+
+          <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
+            linkedin.com/in/mohamed-okash
+          </p>
+
+          <div className="pt-4 border-t border-white/[0.04] mt-auto">
+            <a
+              href={contactData.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-all cursor-pointer"
+            >
+              {data?.translations?.[lang]?.connectLinkedIn || t.connectLinkedIn || (lang === 'ar' ? 'زيارة الحساب المهني' : lang === 'ur' ? 'لنکڈ ان دیکھیں' : 'Connect on LinkedIn')}
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           </div>

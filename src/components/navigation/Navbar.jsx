@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguageStore } from '../../store/languageStore';
 import { useThemeStore } from '../../store/themeStore';
 import { useAuthStore } from '../../store/authStore';
+import { usePortfolioStore } from '../../store/portfolioStore';
+import { DEFAULT_PORTFOLIO_DATA } from '../../data/constants';
 import { translations } from '../../data/translations';
 import { Shield, Languages, SunMoon, LogOut, LayoutDashboard } from 'lucide-react';
 
@@ -13,6 +15,7 @@ export const Navbar = () => {
   const { lang, setLanguage } = useLanguageStore();
   const { activeTheme, setTheme } = useThemeStore();
   const { user, logout, setLoginModalOpen } = useAuthStore();
+  const { data } = usePortfolioStore();
   
   const [scrolled, setScrolled] = useState(false);
   const [clickCount, setClickCount] = useState(0);
@@ -147,6 +150,13 @@ export const Navbar = () => {
     }
   };
 
+  if (data?.websiteStructure && data.websiteStructure.navbarVisible === false) {
+    return null;
+  }
+
+  const sectionsList = data?.websiteStructure?.sections || DEFAULT_PORTFOLIO_DATA.websiteStructure.sections;
+  const logoTextVal = data?.general?.logoText?.[lang] || data?.general?.siteName?.[lang] || t.name;
+
   return (
     <nav className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
       scrolled 
@@ -167,16 +177,23 @@ export const Navbar = () => {
           }} 
           className="cursor-pointer font-extrabold text-xl md:text-2xl tracking-tight text-gradient select-none"
         >
-          {t.name}
+          {logoTextVal}
         </div>
 
         {/* Section Navigation Links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium opacity-80">
-          <button onClick={() => handleScrollToSection('hero')} className="hover:text-[var(--primary)] transition-colors cursor-pointer">{lang === 'ar' ? 'الرئيسية' : lang === 'ur' ? 'ہوم' : 'Home'}</button>
-          <button onClick={() => handleScrollToSection('why-me')} className="hover:text-[var(--primary)] transition-colors cursor-pointer">{lang === 'ar' ? 'من أنا' : lang === 'ur' ? 'میرا تعارف' : 'About'}</button>
-          <button onClick={() => handleScrollToSection('projects')} className="hover:text-[var(--primary)] transition-colors cursor-pointer">{lang === 'ar' ? 'مشاريعي' : lang === 'ur' ? 'میرے پروجیکٹس' : 'Projects'}</button>
-          <button onClick={() => handleScrollToSection('experience')} className="hover:text-[var(--primary)] transition-colors cursor-pointer">{lang === 'ar' ? 'الخبرات' : lang === 'ur' ? 'تجربہ' : 'Experience'}</button>
-          <button onClick={() => handleScrollToSection('certifications')} className="hover:text-[var(--primary)] transition-colors cursor-pointer">{lang === 'ar' ? 'الشهادات' : lang === 'ur' ? 'سندیں' : 'Credentials'}</button>
+          {sectionsList
+            .filter(sect => sect.visible && sect.id !== 'contact' && sect.id !== 'hero')
+            .map(sect => (
+              <button 
+                key={sect.id} 
+                onClick={() => handleScrollToSection(sect.id)} 
+                className="hover:text-[var(--primary)] transition-colors cursor-pointer"
+              >
+                {sect.title?.[lang] || sect.title?.en}
+              </button>
+            ))
+          }
         </div>
 
         {/* Toolbar Controls */}

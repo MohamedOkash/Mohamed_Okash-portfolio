@@ -51,7 +51,7 @@ export const About = () => {
 
             <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-white">
               <TrendingUp className="w-5 h-5 text-[var(--primary)]" />
-              {lang === 'ar' ? 'التحول والتكامل المهني' : lang === 'ur' ? 'پیشہ ورانہ انضمام' : 'The Structural Bridge'}
+              {data?.translations?.[lang]?.aboutBridgeTitle || t.aboutBridgeTitle || (lang === 'ar' ? 'التحول والتكامل المهني' : lang === 'ur' ? 'پیشہ ورانہ انضمام' : 'The Structural Bridge')}
             </h3>
 
             {/* Core comparative tracks */}
@@ -63,10 +63,10 @@ export const About = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-sm mb-1 text-white">
-                    {lang === 'ar' ? 'البنية التحتية والشبكات (2016 - 2023)' : lang === 'ur' ? 'آئی ٹی انفراسٹرکچر' : 'IT Infrastructure Engineering (2016 - 2023)'}
+                    {data?.translations?.[lang]?.aboutITTitle || t.aboutITTitle || (lang === 'ar' ? 'البنية التحتية والشبكات (2016 - 2023)' : lang === 'ur' ? 'آئی ٹی انفراسٹرکچر' : 'IT Infrastructure Engineering (2016 - 2023)')}
                   </h4>
                   <p className="text-xs opacity-60 leading-relaxed text-zinc-300">
-                    {lang === 'ar' ? 'تجهيز السيرفرات، الشبكات اللاسلكية المعقدة، الفايبر، وكاميرات المراقبة للشبكات الأمنية الضخمة.' : 'Servers, complex routing, fiber cabling, CCTV security nodes, access controls, and multi-endpoint software integration.'}
+                    {data?.translations?.[lang]?.aboutITDesc || t.aboutITDesc || (lang === 'ar' ? 'تجهيز السيرفرات، الشبكات اللاسلكية المعقدة، الفايبر، وكاميرات المراقبة للشبكات الأمنية الضخمة.' : 'Servers, complex routing, fiber cabling, CCTV security nodes, access controls, and multi-endpoint software integration.')}
                   </p>
                 </div>
               </div>
@@ -78,10 +78,10 @@ export const About = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-sm mb-1 text-white">
-                    {lang === 'ar' ? 'إدارة السلامة وهندسة الأمن (2023 - الآن)' : lang === 'ur' ? 'کام کی جگہ کی حفاظت' : 'HSE Workplace safety (2023 - Present)'}
+                    {data?.translations?.[lang]?.aboutHSETitle || t.aboutHSETitle || (lang === 'ar' ? 'إدارة السلامة وهندسة الأمن (2023 - الآن)' : lang === 'ur' ? 'کام کی جگہ کی حفاظت' : 'HSE Workplace safety (2023 - Present)')}
                   </h4>
                   <p className="text-xs opacity-60 leading-relaxed text-zinc-300">
-                    {lang === 'ar' ? 'رقمنة عمليات السلامة بالكامل، تتبع الامتثال، القضاء على الورقيات، وتحليل المخاطر الميدانية.' : 'OSHA compliance audits, risk mitigation structures, site-level incident protocols, and digitizing paper processes using custom software.'}
+                    {data?.translations?.[lang]?.aboutHSEDesc || t.aboutHSEDesc || (lang === 'ar' ? 'رقمنة عمليات السلامة بالكامل، تتبع الامتثال، القضاء على الورقيات، وتحليل المخاطر الميدانية.' : 'OSHA compliance audits, risk mitigation structures, site-level incident protocols, and digitizing paper processes using custom software.')}
                   </p>
                 </div>
               </div>
