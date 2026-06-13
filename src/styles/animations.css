@@ -1,0 +1,57 @@
+@keyframes float-slow {
+  0% {
+    transform: translateY(0px) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) scale(1.05) rotate(180deg);
+  }
+  100% {
+    transform: translateY(0px) scale(1) rotate(360deg);
+  }
+}
+
+@keyframes float-medium {
+  0% {
+    transform: translateY(0px) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translateY(20px) scale(0.95) rotate(-180deg);
+  }
+  100% {
+    transform: translateY(0px) scale(1) rotate(-360deg);
+  }
+}
+
+.animate-float-1 {
+  animation: float-slow 25s infinite ease-in-out;
+}
+
+.animate-float-2 {
+  animation: float-medium 20s infinite ease-in-out;
+}
+
+.animate-float-3 {
+  animation: float-slow 30s infinite ease-in-out;
+  animation-delay: -5s;
+}
+
+/* Premium Liquid Glass Backdrop Utility */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+}
+
+.liquid-glass-heavy {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+}
+
+/* Apple-style typography clipping */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, var(--text), var(--muted));
+}

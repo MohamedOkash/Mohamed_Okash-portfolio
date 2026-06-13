@@ -1,0 +1,57 @@
+/* Custom variables for Obsidian, Ocean, and Aurora themes */
+:root {
+  /* Default fallbacks */
+  --bg: #050505;
+  --text: #fafafa;
+  --muted: #a1a1aa;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #ffffff;
+  --accent-text: #000000;
+  --primary: #e4e4e7;
+  --spotlight: rgba(255, 255, 255, 0.08);
+  --blob1: rgba(63, 63, 70, 0.2);
+  --blob2: rgba(39, 39, 42, 0.2);
+  --blob3: rgba(24, 24, 27, 0.2);
+}
+
+[data-theme='dark'] {
+  --bg: #050505;
+  --text: #fafafa;
+  --muted: #a1a1aa;
+  --border: rgba(255, 255, 255, 0.08);
+  --accent: #ffffff;
+  --accent-text: #000000;
+  --primary: #e4e4e7;
+  --spotlight: rgba(255, 255, 255, 0.08);
+  --blob1: rgba(63, 63, 70, 0.2);
+  --blob2: rgba(39, 39, 42, 0.2);
+  --blob3: rgba(24, 24, 27, 0.2);
+}
+
+[data-theme='ocean'] {
+  --bg: #020b16;
+  --text: #f0f9ff;
+  --muted: #7dd3fc;
+  --border: rgba(34, 211, 238, 0.15);
+  --accent: #22d3ee;
+  --accent-text: #020617;
+  --primary: #06b6d4;
+  --spotlight: rgba(34, 211, 238, 0.15);
+  --blob1: rgba(14, 116, 144, 0.3);
+  --blob2: rgba(3, 105, 161, 0.3);
+  --blob3: rgba(6, 182, 212, 0.2);
+}
+
+[data-theme='aurora'] {
+  --bg: #0a0014;
+  --text: #faf5ff;
+  --muted: #d8b4fe;
+  --border: rgba(236, 72, 153, 0.15);
+  --accent: #ec4899;
+  --accent-text: #0f001f;
+  --primary: #d946ef;
+  --spotlight: rgba(236, 72, 153, 0.15);
+  --blob1: rgba(162, 28, 175, 0.3);
+  --blob2: rgba(109, 40, 217, 0.3);
+  --blob3: rgba(249, 115, 22, 0.2);
+}
