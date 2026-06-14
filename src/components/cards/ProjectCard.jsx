@@ -147,7 +147,7 @@ export const ProjectCard = ({ project, onClick }) => {
                   target="_blank"
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="hover:text-[var(--primary)] transition-colors p-1"
+                  className="hover:text-[var(--primary)] transition-colors p-3"
                 >
                   <GithubIcon className="w-4.5 h-4.5" />
                 </a>
@@ -158,7 +158,7 @@ export const ProjectCard = ({ project, onClick }) => {
                   target="_blank"
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="hover:text-[var(--primary)] transition-colors p-1"
+                  className="hover:text-[var(--primary)] transition-colors p-3"
                 >
                   <ArrowUpRight className="w-4.5 h-4.5" />
                 </a>

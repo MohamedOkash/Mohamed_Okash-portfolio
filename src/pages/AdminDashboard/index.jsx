@@ -3359,7 +3359,7 @@ export default function AdminDashboard() {
         <button
           type="button"
           onClick={() => setIsMobileNavOpen(true)}
-          className="lg:hidden p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] shrink-0"
+          className="lg:hidden p-3 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] shrink-0"
           aria-label={t.cms?.ariaCloseModal || 'Close'}
         >
           <Menu className="w-5 h-5" />

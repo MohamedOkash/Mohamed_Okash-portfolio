@@ -108,7 +108,7 @@ export const Contact = React.memo(() => {
         <div className="flex gap-2 mt-auto pt-4 border-t border-[var(--border-color)]">
           <button
             onClick={() => handleCopy(method.value, method.id)}
-            className="flex-1 py-3 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] transition-all text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer text-[var(--text-secondary)]"
+            className="flex-1 py-4 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] transition-all text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer text-[var(--text-secondary)]"
           >
             {copiedType === method.id ? (
               <>
@@ -124,8 +124,9 @@ export const Contact = React.memo(() => {
           </button>
           <a
             href={`mailto:${method.value}`}
-            className="p-3 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] transition-all cursor-pointer text-[var(--text-primary)] flex items-center justify-center"
+            className="p-3.5 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] transition-all cursor-pointer text-[var(--text-primary)] flex items-center justify-center"
             title="Compose Email"
+            aria-label="Compose Email"
           >
             <ArrowUpRight className="w-4 h-4" />
           </a>
@@ -141,7 +142,7 @@ export const Contact = React.memo(() => {
             href={getWhatsAppLink(method.value)}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-all cursor-pointer"
+            className="flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-all cursor-pointer"
           >
             {data?.translations?.[lang]?.sendWhatsApp || t.sendWhatsApp || (lang === 'ar' ? 'بدء محادثة واتساب' : 'Send WhatsApp')}
             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -162,7 +163,7 @@ export const Contact = React.memo(() => {
           href={method.value.startsWith('http') ? method.value : `https://${method.value}`}
           target="_blank"
           rel="noreferrer"
-          className={`flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-xs transition-all cursor-pointer ${btnColorClass}`}
+          className={`flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-xs transition-all cursor-pointer ${btnColorClass}`}
         >
           {lang === 'ar' ? 'زيارة الرابط' : lang === 'ur' ? 'رابط کھولیں' : 'Visit Profile'}
           <ArrowUpRight className="w-3.5 h-3.5" />

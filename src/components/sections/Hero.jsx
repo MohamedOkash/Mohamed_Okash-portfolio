@@ -121,7 +121,7 @@ export const Hero = React.memo(() => {
       >
         <button
           onClick={() => handleScrollTo('projects')}
-          className="px-8 py-3.5 rounded-xl font-bold text-sm bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-95 shadow-xl transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
+          className="px-8 py-4 rounded-xl font-bold text-sm bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-95 shadow-xl transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
         >
           {data?.translations?.[lang]?.viewProjects || t.viewProjects}
           <ArrowUpRight className="w-4 h-4" />
@@ -129,7 +129,7 @@ export const Hero = React.memo(() => {
 
         <button
           onClick={() => handleScrollTo('contact')}
-          className="px-8 py-3.5 rounded-xl font-bold text-sm border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
+          className="px-8 py-4 rounded-xl font-bold text-sm border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
         >
           <Mail className="w-4 h-4" />
           {data?.translations?.[lang]?.contactMe || t.contactMe}

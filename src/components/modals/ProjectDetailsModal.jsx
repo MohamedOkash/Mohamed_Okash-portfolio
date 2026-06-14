@@ -46,7 +46,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 overflow-y-auto">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-6 overflow-y-auto">
           {/* Backdrop Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
