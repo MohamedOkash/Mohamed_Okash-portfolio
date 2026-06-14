@@ -11,17 +11,17 @@ export default function NotFound() {
   const t = translations[lang] || translations.ar;
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white flex items-center justify-center p-6 relative overflow-hidden transition-theme">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex items-center justify-center p-6 relative overflow-hidden transition-theme">
       {/* Background blobs */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] rounded-full blur-[140px] opacity-15 mix-blend-screen bg-pink-500/20 pointer-events-none" />
 
       <div className="w-full max-w-md text-center">
-        <SpotlightCard className="shadow-2xl border-white/10 p-8 md:p-10 relative">
+        <SpotlightCard className="shadow-2xl border-[var(--border-color)] p-8 md:p-10 relative">
           <div className="flex flex-col items-center mb-6">
-            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.08] text-pink-500 mb-4 animate-bounce">
+            <div className="p-4 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-pink-500 mb-4 animate-bounce">
               <Compass className="w-10 h-10" />
             </div>
-            <h1 className="text-6xl font-black text-white tracking-tight mb-2">404</h1>
+            <h1 className="text-6xl font-black text-[var(--text-primary)] tracking-tight mb-2">404</h1>
             <h2 className="text-xl font-bold tracking-tight">
               {lang === 'ar' ? 'الصفحة غير موجودة' : lang === 'ur' ? 'صفحہ نہیں ملا' : 'Page Not Found'}
             </h2>
@@ -34,7 +34,7 @@ export default function NotFound() {
 
           <button
             onClick={() => navigate('/')}
-            className="w-full py-4 rounded-xl font-bold text-sm bg-white text-black hover:bg-white/90 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+            className="w-full py-4 rounded-xl font-bold text-sm bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
           >
             <Home className="w-4.5 h-4.5" />
             {t.backToHome}

@@ -1,6 +1,19 @@
 /* Custom variables for Obsidian, Ocean, Aurora, Platinum, and Midnight themes */
 :root {
-  /* Default fallbacks */
+  color-scheme: dark;
+  --theme-mode: dark;
+  --bg-primary: #050505;
+  --bg-secondary: #0b0b0d;
+  --card-bg: rgba(18, 18, 21, 0.82);
+  --input-bg: rgba(0, 0, 0, 0.55);
+  --overlay-bg: rgba(0, 0, 0, 0.82);
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --accent-color: #ffffff;
+  --surface-hover: rgba(255, 255, 255, 0.07);
+
+  /* Backward-compatible aliases */
   --bg: #050505;
   --text: #fafafa;
   --muted: #a1a1aa;
@@ -15,6 +28,18 @@
 }
 
 [data-theme='dark'] {
+  color-scheme: dark;
+  --theme-mode: dark;
+  --bg-primary: #050505;
+  --bg-secondary: #0b0b0d;
+  --card-bg: rgba(18, 18, 21, 0.82);
+  --input-bg: rgba(0, 0, 0, 0.55);
+  --overlay-bg: rgba(0, 0, 0, 0.82);
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --accent-color: #ffffff;
+  --surface-hover: rgba(255, 255, 255, 0.07);
   --bg: #050505;
   --text: #fafafa;
   --muted: #a1a1aa;
@@ -29,6 +54,18 @@
 }
 
 [data-theme='ocean'] {
+  color-scheme: dark;
+  --theme-mode: dark;
+  --bg-primary: #020b16;
+  --bg-secondary: #061525;
+  --card-bg: rgba(6, 25, 43, 0.84);
+  --input-bg: rgba(1, 9, 18, 0.7);
+  --overlay-bg: rgba(1, 7, 14, 0.84);
+  --text-primary: #f0f9ff;
+  --text-secondary: #9bdcf5;
+  --border-color: rgba(34, 211, 238, 0.2);
+  --accent-color: #22d3ee;
+  --surface-hover: rgba(34, 211, 238, 0.09);
   --bg: #020b16;
   --text: #f0f9ff;
   --muted: #7dd3fc;
@@ -43,6 +80,18 @@
 }
 
 [data-theme='aurora'] {
+  color-scheme: dark;
+  --theme-mode: dark;
+  --bg-primary: #03100c;
+  --bg-secondary: #071b14;
+  --card-bg: rgba(7, 30, 22, 0.84);
+  --input-bg: rgba(2, 15, 10, 0.7);
+  --overlay-bg: rgba(1, 10, 7, 0.84);
+  --text-primary: #ecfdf5;
+  --text-secondary: #8ce8c5;
+  --border-color: rgba(52, 211, 153, 0.22);
+  --accent-color: #34d399;
+  --surface-hover: rgba(52, 211, 153, 0.09);
   --bg: #03100c;
   --text: #ecfdf5;
   --muted: #6ee7b7;
@@ -57,10 +106,22 @@
 }
 
 [data-theme='platinum'] {
-  --bg: #f8f9fa;
+  color-scheme: light;
+  --theme-mode: light;
+  --bg-primary: #f4f6f8;
+  --bg-secondary: #e8edf2;
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --input-bg: rgba(255, 255, 255, 0.96);
+  --overlay-bg: rgba(15, 23, 42, 0.55);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --border-color: rgba(15, 23, 42, 0.16);
+  --accent-color: #1e293b;
+  --surface-hover: rgba(15, 23, 42, 0.07);
+  --bg: #f4f6f8;
   --text: #0f172a;
   --muted: #475569;
-  --border: rgba(15, 23, 42, 0.08);
+  --border: rgba(15, 23, 42, 0.16);
   --accent: #0f172a;
   --accent-text: #ffffff;
   --primary: #334155;
@@ -71,6 +132,18 @@
 }
 
 [data-theme='midnight'] {
+  color-scheme: dark;
+  --theme-mode: dark;
+  --bg-primary: #090414;
+  --bg-secondary: #130a25;
+  --card-bg: rgba(25, 13, 47, 0.84);
+  --input-bg: rgba(10, 4, 22, 0.72);
+  --overlay-bg: rgba(7, 2, 15, 0.86);
+  --text-primary: #f5f3ff;
+  --text-secondary: #c4b5fd;
+  --border-color: rgba(139, 92, 246, 0.22);
+  --accent-color: #8b5cf6;
+  --surface-hover: rgba(139, 92, 246, 0.1);
   --bg: #090414;
   --text: #f5f3ff;
   --muted: #c4b5fd;

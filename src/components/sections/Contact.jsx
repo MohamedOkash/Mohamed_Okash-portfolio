@@ -105,10 +105,10 @@ export const Contact = () => {
   const renderActionArea = (method) => {
     if (method.type === 'email') {
       return (
-        <div className="flex gap-2 mt-auto pt-4 border-t border-white/[0.04]">
+        <div className="flex gap-2 mt-auto pt-4 border-t border-[var(--border-color)]">
           <button
             onClick={() => handleCopy(method.value, method.id)}
-            className="flex-1 py-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer text-zinc-300"
+            className="flex-1 py-3 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] transition-all text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer text-[var(--text-secondary)]"
           >
             {copiedType === method.id ? (
               <>
@@ -124,7 +124,7 @@ export const Contact = () => {
           </button>
           <a
             href={`mailto:${method.value}`}
-            className="p-3 rounded-xl border border-white/[0.08] hover:bg-white/5 transition-all cursor-pointer text-white flex items-center justify-center"
+            className="p-3 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] transition-all cursor-pointer text-[var(--text-primary)] flex items-center justify-center"
             title="Compose Email"
           >
             <ArrowUpRight className="w-4 h-4" />
@@ -136,7 +136,7 @@ export const Contact = () => {
     if (method.type === 'whatsapp') {
       const displayVal = method.value.startsWith('+') ? method.value : `+${method.value}`;
       return (
-        <div className="pt-4 border-t border-white/[0.04] mt-auto">
+        <div className="pt-4 border-t border-[var(--border-color)] mt-auto">
           <a
             href={getWhatsAppLink(method.value)}
             target="_blank"
@@ -151,13 +151,13 @@ export const Contact = () => {
     }
 
     // Default for linkedin, github, custom links
-    let btnColorClass = "bg-white/[0.02] border border-white/[0.08] hover:bg-white/[0.06] text-zinc-300";
+    let btnColorClass = "bg-[var(--surface-hover)] border border-[var(--border-color)] hover:bg-[var(--surface-hover)] text-[var(--text-secondary)]";
     if (method.type === 'linkedin') {
       btnColorClass = "bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20";
     }
 
     return (
-      <div className="pt-4 border-t border-white/[0.04] mt-auto">
+      <div className="pt-4 border-t border-[var(--border-color)] mt-auto">
         <a
           href={method.value.startsWith('http') ? method.value : `https://${method.value}`}
           target="_blank"
@@ -190,11 +190,11 @@ export const Contact = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
         {visibleMethods.map((method) => (
           <SpotlightCard key={method.id} className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300">
-            <div className="p-3.5 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] w-fit mb-6">
+            <div className="p-3.5 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--primary)] w-fit mb-6">
               {getContactIcon(method.type, "w-6 h-6")}
             </div>
 
-            <h3 className="text-lg font-bold mb-1 text-white">
+            <h3 className="text-lg font-bold mb-1 text-[var(--text-primary)]">
               {method.label}
             </h3>
 

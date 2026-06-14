@@ -19,11 +19,11 @@ import {
 // Form Input UI Helpers
 const AdminInput = ({ label, value, onChange, type="text", textarea=false, dir="auto", min, max, step }) => (
   <div className="mb-4 w-full min-w-0">
-    {label && <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{label}</label>}
+    {label && <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">{label}</label>}
     {textarea ? (
-      <textarea rows="4" dir={dir} value={value ?? ''} onChange={onChange} className="block w-full min-w-0 max-w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+      <textarea rows="4" dir={dir} value={value ?? ''} onChange={onChange} className="block w-full min-w-0 max-w-full p-3 rounded-lg bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] transition-colors text-sm" />
     ) : (
-      <input type={type} min={min} max={max} step={step} dir={dir} value={value ?? ''} onChange={onChange} className="block w-full min-w-0 max-w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+      <input type={type} min={min} max={max} step={step} dir={dir} value={value ?? ''} onChange={onChange} className="block w-full min-w-0 max-w-full p-3 rounded-lg bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] transition-colors text-sm" />
     )}
   </div>
 );
@@ -32,31 +32,31 @@ const AdminMultiLangInput = ({ label, valueObj = { ar: '', en: '', ur: '' }, onC
   const { lang } = useLanguageStore();
   const t = translations[lang] || translations.ar;
   return (
-    <div className="mb-5 p-3 sm:p-4 min-w-0 rounded-xl border border-zinc-800 bg-zinc-900/20 space-y-3">
-      {label && <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 font-extrabold">{label}</label>}
-      <div className="space-y-3 pl-3 border-l border-zinc-800">
+    <div className="mb-5 p-3 sm:p-4 min-w-0 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] space-y-3">
+      {label && <label className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] font-extrabold">{label}</label>}
+      <div className="space-y-3 pl-3 border-l border-[var(--border-color)]">
         <div>
-          <span className="text-[10px] text-zinc-500 font-bold uppercase block mb-1">{t.cms?.arabic || 'العربية (Arabic)'}</span>
+          <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block mb-1">{t.cms?.arabic || 'العربية (Arabic)'}</span>
           {textarea ? (
-            <textarea rows="3" dir="rtl" value={valueObj.ar || ""} onChange={(e) => onChangeKey('ar', e.target.value)} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+            <textarea rows="3" dir="rtl" value={valueObj.ar || ""} onChange={(e) => onChangeKey('ar', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] transition-colors text-sm" />
           ) : (
-            <input type="text" dir="rtl" value={valueObj.ar || ""} onChange={(e) => onChangeKey('ar', e.target.value)} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+            <input type="text" dir="rtl" value={valueObj.ar || ""} onChange={(e) => onChangeKey('ar', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] transition-colors text-sm" />
           )}
         </div>
         <div>
-          <span className="text-[10px] text-zinc-500 font-bold uppercase block mb-1">{t.cms?.english || 'English'}</span>
+          <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block mb-1">{t.cms?.english || 'English'}</span>
           {textarea ? (
-            <textarea rows="3" dir="ltr" value={valueObj.en || ""} onChange={(e) => onChangeKey('en', e.target.value)} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+            <textarea rows="3" dir="ltr" value={valueObj.en || ""} onChange={(e) => onChangeKey('en', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] transition-colors text-sm" />
           ) : (
-            <input type="text" dir="ltr" value={valueObj.en || ""} onChange={(e) => onChangeKey('en', e.target.value)} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+            <input type="text" dir="ltr" value={valueObj.en || ""} onChange={(e) => onChangeKey('en', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] transition-colors text-sm" />
           )}
         </div>
         <div>
-          <span className="text-[10px] text-zinc-500 font-bold uppercase block mb-1">{t.cms?.urdu || 'اردو (Urdu)'}</span>
+          <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block mb-1">{t.cms?.urdu || 'اردو (Urdu)'}</span>
           {textarea ? (
-            <textarea rows="3" dir="rtl" value={valueObj.ur || ""} onChange={(e) => onChangeKey('ur', e.target.value)} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+            <textarea rows="3" dir="rtl" value={valueObj.ur || ""} onChange={(e) => onChangeKey('ur', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] transition-colors text-sm" />
           ) : (
-            <input type="text" dir="rtl" value={valueObj.ur || ""} onChange={(e) => onChangeKey('ur', e.target.value)} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+            <input type="text" dir="rtl" value={valueObj.ur || ""} onChange={(e) => onChangeKey('ur', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] transition-colors text-sm" />
           )}
         </div>
       </div>
@@ -391,8 +391,8 @@ export default function AdminDashboard() {
         const el = document.getElementById(`item-${result.id}`);
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          el.classList.add('bg-zinc-800/60');
-          setTimeout(() => el.classList.remove('bg-zinc-800/60'), 2500);
+          el.classList.add('bg-[var(--bg-secondary)]');
+          setTimeout(() => el.classList.remove('bg-[var(--bg-secondary)]'), 2500);
         }
       }, 200);
     }
@@ -400,7 +400,7 @@ export default function AdminDashboard() {
 
   if (!formData) {
     return (
-      <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center text-white">
+      <div className="min-h-screen bg-[var(--bg-primary)] flex flex-col items-center justify-center text-[var(--text-primary)]">
         <Loader2 className="w-10 h-10 animate-spin text-[var(--primary)] mb-4" />
         <p className="text-sm font-medium opacity-60">Loading CMS Dashboard...</p>
       </div>
@@ -414,7 +414,7 @@ export default function AdminDashboard() {
   // Tab 1: General Settings
   const renderGeneralTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.tabGeneral}</h3>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-[var(--border-color)] pb-3 mb-4">{t.cms.tabGeneral}</h3>
       <AdminMultiLangInput label={t.cms.siteName} valueObj={formData.general.siteName} onChangeKey={(langKey, val) => {
         const updated = { ...formData };
         updated.general.siteName[langKey] = val;
@@ -436,8 +436,8 @@ export default function AdminDashboard() {
         setFormData(updated);
       }} />
 
-      <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.socialLinks}</h4>
+      <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-4">
+        <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.socialLinks}</h4>
         <AdminInput label={t.cms.githubUrl} value={formData.general.socialLinks.github} onChange={(e) => {
           const updated = { ...formData };
           updated.general.socialLinks.github = e.target.value;
@@ -460,12 +460,12 @@ export default function AdminDashboard() {
   // Tab 2: Website Structure
   const renderStructureTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.tabStructure}</h3>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-[var(--border-color)] pb-3 mb-4">{t.cms.tabStructure}</h3>
       
-      <div className="flex items-center justify-between p-4 rounded-xl border border-zinc-800 bg-zinc-900/10">
+      <div className="flex items-center justify-between p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]">
         <div>
-          <h5 className="font-bold text-sm text-white mb-0.5">{t.cms.showNavbar}</h5>
-          <p className="text-xs text-zinc-500">{t.cms.showNavbarDesc}</p>
+          <h5 className="font-bold text-sm text-[var(--text-primary)] mb-0.5">{t.cms.showNavbar}</h5>
+          <p className="text-xs text-[var(--text-secondary)]">{t.cms.showNavbarDesc}</p>
         </div>
         <button 
           onClick={() => {
@@ -476,7 +476,7 @@ export default function AdminDashboard() {
           className={`p-2.5 rounded-lg border transition-all ${
             formData.websiteStructure.navbarVisible 
               ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary)]' 
-              : 'border-zinc-800 text-zinc-600'
+              : 'border-[var(--border-color)] text-[var(--text-secondary)]'
           }`}
         >
           {formData.websiteStructure.navbarVisible ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5" />}
@@ -484,12 +484,12 @@ export default function AdminDashboard() {
       </div>
 
       <div className="space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.homepageSections}</h4>
-        <p className="text-xs text-zinc-500">{t.cms.sectionsDesc}</p>
+        <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.homepageSections}</h4>
+        <p className="text-xs text-[var(--text-secondary)]">{t.cms.sectionsDesc}</p>
         
         <div className="space-y-3">
           {formData.websiteStructure.sections.map((sect, idx) => (
-            <div key={sect.id} className="p-4 rounded-xl border border-zinc-800 bg-zinc-900/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div key={sect.id} className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3 min-w-0">
                 <button
                   disabled={idx === 0}
@@ -500,9 +500,9 @@ export default function AdminDashboard() {
                     list[idx - 1] = temp;
                     setFormData({ ...formData, websiteStructure: { ...formData.websiteStructure, sections: list } });
                   }}
-                  className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"
+                  className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"
                 >
-                  <ArrowUp className="w-4 h-4 text-zinc-400" />
+                  <ArrowUp className="w-4 h-4 text-[var(--text-secondary)]" />
                 </button>
                 <button
                   disabled={idx === formData.websiteStructure.sections.length - 1}
@@ -513,13 +513,13 @@ export default function AdminDashboard() {
                     list[idx + 1] = temp;
                     setFormData({ ...formData, websiteStructure: { ...formData.websiteStructure, sections: list } });
                   }}
-                  className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"
+                  className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"
                 >
-                  <ArrowDown className="w-4 h-4 text-zinc-400" />
+                  <ArrowDown className="w-4 h-4 text-[var(--text-secondary)]" />
                 </button>
                 <div>
-                  <h5 className="font-bold text-sm text-white capitalize">{sect.id.replace('-', ' ')}</h5>
-                  <p className="text-[10px] text-zinc-500">{t.cms.projectId || 'ID'}: #{sect.id}</p>
+                  <h5 className="font-bold text-sm text-[var(--text-primary)] capitalize">{sect.id.replace('-', ' ')}</h5>
+                  <p className="text-[10px] text-[var(--text-secondary)]">{t.cms.projectId || 'ID'}: #{sect.id}</p>
                 </div>
               </div>
 
@@ -541,7 +541,7 @@ export default function AdminDashboard() {
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
                     sect.visible 
                       ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
-                      : 'bg-zinc-950/40 border-zinc-800 text-zinc-500'
+                      : 'bg-[var(--bg-secondary)] border-[var(--border-color)] text-[var(--text-secondary)]'
                   }`}
                 >
                   {sect.visible ? t.cms.visible : t.cms.hidden}
@@ -567,7 +567,7 @@ export default function AdminDashboard() {
                       setFormData(updated);
                     }}
                     placeholder={t.cms.sectionTitlePlaceholder}
-                    className="p-2 w-full rounded bg-black/60 border border-zinc-800 text-xs text-white outline-none focus:border-[var(--primary)]"
+                    className="p-2 w-full rounded bg-[var(--card-bg)] border border-[var(--border-color)] text-xs text-[var(--text-primary)] outline-none focus:border-[var(--primary)]"
                   />
                 </div>
               </div>
@@ -581,9 +581,9 @@ export default function AdminDashboard() {
   // Tab 3: Hero Section
   const renderHeroTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.sidebarHero}</h3>
-      <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">Hero Identity</h4>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-[var(--border-color)] pb-3 mb-4">{t.cms.sidebarHero}</h3>
+      <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-4">
+        <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Hero Identity</h4>
         <AdminMultiLangInput label="Display Name" valueObj={formData.hero.identity.displayName} onChangeKey={(key, val) => {
           const updated = structuredClone(formData);
           updated.hero.identity.displayName[key] = val;
@@ -631,11 +631,11 @@ export default function AdminDashboard() {
       }} />
 
       {/* Roles List */}
-      <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.animatedRoles}</h4>
+      <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-4">
+        <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.animatedRoles}</h4>
         <div className="space-y-3">
           {formData.hero.roles.map((role, idx) => (
-            <div key={idx} className="p-3 bg-zinc-950/40 border border-zinc-800 rounded-lg flex items-center justify-between gap-4">
+            <div key={idx} className="p-3 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-lg flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <button disabled={idx === 0} onClick={() => {
                   const list = [...formData.hero.roles];
@@ -643,14 +643,14 @@ export default function AdminDashboard() {
                   list[idx] = list[idx - 1];
                   list[idx - 1] = temp;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-zinc-400" /></button>
+                }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                 <button disabled={idx === formData.hero.roles.length - 1} onClick={() => {
                   const list = [...formData.hero.roles];
                   const temp = list[idx];
                   list[idx] = list[idx + 1];
                   list[idx + 1] = temp;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
+                }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
               </div>
 
               <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -658,17 +658,17 @@ export default function AdminDashboard() {
                   const list = [...formData.hero.roles];
                   list[idx].ar = e.target.value;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} placeholder={t.cms.arabic} className="p-2 text-xs rounded bg-black/60 border border-zinc-800 text-white" />
+                }} placeholder={t.cms.arabic} className="p-2 text-xs rounded bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)]" />
                 <input type="text" value={role.en || ''} onChange={(e) => {
                   const list = [...formData.hero.roles];
                   list[idx].en = e.target.value;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} placeholder={t.cms.english} className="p-2 text-xs rounded bg-black/60 border border-zinc-800 text-white" />
+                }} placeholder={t.cms.english} className="p-2 text-xs rounded bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)]" />
                 <input type="text" value={role.ur || ''} onChange={(e) => {
                   const list = [...formData.hero.roles];
                   list[idx].ur = e.target.value;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} placeholder={t.cms.urdu} className="p-2 text-xs rounded bg-black/60 border border-zinc-800 text-white" />
+                }} placeholder={t.cms.urdu} className="p-2 text-xs rounded bg-[var(--card-bg)] border border-[var(--border-color)] text-[var(--text-primary)]" />
               </div>
 
               <button 
@@ -688,15 +688,15 @@ export default function AdminDashboard() {
             const list = [...formData.hero.roles, { ar: '', en: '', ur: '' }];
             setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
           }}
-          className="w-full py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-xs font-bold rounded-lg flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] text-xs font-bold rounded-lg flex items-center justify-center gap-2 cursor-pointer"
         >
           <Plus className="w-3.5 h-3.5" /> {t.cms.addNewRole}
         </button>
       </div>
 
       {/* Hero statistics */}
-      <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.heroStats}</h4>
+      <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-4">
+        <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.heroStats}</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <AdminInput label={t.cms.yearsExpLabel} type="number" value={formData.hero.statistics.experienceYears} onChange={(e) => {
             const updated = { ...formData };
@@ -721,7 +721,7 @@ export default function AdminDashboard() {
   // Tab 4: About Section
   const renderAboutTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.sidebarAbout}</h3>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-[var(--border-color)] pb-3 mb-4">{t.cms.sidebarAbout}</h3>
       <AdminMultiLangInput label={t.cms.aboutTitleLabel} valueObj={formData.about.title} onChangeKey={(key, val) => {
         const updated = { ...formData };
         updated.about.title[key] = val;
@@ -743,13 +743,13 @@ export default function AdminDashboard() {
   // Helper local search input
   const renderListFilterBar = (placeholder = "Search items...") => (
     <div className="mb-4 relative">
-      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)]" />
       <input 
         type="text" 
         value={localListFilter} 
         onChange={(e) => setLocalListFilter(e.target.value)} 
         placeholder={placeholder}
-        className="w-full pl-10 pr-4 py-2.5 bg-black/40 border border-zinc-800 rounded-lg text-sm text-white placeholder-zinc-500 outline-none focus:border-[var(--primary)]"
+        className="w-full pl-10 pr-4 py-2.5 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)] outline-none focus:border-[var(--primary)]"
       />
     </div>
   );
@@ -763,7 +763,7 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-4">
           <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.projectsTitleLabel}</h3>
           <button 
             onClick={() => {
@@ -804,35 +804,35 @@ export default function AdminDashboard() {
             const globalIndex = formData.projects.findIndex(p => p.id === proj.id);
 
             return (
-              <div key={proj.id} id={`item-${proj.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
+              <div key={proj.id} id={`item-${proj.id}`} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden transition-all duration-300">
                 {/* Accordion Trigger Header */}
                 <div 
                   onClick={() => toggleAccordion(proj.id)}
-                  className="p-4 bg-zinc-950/60 border-b border-zinc-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-950 transition-colors"
+                  className="p-4 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between gap-4 cursor-pointer hover:bg-[var(--bg-secondary)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
                       <button 
                         disabled={globalIndex === 0}
                         onClick={(e) => { e.stopPropagation(); moveItem('projects', globalIndex, 'up'); }}
-                        className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"
+                        className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"
                       >
-                        <ArrowUp className="w-3.5 h-3.5 text-zinc-400" />
+                        <ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
                       </button>
                       <button 
                         disabled={globalIndex === formData.projects.length - 1}
                         onClick={(e) => { e.stopPropagation(); moveItem('projects', globalIndex, 'down'); }}
-                        className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"
+                        className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"
                       >
-                        <ArrowDown className="w-3.5 h-3.5 text-zinc-400" />
+                        <ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
                       </button>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-white flex items-center gap-2">
+                      <h4 className="font-bold text-sm text-[var(--text-primary)] flex items-center gap-2">
                         {proj.title || t.cms.untitledProject || 'Untitled Project'}
                         {isFeatured && <span className="text-[9px] font-black uppercase bg-[var(--primary)]/10 border border-[var(--primary)]/30 text-[var(--primary)] px-2 py-0.5 rounded">{t.cms.featured}</span>}
                       </h4>
-                      <p className="text-[10px] text-zinc-500">{t.cms.projectId}: {proj.id} | {t.cms.projectType}: {proj.projectType || 'N/A'} | {t.cms.projectStatus}: {proj.status || 'N/A'}</p>
+                      <p className="text-[10px] text-[var(--text-secondary)]">{t.cms.projectId}: {proj.id} | {t.cms.projectType}: {proj.projectType || 'N/A'} | {t.cms.projectStatus}: {proj.status || 'N/A'}</p>
                     </div>
                   </div>
 
@@ -857,7 +857,7 @@ export default function AdminDashboard() {
                       className={`px-2.5 py-1 rounded text-[10px] font-extrabold border transition-all ${
                         isFeatured 
                           ? 'bg-amber-500/10 border-amber-500/30 text-amber-400' 
-                          : 'border-zinc-800 text-zinc-500 hover:text-white'
+                          : 'border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                       }`}
                     >
                       {isFeatured ? t.cms.featured : t.cms.makeFeatured}
@@ -872,7 +872,7 @@ export default function AdminDashboard() {
                           setFormData(updated);
                         }
                       }}
-                      className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                      className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -881,7 +881,7 @@ export default function AdminDashboard() {
 
                 {/* Expanded Card Details */}
                 {isExpanded && (
-                  <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-6">
+                  <div className="p-5 border-t border-[var(--border-color)] bg-[var(--card-bg)] space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <AdminInput label={t.cms.projectIdLabel} value={proj.id} onChange={(e) => {
                         const updated = { ...formData };
@@ -973,11 +973,11 @@ export default function AdminDashboard() {
                     }} />
 
                     {/* Features List */}
-                    <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-950/20 space-y-3">
-                      <h5 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.projectKeyFeatures}</h5>
+                    <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] space-y-3">
+                      <h5 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.projectKeyFeatures}</h5>
                       <div className="space-y-3">
                         {proj.features.map((feat, fIdx) => (
-                          <div key={fIdx} className="p-3 border border-zinc-800 rounded bg-black/40 flex items-center justify-between gap-3">
+                          <div key={fIdx} className="p-3 border border-[var(--border-color)] rounded bg-[var(--card-bg)] flex items-center justify-between gap-3">
                             <div className="flex-1">
                               <AdminMultiLangInput label={`${t.cms.featureLabel || 'Feature'} #${fIdx + 1}`} valueObj={feat} onChangeKey={(key, val) => {
                                 const updated = { ...formData };
@@ -991,7 +991,7 @@ export default function AdminDashboard() {
                                 updated.projects[globalIndex].features = updated.projects[globalIndex].features.filter((_, i) => i !== fIdx);
                                 setFormData(updated);
                               }}
-                              className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer shrink-0 self-end mb-5"
+                              className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer shrink-0 self-end mb-5"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -1004,20 +1004,20 @@ export default function AdminDashboard() {
                           updated.projects[globalIndex].features.push({ ar: '', en: '', ur: '' });
                           setFormData(updated);
                         }}
-                        className="w-full py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" /> {t.cms.addNewFeature}
                       </button>
                     </div>
 
                     {/* Tech Stack List */}
-                    <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-950/20 space-y-3">
-                      <h5 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.techStackDetails}</h5>
+                    <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] space-y-3">
+                      <h5 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.techStackDetails}</h5>
                       <div className="space-y-3">
                         {proj.tech.map((tItem, tIdx) => {
                           const valObj = typeof tItem === 'string' ? { ar: tItem, en: tItem, ur: tItem } : tItem;
                           return (
-                            <div key={tIdx} className="p-3 border border-zinc-800 rounded bg-black/40 flex items-center justify-between gap-3">
+                            <div key={tIdx} className="p-3 border border-[var(--border-color)] rounded bg-[var(--card-bg)] flex items-center justify-between gap-3">
                               <div className="flex-1">
                                 <AdminMultiLangInput label={`${t.cms.technologyLabel || 'Technology'} #${tIdx + 1}`} valueObj={valObj} onChangeKey={(key, val) => {
                                   const updated = { ...formData };
@@ -1035,7 +1035,7 @@ export default function AdminDashboard() {
                                   updated.projects[globalIndex].tech = updated.projects[globalIndex].tech.filter((_, i) => i !== tIdx);
                                   setFormData(updated);
                                 }}
-                                className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer shrink-0 self-end mb-5"
+                                className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer shrink-0 self-end mb-5"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -1049,7 +1049,7 @@ export default function AdminDashboard() {
                           updated.projects[globalIndex].tech.push({ ar: '', en: '', ur: '' });
                           setFormData(updated);
                         }}
-                        className="w-full py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" /> {t.cms.addNewTech}
                       </button>
@@ -1074,7 +1074,7 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-4">
           <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.skillsTitleLabel}</h3>
           <button 
             onClick={() => {
@@ -1098,19 +1098,19 @@ export default function AdminDashboard() {
             const globalIndex = formData.skills.findIndex(s => s.id === group.id);
 
             return (
-              <div key={group.id} id={`item-${group.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
+              <div key={group.id} id={`item-${group.id}`} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden transition-all duration-300">
                 <div 
                   onClick={() => toggleAccordion(group.id)}
-                  className="p-4 bg-zinc-950/60 border-b border-zinc-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-950 transition-colors"
+                  className="p-4 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between gap-4 cursor-pointer hover:bg-[var(--bg-secondary)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('skills', globalIndex, 'up'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-zinc-400" /></button>
-                      <button disabled={globalIndex === formData.skills.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('skills', globalIndex, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('skills', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.skills.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('skills', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-white">{group.category?.[lang] || group.category?.en || t.cms.untitledGroup || 'Untitled Group'}</h4>
-                      <p className="text-[10px] text-zinc-500">{group.items?.length || 0} {t.cms.skillsInside}</p>
+                      <h4 className="font-bold text-sm text-[var(--text-primary)]">{group.category?.[lang] || group.category?.en || t.cms.untitledGroup || 'Untitled Group'}</h4>
+                      <p className="text-[10px] text-[var(--text-secondary)]">{group.items?.length || 0} {t.cms.skillsInside}</p>
                     </div>
                   </div>
 
@@ -1123,14 +1123,14 @@ export default function AdminDashboard() {
                         setFormData(updated);
                       }
                     }}
-                    className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                    className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
 
                 {isExpanded && (
-                  <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-6">
+                  <div className="p-5 border-t border-[var(--border-color)] bg-[var(--card-bg)] space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <AdminMultiLangInput label={t.cms.skillCategory} valueObj={group.category} onChangeKey={(key, val) => {
                         const updated = { ...formData };
@@ -1145,11 +1145,11 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Skill items list */}
-                    <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-950/20 space-y-3">
-                      <h5 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.individualSkills}</h5>
+                    <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] space-y-3">
+                      <h5 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.individualSkills}</h5>
                       <div className="space-y-3">
                         {group.items.map((item, itemIdx) => (
-                          <div key={itemIdx} className="p-3 border border-zinc-800 rounded bg-black/40 flex items-center justify-between gap-3">
+                          <div key={itemIdx} className="p-3 border border-[var(--border-color)] rounded bg-[var(--card-bg)] flex items-center justify-between gap-3">
                             <div className="flex-1">
                               <AdminMultiLangInput label={`${t.cms.skillLabel} #${itemIdx + 1}`} valueObj={item} onChangeKey={(key, val) => {
                                 const updated = { ...formData };
@@ -1163,7 +1163,7 @@ export default function AdminDashboard() {
                                 updated.skills[globalIndex].items = updated.skills[globalIndex].items.filter((_, i) => i !== itemIdx);
                                 setFormData(updated);
                               }}
-                              className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer shrink-0 self-end mb-5"
+                              className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer shrink-0 self-end mb-5"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -1176,7 +1176,7 @@ export default function AdminDashboard() {
                           updated.skills[globalIndex].items.push({ ar: '', en: '', ur: '' });
                           setFormData(updated);
                         }}
-                        className="w-full py-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="w-full py-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" /> {t.cms.addNewSkillItem}
                       </button>
@@ -1200,7 +1200,7 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-4">
           <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.experienceTitleLabel}</h3>
           <button 
             onClick={() => {
@@ -1230,19 +1230,19 @@ export default function AdminDashboard() {
             const globalIndex = formData.experience.findIndex(e => e.id === exp.id);
 
             return (
-              <div key={exp.id} id={`item-${exp.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
+              <div key={exp.id} id={`item-${exp.id}`} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden transition-all duration-300">
                 <div 
                   onClick={() => toggleAccordion(exp.id)}
-                  className="p-4 bg-zinc-950/60 border-b border-zinc-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-950 transition-colors"
+                  className="p-4 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between gap-4 cursor-pointer hover:bg-[var(--bg-secondary)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('experience', globalIndex, 'up'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-zinc-400" /></button>
-                      <button disabled={globalIndex === formData.experience.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('experience', globalIndex, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('experience', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.experience.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('experience', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-white">{exp.role?.[lang] || exp.role?.en || t.cms.untitledJob}</h4>
-                      <p className="text-[10px] text-zinc-500">{exp.company?.[lang] || exp.company?.en} • {exp.period?.[lang] || exp.period?.en}</p>
+                      <h4 className="font-bold text-sm text-[var(--text-primary)]">{exp.role?.[lang] || exp.role?.en || t.cms.untitledJob}</h4>
+                      <p className="text-[10px] text-[var(--text-secondary)]">{exp.company?.[lang] || exp.company?.en} • {exp.period?.[lang] || exp.period?.en}</p>
                     </div>
                   </div>
 
@@ -1255,14 +1255,14 @@ export default function AdminDashboard() {
                         setFormData(updated);
                       }
                     }}
-                    className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                    className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
 
                 {isExpanded && (
-                  <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-6">
+                  <div className="p-5 border-t border-[var(--border-color)] bg-[var(--card-bg)] space-y-6">
                     <AdminMultiLangInput label={t.cms.roleTitle} valueObj={exp.role} onChangeKey={(key, val) => {
                       const updated = { ...formData };
                       updated.experience[globalIndex].role[key] = val;
@@ -1302,7 +1302,7 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-4">
           <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.certsTitleLabel}</h3>
           <button 
             onClick={() => {
@@ -1335,19 +1335,19 @@ export default function AdminDashboard() {
             const name = cert.name?.[lang] || cert[lang] || t.cms.untitledCert;
 
             return (
-              <div key={cert.id} id={`item-${cert.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
+              <div key={cert.id} id={`item-${cert.id}`} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden transition-all duration-300">
                 <div 
                   onClick={() => toggleAccordion(cert.id)}
-                  className="p-4 bg-zinc-950/60 border-b border-zinc-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-950 transition-colors"
+                  className="p-4 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between gap-4 cursor-pointer hover:bg-[var(--bg-secondary)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('certifications', globalIndex, 'up'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-zinc-400" /></button>
-                      <button disabled={globalIndex === formData.certifications.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('certifications', globalIndex, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('certifications', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.certifications.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('certifications', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-white">{name}</h4>
-                      <p className="text-[10px] text-zinc-500">{t.cms.providerLabel}: {cert.provider?.[lang] || cert.provider?.en || 'N/A'}</p>
+                      <h4 className="font-bold text-sm text-[var(--text-primary)]">{name}</h4>
+                      <p className="text-[10px] text-[var(--text-secondary)]">{t.cms.providerLabel}: {cert.provider?.[lang] || cert.provider?.en || 'N/A'}</p>
                     </div>
                   </div>
 
@@ -1360,14 +1360,14 @@ export default function AdminDashboard() {
                         setFormData(updated);
                       }
                     }}
-                    className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                    className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
 
                 {isExpanded && (
-                  <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-6">
+                  <div className="p-5 border-t border-[var(--border-color)] bg-[var(--card-bg)] space-y-6">
                     <AdminInput label={t.cms.certIdLabel} value={cert.id} onChange={(e) => {
                       const updated = { ...formData };
                       updated.certifications[globalIndex].id = e.target.value;
@@ -1414,7 +1414,7 @@ export default function AdminDashboard() {
   // Tab 9: Achievements
   const renderAchievementsTab = () => (
     <div className="space-y-6">
-      <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+      <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-4">
         <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.achievementsTitleLabel}</h3>
         <button 
           onClick={() => {
@@ -1439,19 +1439,19 @@ export default function AdminDashboard() {
         {formData.achievements.map((ach, idx) => {
           const isExpanded = !!expandedItems[ach.id];
           return (
-            <div key={ach.id} id={`item-${ach.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
+            <div key={ach.id} id={`item-${ach.id}`} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden transition-all duration-300">
               <div 
                 onClick={() => toggleAccordion(ach.id)}
-                className="p-4 bg-zinc-950/60 border-b border-zinc-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-950 transition-colors"
+                className="p-4 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between gap-4 cursor-pointer hover:bg-[var(--bg-secondary)] transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1 shrink-0">
-                    <button disabled={idx === 0} onClick={(e) => { e.stopPropagation(); moveItem('achievements', idx, 'up'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-zinc-400" /></button>
-                    <button disabled={idx === formData.achievements.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('achievements', idx, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
+                    <button disabled={idx === 0} onClick={(e) => { e.stopPropagation(); moveItem('achievements', idx, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                    <button disabled={idx === formData.achievements.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('achievements', idx, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                   </div>
                   <div>
-                    <h4 className="font-bold text-sm text-white">{ach.value}{ach.suffix} {ach.label?.[lang] || ach.label?.en || t.cms.untitled}</h4>
-                    <p className="text-[10px] text-zinc-500">{t.cms.achIdLabel}: {ach.id}</p>
+                    <h4 className="font-bold text-sm text-[var(--text-primary)]">{ach.value}{ach.suffix} {ach.label?.[lang] || ach.label?.en || t.cms.untitled}</h4>
+                    <p className="text-[10px] text-[var(--text-secondary)]">{t.cms.achIdLabel}: {ach.id}</p>
                   </div>
                 </div>
 
@@ -1464,14 +1464,14 @@ export default function AdminDashboard() {
                       setFormData(updated);
                     }
                   }}
-                  className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                  className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
 
               {isExpanded && (
-                <div className="p-5 border-t border-zinc-900 bg-black/30 space-y-4">
+                <div className="p-5 border-t border-[var(--border-color)] bg-[var(--card-bg)] space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <AdminInput label={t.cms.achValue} type="number" value={ach.value} onChange={(e) => {
                       const updated = { ...formData };
@@ -1517,7 +1517,7 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-4">
           <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.contactMethodsTitleLabel || 'Contact Methods'}</h3>
           <button 
             type="button"
@@ -1543,19 +1543,19 @@ export default function AdminDashboard() {
             const globalIndex = formData.contactMethods.findIndex(m => m.id === method.id);
 
             return (
-              <div key={method.id} id={`item-${method.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
+              <div key={method.id} id={`item-${method.id}`} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden transition-all duration-300">
                 <div 
                   onClick={() => toggleAccordion(method.id)}
-                  className="p-4 bg-zinc-950/60 border-b border-zinc-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-950 transition-colors"
+                  className="p-4 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between gap-4 cursor-pointer hover:bg-[var(--bg-secondary)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'up'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-zinc-400" /></button>
-                      <button disabled={globalIndex === formData.contactMethods.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.contactMethods.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-white">{method.label || t.cms.untitledContactMethod || 'Untitled Method'}</h4>
-                      <p className="text-[10px] text-zinc-500 capitalize">{method.type} • {method.visible ? (t.cms.visible || 'Visible') : (t.cms.hidden || 'Hidden')}</p>
+                      <h4 className="font-bold text-sm text-[var(--text-primary)]">{method.label || t.cms.untitledContactMethod || 'Untitled Method'}</h4>
+                      <p className="text-[10px] text-[var(--text-secondary)] capitalize">{method.type} • {method.visible ? (t.cms.visible || 'Visible') : (t.cms.hidden || 'Hidden')}</p>
                     </div>
                   </div>
 
@@ -1568,7 +1568,7 @@ export default function AdminDashboard() {
                         updated.contactMethods[globalIndex].visible = !updated.contactMethods[globalIndex].visible;
                         setFormData(updated);
                       }}
-                      className={`p-1.5 rounded hover:bg-zinc-800 transition-colors cursor-pointer ${method.visible ? 'text-[var(--primary)]' : 'text-zinc-600'}`}
+                      className={`p-1.5 rounded hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer ${method.visible ? 'text-[var(--primary)]' : 'text-[var(--text-secondary)]'}`}
                     >
                       {method.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                     </button>
@@ -1586,17 +1586,17 @@ export default function AdminDashboard() {
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
-                    <div className="text-zinc-500">
+                    <div className="text-[var(--text-secondary)]">
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </div>
                   </div>
                 </div>
 
                 {isExpanded && (
-                  <div className="p-5 bg-black/40 border-t border-zinc-900 space-y-4">
+                  <div className="p-5 bg-[var(--card-bg)] border-t border-[var(--border-color)] space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.contactMethodType || 'Type'}</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">{t.cms.contactMethodType || 'Type'}</label>
                         <select 
                           value={method.type} 
                           onChange={(e) => {
@@ -1604,7 +1604,7 @@ export default function AdminDashboard() {
                             updated.contactMethods[globalIndex].type = e.target.value;
                             setFormData(updated);
                           }}
-                          className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+                          className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm"
                         >
                           <option value="email">Email</option>
                           <option value="whatsapp">WhatsApp</option>
@@ -1661,7 +1661,7 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-zinc-800 pb-3 mb-4">
+        <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-3 mb-4">
           <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.customSectionsTitleLabel || 'Custom Sections'}</h3>
           <button 
             type="button"
@@ -1706,19 +1706,19 @@ export default function AdminDashboard() {
             const titleText = section.title?.[lang] || section.title?.en || t.cms.untitledCustomSection || 'Untitled Section';
 
             return (
-              <div key={section.id} id={`item-${section.id}`} className="rounded-xl border border-zinc-800 bg-zinc-900/10 overflow-hidden transition-all duration-300">
+              <div key={section.id} id={`item-${section.id}`} className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] overflow-hidden transition-all duration-300">
                 <div 
                   onClick={() => toggleAccordion(section.id)}
-                  className="p-4 bg-zinc-950/60 border-b border-zinc-900 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-950 transition-colors"
+                  className="p-4 bg-[var(--bg-secondary)] border-b border-[var(--border-color)] flex items-center justify-between gap-4 cursor-pointer hover:bg-[var(--bg-secondary)] transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'up'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-zinc-400" /></button>
-                      <button disabled={globalIndex === formData.customSections.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'down'); }} className="p-1 rounded hover:bg-zinc-800 disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-zinc-400" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.customSections.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-white">{titleText}</h4>
-                      <p className="text-[10px] text-zinc-500 capitalize">{section.layoutType} • {section.visible ? (t.cms.visible || 'Visible') : (t.cms.hidden || 'Hidden')}</p>
+                      <h4 className="font-bold text-sm text-[var(--text-primary)]">{titleText}</h4>
+                      <p className="text-[10px] text-[var(--text-secondary)] capitalize">{section.layoutType} • {section.visible ? (t.cms.visible || 'Visible') : (t.cms.hidden || 'Hidden')}</p>
                     </div>
                   </div>
 
@@ -1738,7 +1738,7 @@ export default function AdminDashboard() {
                         }
                         setFormData(updated);
                       }}
-                      className={`p-1.5 rounded hover:bg-zinc-800 transition-colors cursor-pointer ${section.visible ? 'text-[var(--primary)]' : 'text-zinc-600'}`}
+                      className={`p-1.5 rounded hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer ${section.visible ? 'text-[var(--primary)]' : 'text-[var(--text-secondary)]'}`}
                     >
                       {section.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                     </button>
@@ -1762,14 +1762,14 @@ export default function AdminDashboard() {
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
-                    <div className="text-zinc-500">
+                    <div className="text-[var(--text-secondary)]">
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </div>
                   </div>
                 </div>
 
                 {isExpanded && (
-                  <div className="p-5 bg-black/40 border-t border-zinc-900 space-y-4">
+                  <div className="p-5 bg-[var(--card-bg)] border-t border-[var(--border-color)] space-y-4">
                     <AdminMultiLangInput 
                       label={t.cms.customSectionTitle || 'Section Title'} 
                       valueObj={section.title} 
@@ -1812,7 +1812,7 @@ export default function AdminDashboard() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.layoutTypeLabel || 'Layout Type'}</label>
+                        <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">{t.cms.layoutTypeLabel || 'Layout Type'}</label>
                         <select 
                           value={section.layoutType} 
                           onChange={(e) => {
@@ -1820,7 +1820,7 @@ export default function AdminDashboard() {
                             updated.customSections[globalIndex].layoutType = e.target.value;
                             setFormData(updated);
                           }}
-                          className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+                          className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm"
                         >
                           <option value="heroBanner">Hero Banner</option>
                           <option value="cardsGrid">Cards Grid</option>
@@ -1861,8 +1861,8 @@ export default function AdminDashboard() {
   // Tab 11: Translations Editor
   const renderTranslationsTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.translationsTitle}</h3>
-      <p className="text-xs text-zinc-500">{t.cms.translationsDesc}</p>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-[var(--border-color)] pb-3 mb-4">{t.cms.translationsTitle}</h3>
+      <p className="text-xs text-[var(--text-secondary)]">{t.cms.translationsDesc}</p>
       
       {renderListFilterBar(t.cms.searchTranslationsPlaceholder)}
 
@@ -1870,32 +1870,32 @@ export default function AdminDashboard() {
         {Object.keys(formData.translations?.en || {})
           .filter(key => key.toLowerCase().includes(localListFilter.toLowerCase()) || (formData.translations.en[key] || '').toLowerCase().includes(localListFilter.toLowerCase()))
           .map(key => (
-            <div key={key} id={`item-${key}`} className="p-4 border border-zinc-800 rounded-xl bg-zinc-950/20 space-y-3">
-              <span className="text-xs font-bold text-[var(--primary)] font-mono block border-b border-zinc-900 pb-1.5">{t.cms.transKey}: {key}</span>
+            <div key={key} id={`item-${key}`} className="p-4 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-3">
+              <span className="text-xs font-bold text-[var(--primary)] font-mono block border-b border-[var(--border-color)] pb-1.5">{t.cms.transKey}: {key}</span>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
-                  <span className="text-[9px] text-zinc-500 font-bold uppercase mb-0.5 block">{t.cms.arabicLabel}</span>
+                  <span className="text-[9px] text-[var(--text-secondary)] font-bold uppercase mb-0.5 block">{t.cms.arabicLabel}</span>
                   <input type="text" dir="rtl" value={formData.translations.ar?.[key] || ''} onChange={(e) => {
                     const updated = { ...formData };
                     updated.translations.ar[key] = e.target.value;
                     setFormData(updated);
-                  }} className="w-full p-2 bg-black/60 border border-zinc-800 text-xs rounded text-white" />
+                  }} className="w-full p-2 bg-[var(--card-bg)] border border-[var(--border-color)] text-xs rounded text-[var(--text-primary)]" />
                 </div>
                 <div>
-                  <span className="text-[9px] text-zinc-500 font-bold uppercase mb-0.5 block">{t.cms.englishLabel}</span>
+                  <span className="text-[9px] text-[var(--text-secondary)] font-bold uppercase mb-0.5 block">{t.cms.englishLabel}</span>
                   <input type="text" dir="ltr" value={formData.translations.en?.[key] || ''} onChange={(e) => {
                     const updated = { ...formData };
                     updated.translations.en[key] = e.target.value;
                     setFormData(updated);
-                  }} className="w-full p-2 bg-black/60 border border-zinc-800 text-xs rounded text-white" />
+                  }} className="w-full p-2 bg-[var(--card-bg)] border border-[var(--border-color)] text-xs rounded text-[var(--text-primary)]" />
                 </div>
                 <div>
-                  <span className="text-[9px] text-zinc-500 font-bold uppercase mb-0.5 block">{t.cms.urduLabel}</span>
+                  <span className="text-[9px] text-[var(--text-secondary)] font-bold uppercase mb-0.5 block">{t.cms.urduLabel}</span>
                   <input type="text" dir="rtl" value={formData.translations.ur?.[key] || ''} onChange={(e) => {
                     const updated = { ...formData };
                     updated.translations.ur[key] = e.target.value;
                     setFormData(updated);
-                  }} className="w-full p-2 bg-black/60 border border-zinc-800 text-xs text-white rounded" />
+                  }} className="w-full p-2 bg-[var(--card-bg)] border border-[var(--border-color)] text-xs text-[var(--text-primary)] rounded" />
                 </div>
               </div>
             </div>
@@ -1907,12 +1907,12 @@ export default function AdminDashboard() {
   // Tab 12: Theme Settings & Theme Builder
   const renderThemeTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.themeSettingsTitle}</h3>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-[var(--border-color)] pb-3 mb-4">{t.cms.themeSettingsTitle}</h3>
       
-      <div className="p-4 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.defaultVisualSettings}</h4>
+      <div className="p-4 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-4">
+        <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.defaultVisualSettings}</h4>
         <div className="mb-4">
-          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.defaultTheme}</label>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">{t.cms.defaultTheme}</label>
           <select 
             value={formData.themeSettings.defaultTheme} 
             onChange={(e) => {
@@ -1921,7 +1921,7 @@ export default function AdminDashboard() {
               setFormData(updated);
               setTheme(e.target.value);
             }}
-            className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+            className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm"
           >
             <option value="dark">{t.cms.themeDark || 'Dark Obsidian'}</option>
             <option value="ocean">{t.cms.themeOcean || 'Ocean Blue'}</option>
@@ -1932,9 +1932,9 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-5">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.themeBuilderTitle}</h4>
-        <p className="text-xs text-zinc-500">{t.cms.themeBuilderDesc}</p>
+      <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-5">
+        <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.themeBuilderTitle}</h4>
+        <p className="text-xs text-[var(--text-secondary)]">{t.cms.themeBuilderDesc}</p>
         
         {/* Accent Color picker */}
         <div className="flex items-center gap-4">
@@ -1946,19 +1946,19 @@ export default function AdminDashboard() {
             }} />
           </div>
           <div className="shrink-0 flex flex-col items-center">
-            <span className="text-[10px] text-zinc-500 font-bold uppercase mb-1">{t.cms.picker}</span>
+            <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase mb-1">{t.cms.picker}</span>
             <input type="color" value={formData.themeSettings.accentColor} onChange={(e) => {
               const updated = { ...formData };
               updated.themeSettings.accentColor = e.target.value;
               setFormData(updated);
-            }} className="w-12 h-12 rounded border border-zinc-800 bg-transparent cursor-pointer" />
+            }} className="w-12 h-12 rounded border border-[var(--border-color)] bg-transparent cursor-pointer" />
           </div>
         </div>
 
         {/* Glass opacity slider */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">{t.cms.glassOpacity}</span>
+            <span className="text-[var(--text-secondary)]">{t.cms.glassOpacity}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.glassOpacity}</span>
           </div>
           <input type="range" min="0.0" max="0.3" step="0.01" value={formData.themeSettings.glassOpacity} onChange={(e) => {
@@ -1971,7 +1971,7 @@ export default function AdminDashboard() {
         {/* Glass blur strength */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">{t.cms.backdropBlur}</span>
+            <span className="text-[var(--text-secondary)]">{t.cms.backdropBlur}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.blurStrength}px</span>
           </div>
           <input type="range" min="0" max="40" step="1" value={formData.themeSettings.blurStrength} onChange={(e) => {
@@ -1984,7 +1984,7 @@ export default function AdminDashboard() {
         {/* Glass border opacity */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">{t.cms.borderOpacity}</span>
+            <span className="text-[var(--text-secondary)]">{t.cms.borderOpacity}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.borderOpacity}</span>
           </div>
           <input type="range" min="0.0" max="0.2" step="0.01" value={formData.themeSettings.borderOpacity} onChange={(e) => {
@@ -1997,7 +1997,7 @@ export default function AdminDashboard() {
         {/* Mouse Glow intensity */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">{t.cms.cursorGlow}</span>
+            <span className="text-[var(--text-secondary)]">{t.cms.cursorGlow}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.glowIntensity}</span>
           </div>
           <input type="range" min="0.0" max="1.0" step="0.05" value={formData.themeSettings.glowIntensity} onChange={(e) => {
@@ -2010,7 +2010,7 @@ export default function AdminDashboard() {
         {/* Background ambient blobs intensity */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">{t.cms.ambientBlob}</span>
+            <span className="text-[var(--text-secondary)]">{t.cms.ambientBlob}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.bgIntensity}</span>
           </div>
           <input type="range" min="0.0" max="0.5" step="0.01" value={formData.themeSettings.bgIntensity} onChange={(e) => {
@@ -2022,12 +2022,12 @@ export default function AdminDashboard() {
       </div>
 
       {/* Typography settings controls */}
-      <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-5">
-        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">{t.cms.typographySettingsTitle}</h4>
+      <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-5">
+        <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.typographySettingsTitle}</h4>
         
         {/* Font Family */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.fontFamily}</label>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">{t.cms.fontFamily}</label>
           <select 
             value={formData.themeSettings.fontFamily || 'Inter'} 
             onChange={(e) => {
@@ -2035,7 +2035,7 @@ export default function AdminDashboard() {
               updated.themeSettings.fontFamily = e.target.value;
               setFormData(updated);
             }}
-            className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+            className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm"
           >
             <option value="Inter">Inter</option>
             <option value="Cairo">Cairo</option>
@@ -2048,7 +2048,7 @@ export default function AdminDashboard() {
         {/* Font Scale slider */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">{t.cms.fontScale}</span>
+            <span className="text-[var(--text-secondary)]">{t.cms.fontScale}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.fontScale || 1.0}x</span>
           </div>
           <input type="range" min="0.8" max="1.5" step="0.05" value={formData.themeSettings.fontScale || 1.0} onChange={(e) => {
@@ -2061,7 +2061,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
             <div className="flex justify-between text-xs font-bold uppercase mb-1">
-              <span className="text-zinc-400">Heading Size</span>
+              <span className="text-[var(--text-secondary)]">Heading Size</span>
               <span className="text-[var(--primary)]">{formData.themeSettings.headingSize}px</span>
             </div>
             <input type="range" min="32" max="88" step="2" value={formData.themeSettings.headingSize} onChange={(e) => {
@@ -2070,7 +2070,7 @@ export default function AdminDashboard() {
           </div>
           <div>
             <div className="flex justify-between text-xs font-bold uppercase mb-1">
-              <span className="text-zinc-400">Paragraph Size</span>
+              <span className="text-[var(--text-secondary)]">Paragraph Size</span>
               <span className="text-[var(--primary)]">{formData.themeSettings.paragraphSize}px</span>
             </div>
             <input type="range" min="12" max="24" step="1" value={formData.themeSettings.paragraphSize} onChange={(e) => {
@@ -2081,7 +2081,7 @@ export default function AdminDashboard() {
 
         {/* Heading Weight selection */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.headingWeight}</label>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">{t.cms.headingWeight}</label>
           <select 
             value={formData.themeSettings.headingWeight || '800'} 
             onChange={(e) => {
@@ -2089,7 +2089,7 @@ export default function AdminDashboard() {
               updated.themeSettings.headingWeight = e.target.value;
               setFormData(updated);
             }}
-            className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+            className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm"
           >
             <option value="400">400 ({t.cms.weightRegular || 'Regular'})</option>
             <option value="500">500 ({t.cms.weightMedium || 'Medium'})</option>
@@ -2101,7 +2101,7 @@ export default function AdminDashboard() {
 
         {/* Body Weight selection */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.bodyWeight}</label>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">{t.cms.bodyWeight}</label>
           <select 
             value={formData.themeSettings.bodyWeight || '300'} 
             onChange={(e) => {
@@ -2109,7 +2109,7 @@ export default function AdminDashboard() {
               updated.themeSettings.bodyWeight = e.target.value;
               setFormData(updated);
             }}
-            className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+            className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm"
           >
             <option value="300">300 ({t.cms.weightLight || 'Light'})</option>
             <option value="400">400 ({t.cms.weightRegular || 'Regular'})</option>
@@ -2119,7 +2119,7 @@ export default function AdminDashboard() {
 
         {/* Letter Spacing selection */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.letterSpacing || 'Letter Spacing'}</label>
+          <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">{t.cms.letterSpacing || 'Letter Spacing'}</label>
           <select 
             value={formData.themeSettings.letterSpacing || '0px'} 
             onChange={(e) => {
@@ -2127,7 +2127,7 @@ export default function AdminDashboard() {
               updated.themeSettings.letterSpacing = e.target.value;
               setFormData(updated);
             }}
-            className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
+            className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm"
           >
             <option value="-0.05em">-0.05em</option>
             <option value="-0.02em">-0.02em</option>
@@ -2143,7 +2143,7 @@ export default function AdminDashboard() {
         {/* Line Height slider */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">{t.cms.lineHeight || 'Line Height'}</span>
+            <span className="text-[var(--text-secondary)]">{t.cms.lineHeight || 'Line Height'}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.lineHeight || 1.6}</span>
           </div>
           <input type="range" min="1.0" max="2.2" step="0.1" value={formData.themeSettings.lineHeight || 1.6} onChange={(e) => {
@@ -2156,7 +2156,7 @@ export default function AdminDashboard() {
         {/* Paragraph Max Width slider */}
         <div>
           <div className="flex justify-between text-xs font-bold uppercase mb-1">
-            <span className="text-zinc-400">{t.cms.paragraphWidth || 'Paragraph Max Width'}</span>
+            <span className="text-[var(--text-secondary)]">{t.cms.paragraphWidth || 'Paragraph Max Width'}</span>
             <span className="text-[var(--primary)]">{formData.themeSettings.paragraphWidth || '65ch'}</span>
           </div>
           <input type="range" min="40" max="95" step="5" value={parseInt(formData.themeSettings.paragraphWidth, 10) || 65} onChange={(e) => {
@@ -2176,12 +2176,12 @@ export default function AdminDashboard() {
             }} />
           </div>
           <div className="shrink-0 flex flex-col items-center">
-            <span className="text-[10px] text-zinc-500 font-bold uppercase mb-1">{t.cms.picker}</span>
+            <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase mb-1">{t.cms.picker}</span>
             <input type="color" value={formData.themeSettings.fontColor || '#fafafa'} onChange={(e) => {
               const updated = { ...formData };
               updated.themeSettings.fontColor = e.target.value;
               setFormData(updated);
-            }} className="w-12 h-12 rounded border border-zinc-800 bg-transparent cursor-pointer" />
+            }} className="w-12 h-12 rounded border border-[var(--border-color)] bg-transparent cursor-pointer" />
           </div>
         </div>
 
@@ -2195,12 +2195,12 @@ export default function AdminDashboard() {
             }} />
           </div>
           <div className="shrink-0 flex flex-col items-center">
-            <span className="text-[10px] text-zinc-500 font-bold uppercase mb-1">{t.cms.picker}</span>
+            <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase mb-1">{t.cms.picker}</span>
             <input type="color" value={formData.themeSettings.headingColor || '#fafafa'} onChange={(e) => {
               const updated = { ...formData };
               updated.themeSettings.headingColor = e.target.value;
               setFormData(updated);
-            }} className="w-12 h-12 rounded border border-zinc-800 bg-transparent cursor-pointer" />
+            }} className="w-12 h-12 rounded border border-[var(--border-color)] bg-transparent cursor-pointer" />
           </div>
         </div>
 
@@ -2219,7 +2219,7 @@ export default function AdminDashboard() {
               </div>
               <input type="color" value={formData.themeSettings[key]} onChange={(e) => {
                 setFormData({ ...formData, themeSettings: { ...formData.themeSettings, [key]: e.target.value } });
-              }} className="w-12 h-12 mb-4 rounded border border-zinc-800 bg-transparent cursor-pointer" />
+              }} className="w-12 h-12 mb-4 rounded border border-[var(--border-color)] bg-transparent cursor-pointer" />
             </div>
           ))}
         </div>
@@ -2245,14 +2245,14 @@ export default function AdminDashboard() {
 
     return (
       <div className="space-y-6">
-        <div className="border-b border-zinc-800 pb-3 mb-4">
+        <div className="border-b border-[var(--border-color)] pb-3 mb-4">
           <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms?.sidebarBrandIdentity || 'Brand Identity'}</h3>
-          <p className="text-xs text-zinc-500 mt-1">{t.cms?.brandIdentityDesc || 'Manage your global brand names, logos, subtitles, preloader, and SEO properties.'}</p>
+          <p className="text-xs text-[var(--text-secondary)] mt-1">{t.cms?.brandIdentityDesc || 'Manage your global brand names, logos, subtitles, preloader, and SEO properties.'}</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-zinc-800 bg-zinc-900/10 mb-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] mb-5">
           <div className="md:col-span-3">
-            <span className="block text-xs font-bold uppercase tracking-wider text-zinc-300 mb-2">{t.cms?.brandNameArabic || 'Arabic Brand Name'} / {t.cms?.brandNameEnglish || 'English Brand Name'} / {t.cms?.brandNameUrdu || 'Urdu Brand Name'}</span>
+            <span className="block text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)] mb-2">{t.cms?.brandNameArabic || 'Arabic Brand Name'} / {t.cms?.brandNameEnglish || 'English Brand Name'} / {t.cms?.brandNameUrdu || 'Urdu Brand Name'}</span>
           </div>
           <AdminInput 
             label={t.cms?.brandNameArabic || 'Arabic Brand Name'} 
@@ -2407,7 +2407,7 @@ export default function AdminDashboard() {
   // Tab 13: Media & Branding
   const renderBrandingTab = () => (
     <div className="space-y-6">
-      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.mediaBrandingTitle}</h3>
+      <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-[var(--border-color)] pb-3 mb-4">{t.cms.mediaBrandingTitle}</h3>
       <AdminInput label={t.cms.preloaderLogo} value={formData.mediaBranding.preloaderLogo || ''} onChange={(e) => {
         const updated = { ...formData };
         updated.mediaBranding.preloaderLogo = e.target.value;
@@ -2461,7 +2461,7 @@ export default function AdminDashboard() {
   const renderPreviewPanel = () => {
     return (
       <div 
-        className="w-full h-full p-6 border border-zinc-800 bg-[#070709] rounded-2xl relative overflow-hidden flex flex-col justify-center min-h-[300px]"
+        className="w-full h-full p-6 border border-[var(--border-color)] bg-[var(--card-bg)] rounded-2xl relative overflow-hidden flex flex-col justify-center min-h-[300px]"
         style={{
           '--accent-color': formData.themeSettings.accentColor,
           '--primary': formData.themeSettings.accentColor,
@@ -2503,26 +2503,26 @@ export default function AdminDashboard() {
         />
 
         <div className="relative z-10 space-y-4" style={{ color: 'var(--font-color)' }}>
-          <div className="flex items-center justify-between border-b border-zinc-900 pb-2 text-[10px] uppercase font-bold text-zinc-500 tracking-wider">
+          <div className="flex items-center justify-between border-b border-[var(--border-color)] pb-2 text-[10px] uppercase font-bold text-[var(--text-secondary)] tracking-wider">
             <span>{t.cms?.previewCardTitle}</span>
             <span className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" /> {t.cms?.realtime}</span>
           </div>
 
           {activeTab === 'general' && (
-            <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-2">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms?.previewLogo}</span>
-              <div className="text-lg font-black text-white" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>{formData.general.logoText[lang] || formData.general.logoText.en}</div>
-              <div className="text-xs text-zinc-400" style={{ fontWeight: 'var(--body-weight)' }}>{formData.general.brandIdentity[lang] || formData.general.brandIdentity.en}</div>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-2">
+              <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block">{t.cms?.previewLogo}</span>
+              <div className="text-lg font-black text-[var(--text-primary)]" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>{formData.general.logoText[lang] || formData.general.logoText.en}</div>
+              <div className="text-xs text-[var(--text-secondary)]" style={{ fontWeight: 'var(--body-weight)' }}>{formData.general.brandIdentity[lang] || formData.general.brandIdentity.en}</div>
             </div>
           )}
 
           {activeTab === 'structure' && (
-            <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms?.previewFlow}</span>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-3">
+              <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block">{t.cms?.previewFlow}</span>
               <div className="space-y-1.5">
                 {formData.websiteStructure.sections.map(s => (
                   <div key={s.id} className={`p-2 rounded text-[10px] font-bold border flex items-center justify-between ${
-                    s.visible ? 'bg-[var(--accent-color)]/5 border-[var(--accent-color)]/20 text-white' : 'bg-black/10 border-zinc-900 text-zinc-500'
+                    s.visible ? 'bg-[var(--accent-color)]/5 border-[var(--accent-color)]/20 text-[var(--text-primary)]' : 'bg-[var(--card-bg)] border-[var(--border-color)] text-[var(--text-secondary)]'
                   }`}>
                     <span className="capitalize">{s.id}</span>
                     <span>{s.visible ? t.cms.on : t.cms.off}</span>
@@ -2533,26 +2533,26 @@ export default function AdminDashboard() {
           )}
 
           {activeTab === 'hero' && (
-            <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-3">
               <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-[8px] font-bold text-emerald-400 uppercase">{t.cms.availableBadge}</div>
-              <h4 className="text-xl font-black text-white leading-tight" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>
+              <h4 className="text-xl font-black text-[var(--text-primary)] leading-tight" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>
                 {formData.hero.title1[lang] || formData.hero.title1.en}<br />
                 <span style={{ color: formData.themeSettings.accentColor }}>{formData.hero.title2[lang] || formData.hero.title2.en}</span>
               </h4>
-              <p className="text-xs text-zinc-400 leading-relaxed font-light line-clamp-3" style={{ fontWeight: 'var(--body-weight)' }}>
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-light line-clamp-3" style={{ fontWeight: 'var(--body-weight)' }}>
                 {formData.hero.tagline[lang] || formData.hero.tagline.en}
               </p>
-              <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest pt-2">
+              <div className="text-[10px] font-bold text-[var(--text-secondary)] uppercase tracking-widest pt-2">
                 {t.cms.statsLabel}: {formData.hero.statistics.experienceYears} {t.yearsExp} • {formData.hero.statistics.projectsBuilt} {t.projectsBuilt}
               </div>
             </div>
           )}
 
           {activeTab === 'about' && (
-            <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
-              <h4 className="text-base font-bold text-white" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>{formData.about.title[lang] || formData.about.title.en}</h4>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-3">
+              <h4 className="text-base font-bold text-[var(--text-primary)]" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>{formData.about.title[lang] || formData.about.title.en}</h4>
               <p className="text-[11px] text-[var(--accent-color)] font-medium">{formData.about.subtitle[lang] || formData.about.subtitle.en}</p>
-              <p className="text-xs text-zinc-400 leading-relaxed font-light line-clamp-5 whitespace-pre-line" style={{ fontWeight: 'var(--body-weight)' }}>
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-light line-clamp-5 whitespace-pre-line" style={{ fontWeight: 'var(--body-weight)' }}>
                 {formData.about.text[lang] || formData.about.text.en}
               </p>
             </div>
@@ -2560,45 +2560,45 @@ export default function AdminDashboard() {
 
           {activeTab === 'projects' && (
             <div 
-              className="p-5 rounded-2xl border bg-white/[var(--glass-opacity)] backdrop-blur-[var(--blur-strength)] space-y-4"
+              className="p-5 rounded-2xl border bg-[var(--surface-hover)] backdrop-blur-[var(--blur-strength)] space-y-4"
               style={{ borderColor: `rgba(255,255,255,var(--border-opacity))` }}
             >
-              <div className="flex justify-between items-center text-[10px] font-bold text-zinc-500">
+              <div className="flex justify-between items-center text-[10px] font-bold text-[var(--text-secondary)]">
                 <span>{formData.projects[0]?.category[lang] || t.cms.projectPlaceholderCategory}</span>
                 <span className="text-[var(--accent-color)]">{t.cms.previewLabel || 'Preview'}</span>
               </div>
-              <h4 className="text-base font-extrabold text-white" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>{formData.projects[0]?.title || 'Safety System'}</h4>
-              <p className="text-xs text-zinc-400 leading-relaxed font-light line-clamp-3" style={{ fontWeight: 'var(--body-weight)' }}>
+              <h4 className="text-base font-extrabold text-[var(--text-primary)]" style={{ color: 'var(--heading-color)', fontWeight: 'var(--heading-weight)' }}>{formData.projects[0]?.title || 'Safety System'}</h4>
+              <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-light line-clamp-3" style={{ fontWeight: 'var(--body-weight)' }}>
                 {formData.projects[0]?.description[lang] || formData.projects[0]?.description.en}
               </p>
               <div className="flex flex-wrap gap-1">
                 {formData.projects[0]?.tech.slice(0, 3).map((tItem, i) => {
                   const label = typeof tItem === 'string' ? tItem : tItem[lang] || tItem.en;
-                  return <span key={i} className="text-[8px] font-bold bg-white/5 border border-white/10 px-2 py-0.5 rounded text-white/75">{label}</span>;
+                  return <span key={i} className="text-[8px] font-bold bg-[var(--surface-hover)] border border-[var(--border-color)] px-2 py-0.5 rounded text-[var(--text-primary)]/75">{label}</span>;
                 })}
               </div>
             </div>
           )}
 
           {activeTab === 'skills' && (
-            <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-3">
               <h4 className="text-xs font-bold text-[var(--accent-color)] uppercase tracking-wider">{formData.skills[0]?.category[lang] || t.cms.sidebarSkills}</h4>
               <div className="flex flex-wrap gap-1.5">
                 {formData.skills[0]?.items.slice(0, 5).map((item, i) => (
-                  <span key={i} className="text-[10px] font-medium bg-white/5 border border-white/10 px-2.5 py-1 rounded-lg text-white/80">{item[lang] || item.en}</span>
+                  <span key={i} className="text-[10px] font-medium bg-[var(--surface-hover)] border border-[var(--border-color)] px-2.5 py-1 rounded-lg text-[var(--text-primary)]/80">{item[lang] || item.en}</span>
                 ))}
               </div>
             </div>
           )}
 
           {activeTab === 'experience' && (
-            <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-3">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms.previewTimeline}</span>
-              <div className="border-l border-zinc-800 pl-3 space-y-3">
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-3">
+              <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block">{t.cms.previewTimeline}</span>
+              <div className="border-l border-[var(--border-color)] pl-3 space-y-3">
                 {formData.experience.slice(0, 2).map((exp) => (
                   <div key={exp.id} className="text-xs">
-                    <h5 className="font-bold text-white">{exp.role[lang] || exp.role.en}</h5>
-                    <p className="text-[10px] text-zinc-500 mb-1">{exp.company[lang] || exp.company.en} • {exp.period[lang] || exp.period.en}</p>
+                    <h5 className="font-bold text-[var(--text-primary)]">{exp.role[lang] || exp.role.en}</h5>
+                    <p className="text-[10px] text-[var(--text-secondary)] mb-1">{exp.company[lang] || exp.company.en} • {exp.period[lang] || exp.period.en}</p>
                   </div>
                 ))}
               </div>
@@ -2607,25 +2607,25 @@ export default function AdminDashboard() {
 
           {activeTab === 'certifications' && (
             <div 
-              className="p-4 rounded-xl border bg-white/[var(--glass-opacity)] backdrop-blur-[var(--blur-strength)] text-center relative"
+              className="p-4 rounded-xl border bg-[var(--surface-hover)] backdrop-blur-[var(--blur-strength)] text-center relative"
               style={{ borderColor: `rgba(255,255,255,var(--border-opacity))` }}
             >
               <div className="mx-auto w-10 h-10 rounded-full bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/20 flex items-center justify-center text-[var(--accent-color)] mb-3">
                 <Award className="w-5 h-5" />
               </div>
-              <h5 className="font-bold text-white text-xs px-2 leading-snug">
+              <h5 className="font-bold text-[var(--text-primary)] text-xs px-2 leading-snug">
                 {formData.certifications[0]?.name?.[lang] || formData.certifications[0]?.[lang] || t.cms.certPlaceholderName}
               </h5>
-              <p className="text-[9px] text-zinc-500 mt-1">{formData.certifications[0]?.provider?.[lang] || t.cms.certPlaceholderProvider}</p>
+              <p className="text-[9px] text-[var(--text-secondary)] mt-1">{formData.certifications[0]?.provider?.[lang] || t.cms.certPlaceholderProvider}</p>
             </div>
           )}
 
           {activeTab === 'achievements' && (
             <div className="grid grid-cols-2 gap-3">
               {formData.achievements.slice(0, 2).map((ach) => (
-                <div key={ach.id} className="p-4 rounded-xl border border-zinc-900 bg-black/40 text-center">
-                  <div className="text-2xl font-black text-white" style={{ color: formData.themeSettings.accentColor }}>{ach.value}{ach.suffix}</div>
-                  <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-wider mt-1">{ach.label[lang] || ach.label.en}</div>
+                <div key={ach.id} className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] text-center">
+                  <div className="text-2xl font-black text-[var(--text-primary)]" style={{ color: formData.themeSettings.accentColor }}>{ach.value}{ach.suffix}</div>
+                  <div className="text-[9px] font-bold text-[var(--text-secondary)] uppercase tracking-wider mt-1">{ach.label[lang] || ach.label.en}</div>
                 </div>
               ))}
             </div>
@@ -2633,10 +2633,10 @@ export default function AdminDashboard() {
 
           {activeTab === 'contact' && (
             <div className="grid grid-cols-2 gap-2">
-              {formData.contact.email && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-white">{t.emailLabel}</div>}
-              {formData.contact.whatsapp && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-emerald-400">{t.whatsappLabel}</div>}
-              {formData.contact.github && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-zinc-400">{t.githubLabel}</div>}
-              {formData.contact.linkedin && <div className="p-2 border border-zinc-900 bg-black/40 rounded text-center text-[10px] text-blue-400">LinkedIn</div>}
+              {formData.contact.email && <div className="p-2 border border-[var(--border-color)] bg-[var(--card-bg)] rounded text-center text-[10px] text-[var(--text-primary)]">{t.emailLabel}</div>}
+              {formData.contact.whatsapp && <div className="p-2 border border-[var(--border-color)] bg-[var(--card-bg)] rounded text-center text-[10px] text-emerald-400">{t.whatsappLabel}</div>}
+              {formData.contact.github && <div className="p-2 border border-[var(--border-color)] bg-[var(--card-bg)] rounded text-center text-[10px] text-[var(--text-secondary)]">{t.githubLabel}</div>}
+              {formData.contact.linkedin && <div className="p-2 border border-[var(--border-color)] bg-[var(--card-bg)] rounded text-center text-[10px] text-blue-400">LinkedIn</div>}
             </div>
           )}
 
@@ -2657,44 +2657,44 @@ export default function AdminDashboard() {
                 }}
               />
               <span className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: formData.themeSettings.accentColor }}>{t.cms.previewMockup}</span>
-              <p className="text-xs text-white/70 mt-3 font-light leading-relaxed">
+              <p className="text-xs text-[var(--text-primary)]/70 mt-3 font-light leading-relaxed">
                 {t.cms.previewThemeDesc}
               </p>
             </div>
           )}
 
           {activeTab === 'translations' && (
-            <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 space-y-2">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms.previewTranslation}</span>
-              <div className="text-xs text-white"><span className="opacity-55">workTitle:</span> "{formData.translations[lang]?.workTitle || ''}"</div>
-              <div className="text-xs text-white"><span className="opacity-55">footerText:</span> "{formData.translations[lang]?.footerText || ''}"</div>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-2">
+              <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block">{t.cms.previewTranslation}</span>
+              <div className="text-xs text-[var(--text-primary)]"><span className="opacity-55">workTitle:</span> "{formData.translations[lang]?.workTitle || ''}"</div>
+              <div className="text-xs text-[var(--text-primary)]"><span className="opacity-55">footerText:</span> "{formData.translations[lang]?.footerText || ''}"</div>
             </div>
           )}
 
           {activeTab === 'branding' && (
-            <div className="p-4 rounded-xl border border-zinc-900 bg-black/40 text-center space-y-2">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block">{t.cms.previewBranding}</span>
-              <div className="text-xl font-bold tracking-widest text-white animate-pulse uppercase">{formData.mediaBranding.preloaderLogo || 'Mohamed Okash'}</div>
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] text-center space-y-2">
+              <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block">{t.cms.previewBranding}</span>
+              <div className="text-xl font-bold tracking-widest text-[var(--text-primary)] animate-pulse uppercase">{formData.mediaBranding.preloaderLogo || 'Mohamed Okash'}</div>
             </div>
           )}
 
           {activeTab === 'brandIdentity' && (
-            <div className="p-4 rounded-xl border border-zinc-800 bg-black/40 text-left space-y-2 text-xs">
-              <span className="text-[10px] text-zinc-500 font-bold uppercase block text-center border-b border-zinc-800 pb-1 mb-2">
+            <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] text-left space-y-2 text-xs">
+              <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block text-center border-b border-[var(--border-color)] pb-1 mb-2">
                 {t.cms?.sidebarBrandIdentity || 'Brand Identity'}
               </span>
-              <div><strong className="text-zinc-400">Arabic Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.brandName?.ar || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">English Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.brandName?.en || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">Urdu Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.brandName?.ur || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">Short Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.shortName?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">Subtitle:</strong> <span className="text-white font-medium">{formData.brandIdentity?.subtitle?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">Navbar Logo:</strong> <span className="text-white font-medium">{formData.brandIdentity?.logoText?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">Hero Display Name:</strong> <span className="text-white font-medium">{formData.brandIdentity?.heroName?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">Footer Text:</strong> <span className="text-white font-medium">{formData.brandIdentity?.footerText?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">Preloader Text:</strong> <span className="text-white font-medium">{formData.brandIdentity?.preloaderText?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">Browser Title:</strong> <span className="text-white font-medium">{formData.brandIdentity?.browserTitle?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">SEO Title:</strong> <span className="text-white font-medium">{formData.brandIdentity?.seoTitle?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-zinc-400">SEO Description:</strong> <span className="text-white font-light block mt-1">{formData.brandIdentity?.seoDescription?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">Arabic Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.brandName?.ar || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">English Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.brandName?.en || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">Urdu Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.brandName?.ur || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">Short Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.shortName?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">Subtitle:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.subtitle?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">Navbar Logo:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.logoText?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">Hero Display Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.heroName?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">Footer Text:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.footerText?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">Preloader Text:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.preloaderText?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">Browser Title:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.browserTitle?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">SEO Title:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.seoTitle?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">SEO Description:</strong> <span className="text-[var(--text-primary)] font-light block mt-1">{formData.brandIdentity?.seoDescription?.[lang] || 'N/A'}</span></div>
             </div>
           )}
 
@@ -2704,14 +2704,14 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div dir={isRtl ? 'rtl' : 'ltr'} className="min-h-screen bg-[#050507] text-white flex flex-col font-sans">
+    <div dir={isRtl ? 'rtl' : 'ltr'} className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex flex-col font-sans">
       
       {/* CMS Header Bar */}
-      <header className="fixed top-0 inset-x-0 h-16 bg-black/80 border-b border-zinc-800 backdrop-blur-md flex items-center gap-2 px-2 sm:px-4 lg:px-6 z-40">
+      <header className="fixed top-0 inset-x-0 h-16 bg-[var(--card-bg)] border-b border-[var(--border-color)] backdrop-blur-md flex items-center gap-2 px-2 sm:px-4 lg:px-6 z-40">
         <div className="flex items-center gap-2 shrink-0">
           <button 
             onClick={() => navigate('/')} 
-            className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800 text-xs font-bold flex items-center gap-1.5 cursor-pointer text-zinc-300"
+            className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-secondary)] text-xs font-bold flex items-center gap-1.5 cursor-pointer text-[var(--text-secondary)]"
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="hidden sm:inline">{t.cms?.viewSite || 'View Site'}</span>
@@ -2720,14 +2720,14 @@ export default function AdminDashboard() {
           <select 
             value={lang} 
             onChange={(e) => setLanguage(e.target.value)} 
-            className="px-2.5 py-1.5 rounded-lg border border-zinc-800 bg-zinc-900 text-xs text-white outline-none cursor-pointer hover:border-zinc-700 transition-colors"
+            className="px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs text-[var(--text-primary)] outline-none cursor-pointer hover:border-[var(--border-color)] transition-colors"
           >
             <option value="ar">{t.cms?.arabic || 'العربية'}</option>
             <option value="en">{t.cms?.english || 'English'}</option>
             <option value="ur">{t.cms?.urdu || 'اردو'}</option>
           </select>
           
-          <h1 className="text-sm font-black text-white tracking-widest uppercase hidden md:flex items-center gap-2">
+          <h1 className="text-sm font-black text-[var(--text-primary)] tracking-widest uppercase hidden md:flex items-center gap-2">
             <Cpu className="w-4.5 h-4.5 text-[var(--primary)]" />
             {t.cms?.panelTitle || 'Portfolio Enterprise CMS'}
           </h1>
@@ -2735,31 +2735,31 @@ export default function AdminDashboard() {
 
         {/* Global Search Bar */}
         <div className="relative flex-1 min-w-0 max-w-md mx-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-secondary)]" />
           <input 
             type="text" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t.cms?.searchPlaceholder || 'Search everywhere...'}
-            className="w-full pl-9 pr-3 py-1.5 bg-black/60 border border-zinc-800 rounded-lg text-xs text-white placeholder-zinc-500 outline-none focus:border-[var(--primary)] transition-all"
+            className="w-full pl-9 pr-3 py-1.5 bg-[var(--card-bg)] border border-[var(--border-color)] rounded-lg text-xs text-[var(--text-primary)] placeholder-[var(--text-secondary)] outline-none focus:border-[var(--primary)] transition-all"
           />
 
           {/* Search Dropdown Overlay */}
           {searchQuery && (
-            <div className="absolute top-full right-0 w-[min(20rem,calc(100vw-1rem))] mt-1 border border-zinc-800 bg-black/95 rounded-xl shadow-2xl overflow-hidden z-50 py-1.5">
-              <div className="px-3 py-1 text-[9px] uppercase font-bold text-zinc-500 tracking-wider border-b border-zinc-900">{t.cms?.searchResults || 'Search Results'}</div>
+            <div className="absolute top-full right-0 w-[min(20rem,calc(100vw-1rem))] mt-1 border border-[var(--border-color)] bg-[var(--card-bg)] rounded-xl shadow-2xl overflow-hidden z-50 py-1.5">
+              <div className="px-3 py-1 text-[9px] uppercase font-bold text-[var(--text-secondary)] tracking-wider border-b border-[var(--border-color)]">{t.cms?.searchResults || 'Search Results'}</div>
               {searchResults.length === 0 ? (
-                <div className="px-4 py-3 text-xs text-zinc-500">{t.cms?.noResults || 'No matches found.'}</div>
+                <div className="px-4 py-3 text-xs text-[var(--text-secondary)]">{t.cms?.noResults || 'No matches found.'}</div>
               ) : (
                 <div className="max-h-60 overflow-y-auto">
                   {searchResults.map((res, i) => (
                     <div 
                       key={i} 
                       onClick={() => handleSearchResultClick(res)}
-                      className="px-4 py-2.5 hover:bg-zinc-900 cursor-pointer flex flex-col gap-0.5 border-b border-zinc-900 last:border-b-0"
+                      className="px-4 py-2.5 hover:bg-[var(--bg-secondary)] cursor-pointer flex flex-col gap-0.5 border-b border-[var(--border-color)] last:border-b-0"
                     >
-                      <span className="text-xs font-bold text-white">{res.name}</span>
-                      <span className="text-[9px] text-zinc-500 capitalize">{res.desc} ({t.cms?.tabLabel || 'Tab'}: {res.tab})</span>
+                      <span className="text-xs font-bold text-[var(--text-primary)]">{res.name}</span>
+                      <span className="text-[9px] text-[var(--text-secondary)] capitalize">{res.desc} ({t.cms?.tabLabel || 'Tab'}: {res.tab})</span>
                     </div>
                   ))}
                 </div>
@@ -2773,7 +2773,7 @@ export default function AdminDashboard() {
           <button
             onClick={handleExportJSON}
             title={t.cms?.exportBackup || 'Export Portfolio JSON Backup'}
-            className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800 text-zinc-400 hover:text-white cursor-pointer"
+            className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
           >
             <Download className="w-4 h-4" />
           </button>
@@ -2781,7 +2781,7 @@ export default function AdminDashboard() {
           <button
             onClick={() => fileInputRef.current?.click()}
             title={t.cms?.importBackup || 'Import Portfolio JSON Backup'}
-            className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800 text-zinc-400 hover:text-white cursor-pointer"
+            className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
           >
             <Upload className="w-4 h-4" />
           </button>
@@ -2797,7 +2797,7 @@ export default function AdminDashboard() {
             <button
               onClick={handleRollback}
               title={t.cms?.rollbackBackup || 'Restore Previous Backup Version'}
-              className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800 text-amber-500 hover:bg-amber-500/10 cursor-pointer"
+              className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-secondary)] text-amber-500 hover:bg-amber-500/10 cursor-pointer"
             >
               <Undo className="w-4 h-4" />
             </button>
@@ -2820,7 +2820,7 @@ export default function AdminDashboard() {
         <button
           type="button"
           onClick={() => setIsMobileNavOpen(true)}
-          className="lg:hidden p-2 rounded-lg border border-zinc-800 bg-zinc-900/40 text-zinc-200 shrink-0"
+          className="lg:hidden p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] shrink-0"
           aria-label="Open CMS navigation"
         >
           <Menu className="w-5 h-5" />
@@ -2832,124 +2832,124 @@ export default function AdminDashboard() {
         {isMobileNavOpen && (
           <button
             type="button"
-            className="fixed inset-0 top-16 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 top-16 bg-[var(--card-bg)] backdrop-blur-sm z-40 lg:hidden"
             onClick={() => setIsMobileNavOpen(false)}
             aria-label="Close CMS navigation"
           />
         )}
         
         {/* Navigation Sidebar */}
-        <aside className={`fixed lg:static top-16 bottom-0 start-0 z-50 w-[min(19rem,88vw)] lg:w-64 bg-[#070709] lg:bg-black/60 border-e border-zinc-800 h-[calc(100vh-64px)] overflow-y-auto shrink-0 flex flex-col p-4 gap-1 transition-transform duration-300 ease-out will-change-transform ${isMobileNavOpen ? 'translate-x-0' : isRtl ? 'translate-x-full lg:translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-          <div className="lg:hidden flex items-center justify-between px-2 pb-3 mb-2 border-b border-zinc-800">
+        <aside className={`fixed lg:static top-16 bottom-0 start-0 z-50 w-[min(19rem,88vw)] lg:w-64 bg-[var(--bg-secondary)] lg:bg-[var(--card-bg)] border-e border-[var(--border-color)] h-[calc(100vh-64px)] overflow-y-auto shrink-0 flex flex-col p-4 gap-1 transition-transform duration-300 ease-out will-change-transform ${isMobileNavOpen ? 'translate-x-0' : isRtl ? 'translate-x-full lg:translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+          <div className="lg:hidden flex items-center justify-between px-2 pb-3 mb-2 border-b border-[var(--border-color)]">
             <span className="text-xs font-black uppercase tracking-widest">CMS Navigation</span>
-            <button type="button" onClick={() => setIsMobileNavOpen(false)} className="p-2 rounded-lg hover:bg-zinc-900" aria-label="Close CMS navigation">
+            <button type="button" onClick={() => setIsMobileNavOpen(false)} className="p-2 rounded-lg hover:bg-[var(--bg-secondary)]" aria-label="Close CMS navigation">
               <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="px-3 py-2 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">{t.cms?.sidebarHeaderSettings || 'Settings'}</div>
+          <div className="px-3 py-2 text-[9px] uppercase font-bold text-[var(--text-secondary)] tracking-widest hidden md:block">{t.cms?.sidebarHeaderSettings || 'Settings'}</div>
           <button 
             onClick={() => handleTabChange('general')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'general' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'general' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Settings className="w-3.5 h-3.5" /> {t.cms?.sidebarSettings || 'General Settings'}
           </button>
 
           <button 
             onClick={() => handleTabChange('brandIdentity')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'brandIdentity' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'brandIdentity' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Shield className="w-3.5 h-3.5" /> {t.cms?.sidebarBrandIdentity || 'Brand Identity'}
           </button>
 
           <button 
             onClick={() => handleTabChange('structure')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'structure' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'structure' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Globe className="w-3.5 h-3.5" /> {t.cms?.sidebarStructure || 'Website Structure'}
           </button>
 
           <button 
             onClick={() => handleTabChange('branding')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'branding' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'branding' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Image className="w-3.5 h-3.5" /> {t.cms?.sidebarBranding || 'Media & Branding'}
           </button>
 
-          <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">{t.cms?.sidebarHeaderComponents || 'Components'}</div>
+          <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-[var(--text-secondary)] tracking-widest hidden md:block">{t.cms?.sidebarHeaderComponents || 'Components'}</div>
           <button 
             onClick={() => handleTabChange('hero')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'hero' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'hero' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <User className="w-3.5 h-3.5" /> {t.cms?.sidebarHero || 'Hero Section'}
           </button>
 
           <button 
             onClick={() => handleTabChange('about')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'about' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'about' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Star className="w-3.5 h-3.5" /> {t.cms?.sidebarAbout || 'About Section'}
           </button>
 
           <button 
             onClick={() => handleTabChange('projects')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'projects' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'projects' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Briefcase className="w-3.5 h-3.5" /> {t.cms?.sidebarProjects || 'Projects Showcase'}
           </button>
 
           <button 
             onClick={() => handleTabChange('skills')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'skills' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'skills' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Monitor className="w-3.5 h-3.5" /> {t.cms?.sidebarSkills || 'Toolbox / Skills'}
           </button>
 
           <button 
             onClick={() => handleTabChange('experience')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'experience' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'experience' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Briefcase className="w-3.5 h-3.5" /> {t.cms?.sidebarExperience || 'Job Experience'}
           </button>
 
           <button 
             onClick={() => handleTabChange('certifications')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'certifications' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'certifications' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Award className="w-3.5 h-3.5" /> {t.cms?.sidebarCertifications || 'Certifications'}
           </button>
 
           <button 
             onClick={() => handleTabChange('achievements')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'achievements' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'achievements' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Award className="w-3.5 h-3.5" /> {t.cms?.sidebarAchievements || 'Achievements'}
           </button>
 
           <button 
             onClick={() => handleTabChange('contact')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'contact' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'contact' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Mail className="w-3.5 h-3.5" /> {t.cms?.sidebarContact || 'Contact Details'}
           </button>
 
           <button 
             onClick={() => handleTabChange('customSections')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'customSections' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'customSections' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Layers className="w-3.5 h-3.5" /> {t.cms?.sidebarCustomSections || 'Custom Sections'}
           </button>
 
-          <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">{t.cms?.sidebarHeaderThemeLang || 'Theme & Language'}</div>
+          <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-[var(--text-secondary)] tracking-widest hidden md:block">{t.cms?.sidebarHeaderThemeLang || 'Theme & Language'}</div>
           <button 
             onClick={() => handleTabChange('theme')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'theme' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'theme' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Palette className="w-3.5 h-3.5" /> {t.cms?.sidebarTheme || 'Theme Settings'}
           </button>
 
           <button 
             onClick={() => handleTabChange('translations')}
-            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'translations' ? 'bg-zinc-800 text-white border-l-2 border-[var(--primary)]' : 'text-zinc-400 hover:bg-zinc-900/50 hover:text-white'}`}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'translations' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Languages className="w-3.5 h-3.5" /> {t.cms?.sidebarTranslations || 'Dictionary Texts'}
           </button>
@@ -2975,22 +2975,22 @@ export default function AdminDashboard() {
 
             <div className="max-w-3xl pb-28 overflow-x-hidden">
               {renderActiveForm()}
-              <div className="lg:hidden mt-8 rounded-xl border border-zinc-800 overflow-hidden">
+              <div className="lg:hidden mt-8 rounded-xl border border-[var(--border-color)] overflow-hidden">
                 <button
                   type="button"
                   onClick={() => setIsMobilePreviewOpen((open) => !open)}
-                  className="w-full p-4 flex items-center justify-between bg-zinc-950/70 text-sm font-bold"
+                  className="w-full p-4 flex items-center justify-between bg-[var(--bg-secondary)] text-sm font-bold"
                 >
                   <span>Live Preview</span>
                   {isMobilePreviewOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
-                {isMobilePreviewOpen && <div className="p-4 bg-[#040405]">{renderPreviewPanel()}</div>}
+                {isMobilePreviewOpen && <div className="p-4 bg-[var(--bg-secondary)]">{renderPreviewPanel()}</div>}
               </div>
             </div>
           </div>
 
           {/* Right Visual Preview Sidebar Panel (40% width) */}
-          <div className="hidden lg:block w-96 xl:w-[28rem] h-full p-6 border-s border-zinc-800 bg-[#040405] shrink-0 overflow-y-auto">
+          <div className="hidden lg:block w-96 xl:w-[28rem] h-full p-6 border-s border-[var(--border-color)] bg-[var(--bg-secondary)] shrink-0 overflow-y-auto">
             {renderPreviewPanel()}
           </div>
 
@@ -2999,18 +2999,18 @@ export default function AdminDashboard() {
 
       {/* Dirty state / Unsaved changes floating banner at the bottom */}
       {isDirty && (
-        <div className="fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#0d0d12] border border-zinc-800 px-3 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl flex items-center gap-3 sm:gap-5 justify-between w-[calc(100vw-1rem)] max-w-[540px] animate-bounce-subtle">
+        <div className="fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[var(--card-bg)] border border-[var(--border-color)] px-3 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl flex items-center gap-3 sm:gap-5 justify-between w-[calc(100vw-1rem)] max-w-[540px] animate-bounce-subtle">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping" />
             <div>
-              <p className="text-xs font-bold text-white">{t.cms?.unsavedTitle || 'Unsaved Changes'}</p>
-              <p className="text-[10px] text-zinc-500">{t.cms?.unsavedSubtitle || 'Press Save Changes to publish.'}</p>
+              <p className="text-xs font-bold text-[var(--text-primary)]">{t.cms?.unsavedTitle || 'Unsaved Changes'}</p>
+              <p className="text-[10px] text-[var(--text-secondary)]">{t.cms?.unsavedSubtitle || 'Press Save Changes to publish.'}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button 
               onClick={() => setFormData(JSON.parse(JSON.stringify(data)))}
-              className="px-4 py-2 border border-zinc-800 hover:bg-zinc-900 rounded-lg text-xs font-extrabold text-zinc-400 hover:text-white transition-all cursor-pointer"
+              className="px-4 py-2 border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] rounded-lg text-xs font-extrabold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
             >
               {t.cms?.reset || 'Reset'}
             </button>

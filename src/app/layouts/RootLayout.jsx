@@ -15,6 +15,7 @@ export const RootLayout = ({ children }) => {
 
   const themeSettings = data?.themeSettings;
   const configuredTheme = themeSettings?.defaultTheme || activeTheme || 'dark';
+  const isLightTheme = configuredTheme === 'platinum';
 
   useEffect(() => {
     setTheme(configuredTheme);
@@ -37,15 +38,15 @@ export const RootLayout = ({ children }) => {
     '--paragraph-size-setting': `${themeSettings.paragraphSize || 16}px`,
     '--heading-weight-setting': themeSettings.headingWeight || '800',
     '--body-weight-setting': themeSettings.bodyWeight || '300',
-    '--font-color-setting': themeSettings.fontColor || '#fafafa',
-    '--heading-color-setting': themeSettings.headingColor || '#fafafa',
+    '--font-color-setting': isLightTheme ? 'var(--text-primary)' : (themeSettings.fontColor || 'var(--text-primary)'),
+    '--heading-color-setting': isLightTheme ? 'var(--text-primary)' : (themeSettings.headingColor || 'var(--text-primary)'),
     '--letter-spacing-setting': themeSettings.letterSpacing || 'normal',
     '--line-height-setting': themeSettings.lineHeight || '1.6',
     '--paragraph-width-setting': themeSettings.paragraphWidth || '65ch',
-    '--button-text-color-setting': themeSettings.buttonTextColor || 'var(--accent-text)',
-    '--button-background-color-setting': themeSettings.buttonBackgroundColor || 'var(--accent)',
-    '--card-title-color-setting': themeSettings.cardTitleColor || 'var(--heading-color-setting)',
-    '--card-description-color-setting': themeSettings.cardDescriptionColor || 'var(--muted)'
+    '--button-text-color-setting': isLightTheme ? 'var(--accent-text)' : (themeSettings.buttonTextColor || 'var(--accent-text)'),
+    '--button-background-color-setting': isLightTheme ? 'var(--accent-color)' : (themeSettings.buttonBackgroundColor || 'var(--accent)'),
+    '--card-title-color-setting': isLightTheme ? 'var(--text-primary)' : (themeSettings.cardTitleColor || 'var(--heading-color-setting)'),
+    '--card-description-color-setting': isLightTheme ? 'var(--text-secondary)' : (themeSettings.cardDescriptionColor || 'var(--muted)')
   } : {};
 
   const blobOpacity = themeSettings?.bgIntensity !== undefined ? themeSettings.bgIntensity : 0.45;
@@ -77,7 +78,7 @@ export const RootLayout = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-[var(--border)] py-8 mt-20 bg-black/20 backdrop-blur-md">
+      <footer className="relative z-10 border-t border-[var(--border)] py-8 mt-20 bg-[var(--card-bg)] backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 text-center md:flex md:justify-between md:items-center">
           <p className="text-sm opacity-60">
             &copy; {new Date().getFullYear()} {copyrightName}. {data?.translations?.[lang]?.allRightsReserved || t.allRightsReserved || 'All Rights Reserved.'}

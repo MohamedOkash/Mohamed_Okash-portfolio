@@ -105,26 +105,26 @@ export const Hero = () => {
         className="grid grid-cols-3 gap-6 sm:gap-12 md:gap-16 max-w-2xl mx-auto mb-7 text-center z-20"
       >
         <div className="flex flex-col items-center">
-          <span className="text-2xl sm:text-3xl font-black text-white leading-tight font-mono">
+          <span className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] leading-tight font-mono">
             <Counter target={data?.hero?.statistics?.projectsBuilt || 8} />+
           </span>
-          <span className="text-[9px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
+          <span className="text-[9px] sm:text-xs text-[var(--text-secondary)] font-bold uppercase tracking-widest mt-1">
             {lang === 'ar' ? 'مشاريع منفذة' : lang === 'ur' ? 'منصوبے' : 'Projects Built'}
           </span>
         </div>
-        <div className="flex flex-col items-center border-x border-white/[0.08] px-4 sm:px-8 md:px-12">
-          <span className="text-2xl sm:text-3xl font-black text-white leading-tight font-mono">
+        <div className="flex flex-col items-center border-x border-[var(--border-color)] px-4 sm:px-8 md:px-12">
+          <span className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] leading-tight font-mono">
             <Counter target={4} />
           </span>
-          <span className="text-[9px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
+          <span className="text-[9px] sm:text-xs text-[var(--text-secondary)] font-bold uppercase tracking-widest mt-1">
             {lang === 'ar' ? 'قطاعات صناعية' : lang === 'ur' ? 'صنعتیں' : 'Industries'}
           </span>
         </div>
         <div className="flex flex-col items-center">
-          <span className="text-2xl sm:text-3xl font-black text-white leading-tight font-mono">
+          <span className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] leading-tight font-mono">
             <Counter target={data?.hero?.statistics?.experienceYears || 7} />+
           </span>
-          <span className="text-[9px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1">
+          <span className="text-[9px] sm:text-xs text-[var(--text-secondary)] font-bold uppercase tracking-widest mt-1">
             {lang === 'ar' ? 'سنوات الخبرة' : lang === 'ur' ? 'سال کا تجربہ' : 'Years Exp'}
           </span>
         </div>
@@ -147,7 +147,7 @@ export const Hero = () => {
 
         <button
           onClick={() => handleScrollTo('contact')}
-          className="px-8 py-3.5 rounded-xl font-bold text-sm border border-[var(--border)] bg-white/[0.01] hover:bg-white/[0.06] transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
+          className="px-8 py-3.5 rounded-xl font-bold text-sm border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] transition-all flex items-center gap-2 cursor-pointer hover:-translate-y-0.5"
         >
           <Mail className="w-4 h-4" />
           {data?.translations?.[lang]?.contactMe || t.contactMe}

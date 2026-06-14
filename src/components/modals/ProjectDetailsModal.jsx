@@ -53,7 +53,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-md cursor-pointer"
+            className="fixed inset-0 bg-[var(--card-bg)] backdrop-blur-md cursor-pointer"
           />
 
           {/* Modal Container */}
@@ -62,22 +62,22 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 30 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-            className="relative w-full max-w-5xl bg-[#0a0a0c]/90 border border-white/[0.08] rounded-[2rem] shadow-2xl p-6 md:p-10 z-10 overflow-hidden max-h-[90vh] overflow-y-auto liquid-glass"
+            className="relative w-full max-w-5xl bg-[#0a0a0c]/90 border border-[var(--border-color)] rounded-[2rem] shadow-2xl p-6 md:p-10 z-10 overflow-hidden max-h-[90vh] overflow-y-auto liquid-glass"
           >
             {/* Ambient inner blob */}
             <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[100px] opacity-20 pointer-events-none bg-[var(--primary)]" />
 
             {/* Header toolbar */}
-            <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/[0.06]">
+            <div className="flex justify-between items-center mb-8 pb-4 border-b border-[var(--border-color)]">
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/[0.05] text-[var(--primary)]">
+                <div className="p-3 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--primary)]">
                   {getIcon(project.iconType, "w-6 h-6")}
                 </div>
                 <div>
                   <span className="text-xs font-semibold tracking-wider text-[var(--primary)] uppercase opacity-80 block">
                     {project.category?.[lang] || project.category?.en || ''}
                   </span>
-                  <h2 className="text-2xl md:text-3xl font-black tracking-tight text-white">
+                  <h2 className="text-2xl md:text-3xl font-black tracking-tight text-[var(--text-primary)]">
                     {project.title}
                   </h2>
                 </div>
@@ -85,7 +85,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
               <button 
                 onClick={onClose} 
-                className="p-3 rounded-xl border border-white/[0.08] hover:bg-white/10 text-white transition-all cursor-pointer"
+                className="p-3 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] transition-all cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -109,7 +109,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                 </div>
 
                 {/* 2. Solution Section */}
-                <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                <div className="pt-6 border-t border-[var(--border-color)] space-y-3">
                   <div className="flex items-center gap-2 text-green-400">
                     <Lightbulb className="w-5 h-5 shrink-0" />
                     <h4 className="text-xs uppercase tracking-widest font-black">{t.solutionLabel || 'Proposed Solution'}</h4>
@@ -121,12 +121,12 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
                 {/* 3. Architecture Section */}
                 {architectureContent && (
-                  <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                  <div className="pt-6 border-t border-[var(--border-color)] space-y-3">
                     <div className="flex items-center gap-2 text-[var(--primary)]">
                       <Cpu className="w-5 h-5 shrink-0" />
                       <h4 className="text-xs uppercase tracking-widest font-black">{t.architecture || 'System Architecture'}</h4>
                     </div>
-                    <p className="text-sm md:text-base opacity-85 leading-relaxed font-light bg-white/[0.01] border border-white/[0.04] p-5 rounded-2xl">
+                    <p className="text-sm md:text-base opacity-85 leading-relaxed font-light bg-[var(--surface-hover)] border border-[var(--border-color)] p-5 rounded-2xl">
                       {architectureContent}
                     </p>
                   </div>
@@ -134,7 +134,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
                 {/* 4. Features Section */}
                 {project.features && project.features.length > 0 && (
-                  <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                  <div className="pt-6 border-t border-[var(--border-color)] space-y-3">
                     <h4 className="text-xs uppercase tracking-widest font-bold opacity-45">{t.keyFeatures || 'Key Features'}</h4>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {project.features.map((feature, idx) => (
@@ -151,7 +151,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
                 {/* 5. Challenges Section */}
                 {challengesContent && (
-                  <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                  <div className="pt-6 border-t border-[var(--border-color)] space-y-3">
                     <div className="flex items-center gap-2 text-orange-400">
                       <Wrench className="w-5 h-5 shrink-0" />
                       <h4 className="text-xs uppercase tracking-widest font-black">{t.techChallenges || 'Engineering Challenges'}</h4>
@@ -164,7 +164,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
                 {/* 6. Business Impact Section */}
                 {businessImpactContent && (
-                  <div className="pt-6 border-t border-white/[0.04] space-y-3">
+                  <div className="pt-6 border-t border-[var(--border-color)] space-y-3">
                     <div className="flex items-center gap-2 text-yellow-400">
                       <TrendingUp className="w-5 h-5 shrink-0" />
                       <h4 className="text-xs uppercase tracking-widest font-black">{t.businessImpactLabel || 'Business Impact & Value'}</h4>
@@ -177,7 +177,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
               </div>
 
               {/* Right Column: Sidebar / Tech Stack & Links (1/3 width) */}
-              <div className="space-y-6 lg:border-l lg:border-white/[0.05] lg:pl-8">
+              <div className="space-y-6 lg:border-l lg:border-[var(--border-color)] lg:pl-8">
                 
                 {/* 7. Tech Stack Section */}
                 <div>
@@ -186,7 +186,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                     {project.tech && project.tech.map((techItem, index) => (
                       <span 
                         key={index}
-                        className="px-3 py-1.5 text-xs rounded-xl bg-white/[0.02] border border-white/[0.05] font-medium opacity-90 flex items-center gap-1.5"
+                        className="px-3 py-1.5 text-xs rounded-xl bg-[var(--surface-hover)] border border-[var(--border-color)] font-medium opacity-90 flex items-center gap-1.5"
                       >
                         <Binary className="w-3.5 h-3.5 opacity-60 text-[var(--primary)]" />
                         {techItem[lang] || techItem.en || techItem}
@@ -196,7 +196,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                 </div>
 
                 {/* 8. Demo & 9. GitHub Links */}
-                <div className="pt-6 border-t border-white/[0.05] space-y-3">
+                <div className="pt-6 border-t border-[var(--border-color)] space-y-3">
                   {project.demoLink && (
                     <a
                       href={project.demoLink}
@@ -214,7 +214,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                       href={project.githubLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm border border-white/20 hover:bg-white/5 transition-all cursor-pointer hover:-translate-y-0.5"
+                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-bold text-sm border border-[var(--border-color)] hover:bg-[var(--surface-hover)] transition-all cursor-pointer hover:-translate-y-0.5"
                     >
                       <GithubIcon className="w-4.5 h-4.5" />
                       {t.sourceLink || 'Source Code'}

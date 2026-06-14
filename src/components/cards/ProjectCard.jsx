@@ -68,7 +68,7 @@ export const ProjectCard = ({ project, onClick }) => {
     >
       <SpotlightCard 
         onClick={onClick}
-        className="flex flex-col h-full bg-[#0d0d11]/85 border-white/[0.08] hover:border-[var(--primary)]/40 transition-all duration-300 shadow-2xl backdrop-blur-xl relative overflow-hidden group rounded-3xl"
+        className="flex flex-col h-full bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/40 transition-all duration-300 shadow-2xl backdrop-blur-xl relative overflow-hidden group rounded-3xl"
       >
         <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--primary)] rounded-full blur-[60px] opacity-10 pointer-events-none group-hover:opacity-25 transition-opacity" />
 
@@ -121,20 +121,20 @@ export const ProjectCard = ({ project, onClick }) => {
             {project.tech.slice(0, 4).map((techItem, index) => (
               <span 
                 key={index}
-                className="px-2.5 py-1 text-[10px] md:text-xs rounded-xl bg-white/[0.03] border border-white/[0.06] opacity-90 font-medium"
+                className="px-2.5 py-1 text-[10px] md:text-xs rounded-xl bg-[var(--surface-hover)] border border-[var(--border-color)] opacity-90 font-medium"
               >
                 {techItem[lang] || techItem.en || techItem}
               </span>
             ))}
             {project.tech.length > 4 && (
-              <span className="px-2.5 py-1 text-[10px] md:text-xs rounded-xl bg-white/[0.01] border border-white/[0.02] opacity-50 font-medium">
+              <span className="px-2.5 py-1 text-[10px] md:text-xs rounded-xl bg-[var(--surface-hover)] border border-[var(--border-color)] opacity-50 font-medium">
                 +{project.tech.length - 4}
               </span>
             )}
           </div>
 
           {/* Footer controls */}
-          <div className="flex justify-between items-center pt-4 border-t border-white/[0.06]">
+          <div className="flex justify-between items-center pt-4 border-t border-[var(--border-color)]">
             <span className="text-xs font-bold text-[var(--primary)] flex items-center gap-1 group-hover:underline">
               {lang === 'ar' ? 'استكشف المنتج' : lang === 'ur' ? 'تفصیلات دیکھیں' : 'Explore Product'}
               <ArrowUpRight className="w-3.5 h-3.5" />

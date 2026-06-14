@@ -34,7 +34,7 @@ export const Preloader = ({ finishLoading, preloaderText }) => {
         filter: 'blur(10px)',
         transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
       }}
-      className="fixed inset-0 bg-[#050505] z-[9999] flex flex-col items-center justify-center select-none"
+      className="fixed inset-0 bg-[var(--bg-primary)] z-[9999] flex flex-col items-center justify-center select-none"
     >
       <div className="relative flex flex-col items-center justify-center">
         {/* Glow behind monogram */}
@@ -42,39 +42,39 @@ export const Preloader = ({ finishLoading, preloaderText }) => {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1.1, opacity: 0.15 }}
           transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
-          className="absolute w-40 h-40 rounded-full bg-white blur-[40px] pointer-events-none"
+            className="absolute w-40 h-40 rounded-full bg-[var(--accent-color)] blur-[40px] pointer-events-none"
         />
 
         {/* Monogram MO container */}
-        <div className="relative w-28 h-28 mb-6 flex items-center justify-center border border-white/10 rounded-2xl bg-white/[0.02] backdrop-blur-md overflow-hidden p-2">
+        <div className="relative w-28 h-28 mb-6 flex items-center justify-center border border-[var(--border-color)] rounded-2xl bg-[var(--surface-hover)] backdrop-blur-md overflow-hidden p-2">
           {/* Glass light sweep animation */}
           <motion.div 
             initial={{ x: '-100%', y: '-100%' }}
             animate={{ x: '100%', y: '100%' }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent"
+            className="absolute inset-0 bg-gradient-to-br from-transparent via-[var(--text-primary)]/10 to-transparent"
           />
 
           <motion.span 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="text-white text-xl font-extrabold tracking-widest font-sans text-center truncate w-full"
+            className="text-[var(--text-primary)] text-xl font-extrabold tracking-widest font-sans text-center truncate w-full"
           >
             {preloaderText || 'MO'}
           </motion.span>
         </div>
 
         {/* Loading Progress */}
-        <div className="w-48 h-[1px] bg-white/10 rounded-full overflow-hidden mb-3">
+        <div className="w-48 h-[1px] bg-[var(--border-color)] rounded-full overflow-hidden mb-3">
           <motion.div 
-            className="h-full bg-white"
+            className="h-full bg-[var(--accent-color)]"
             style={{ width: `${progress}%` }}
           />
         </div>
 
         <motion.span 
-          className="text-[10px] tracking-[0.3em] font-medium text-white/50 uppercase"
+          className="text-[10px] tracking-[0.3em] font-medium text-[var(--text-primary)]/50 uppercase"
         >
           {Math.round(progress)}%
         </motion.span>

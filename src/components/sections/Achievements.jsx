@@ -37,7 +37,7 @@ const StatCounter = ({ value, label, suffix = "" }) => {
   }, [isInView, value]);
 
   return (
-    <div ref={ref} className="text-center p-8 md:p-10 rounded-[2rem] border border-[var(--border)] bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-300 relative group flex flex-col items-center justify-center">
+    <div ref={ref} className="text-center p-8 md:p-10 rounded-[2rem] border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] transition-all duration-300 relative group flex flex-col items-center justify-center">
       <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-b from-[var(--primary)]/5 to-[var(--accent)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       <span className="text-5xl sm:text-7xl font-extrabold tracking-tight text-gradient block mb-3 font-mono">
         {current}{suffix}
@@ -79,7 +79,7 @@ export const Achievements = () => {
   ];
 
   return (
-    <section className="py-16 max-w-7xl mx-auto px-6 relative z-10 border-t border-white/[0.04]">
+    <section className="py-16 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]">
       {/* Title */}
       <div className="mb-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-4">
         <div>

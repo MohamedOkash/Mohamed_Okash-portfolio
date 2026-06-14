@@ -107,9 +107,9 @@ export default function Home() {
                   {getIcon(sect.icon, "w-8 h-8")}
                 </div>
               )}
-              <h3 className="text-3xl sm:text-5xl font-black text-white leading-tight">{title}</h3>
+              <h3 className="text-3xl sm:text-5xl font-black text-[var(--text-primary)] leading-tight">{title}</h3>
               {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-extrabold">{subtitle}</p>}
-              <div className="text-zinc-300 leading-relaxed whitespace-pre-wrap font-light text-base md:text-lg max-w-3xl mx-auto">{content}</div>
+              <div className="text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap font-light text-base md:text-lg max-w-3xl mx-auto">{content}</div>
               <button 
                 onClick={() => {
                   const el = document.getElementById('contact');
@@ -130,7 +130,7 @@ export default function Home() {
         if (items.length <= 1) {
           return (
             <div className="max-w-4xl mx-auto">
-              <SpotlightCard className="p-8 md:p-12 hover:border-[var(--primary)]/20 transition-all duration-500 relative overflow-hidden bg-[#0d0d11]/85 border-white/[0.08] rounded-3xl backdrop-blur-xl">
+              <SpotlightCard className="p-8 md:p-12 hover:border-[var(--primary)]/20 transition-all duration-500 relative overflow-hidden bg-[var(--card-bg)] border-[var(--border-color)] rounded-3xl backdrop-blur-xl">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--primary)] rounded-full blur-[100px] opacity-10 pointer-events-none" />
                 <div className="flex flex-col md:flex-row gap-8 items-start relative z-10">
                   {sect.icon && (
@@ -139,9 +139,9 @@ export default function Home() {
                     </div>
                   )}
                   <div className="space-y-4 flex-1">
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white">{title}</h3>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)]">{title}</h3>
                     {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
-                    <div className="text-zinc-300 leading-relaxed whitespace-pre-wrap font-light text-base">{content}</div>
+                    <div className="text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap font-light text-base">{content}</div>
                   </div>
                 </div>
               </SpotlightCard>
@@ -151,15 +151,15 @@ export default function Home() {
           return (
             <div className="max-w-6xl mx-auto">
               <div className="mb-12 text-center">
-                <h3 className="text-2xl sm:text-4xl font-extrabold text-white mb-2">{title}</h3>
+                <h3 className="text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] mb-2">{title}</h3>
                 {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {items.map((item, idx) => (
-                  <SpotlightCard key={idx} className="p-6 md:p-8 bg-[#0d0d11]/85 border-white/[0.08] hover:border-[var(--primary)]/20 transition-all duration-300 rounded-2xl backdrop-blur-xl flex gap-4">
+                  <SpotlightCard key={idx} className="p-6 md:p-8 bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/20 transition-all duration-300 rounded-2xl backdrop-blur-xl flex gap-4">
                     {sect.icon && <div className="text-[var(--primary)] shrink-0 mt-1">{getIcon(sect.icon, "w-5 h-5")}</div>}
                     <div className="space-y-2">
-                      <div className="text-zinc-300 leading-relaxed font-light text-sm whitespace-pre-wrap">{item}</div>
+                      <div className="text-[var(--text-secondary)] leading-relaxed font-light text-sm whitespace-pre-wrap">{item}</div>
                     </div>
                   </SpotlightCard>
                 ))}
@@ -174,17 +174,17 @@ export default function Home() {
         return (
           <div className="max-w-4xl mx-auto">
             <div className="mb-10 text-center md:text-start">
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">{title}</h3>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] mb-2">{title}</h3>
               {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
             </div>
-            <div className="relative border-s border-white/[0.06] ms-4 md:ms-8 space-y-8 py-2">
+            <div className="relative border-s border-[var(--border-color)] ms-4 md:ms-8 space-y-8 py-2">
               {items.map((item, idx) => (
                 <div key={idx} className="relative ps-8 group">
-                  <div className="absolute top-1.5 -start-[6px] w-3 h-3 rounded-full bg-[#050505] border border-white/20 group-hover:border-[var(--primary)] transition-colors duration-300 flex items-center justify-center z-10">
-                    <div className="w-1 h-1 rounded-full bg-white/40 group-hover:bg-[var(--primary)] transition-all duration-300" />
+                  <div className="absolute top-1.5 -start-[6px] w-3 h-3 rounded-full bg-[var(--bg-primary)] border border-[var(--border-color)] group-hover:border-[var(--primary)] transition-colors duration-300 flex items-center justify-center z-10">
+                    <div className="w-1 h-1 rounded-full bg-[var(--text-primary)]/40 group-hover:bg-[var(--primary)] transition-all duration-300" />
                   </div>
-                  <SpotlightCard className="p-5 hover:border-[var(--primary)]/20 transition-all duration-300 bg-[#0d0d11]/85 border-white/[0.08] rounded-xl backdrop-blur-xl">
-                    <div className="text-zinc-300 leading-relaxed font-light text-sm">{item}</div>
+                  <SpotlightCard className="p-5 hover:border-[var(--primary)]/20 transition-all duration-300 bg-[var(--card-bg)] border-[var(--border-color)] rounded-xl backdrop-blur-xl">
+                    <div className="text-[var(--text-secondary)] leading-relaxed font-light text-sm">{item}</div>
                   </SpotlightCard>
                 </div>
               ))}
@@ -199,15 +199,15 @@ export default function Home() {
         return (
           <div className="max-w-6xl mx-auto">
             <div className="mb-12 text-center">
-              <h3 className="text-2xl sm:text-4xl font-extrabold text-white mb-2">{title}</h3>
+              <h3 className="text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] mb-2">{title}</h3>
               {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {items.map((item, idx) => (
-                <SpotlightCard key={idx} className="p-6 bg-[#0d0d11]/85 border-white/[0.08] hover:border-[var(--primary)]/20 transition-all duration-300 flex flex-col justify-between h-full rounded-2xl backdrop-blur-xl">
+                <SpotlightCard key={idx} className="p-6 bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/20 transition-all duration-300 flex flex-col justify-between h-full rounded-2xl backdrop-blur-xl">
                   <div className="space-y-3">
                     {sect.icon && <div className="text-[var(--primary)]">{getIcon(sect.icon, "w-5 h-5")}</div>}
-                    <div className="text-zinc-300 leading-relaxed font-light text-sm">{item}</div>
+                    <div className="text-[var(--text-secondary)] leading-relaxed font-light text-sm">{item}</div>
                   </div>
                 </SpotlightCard>
               ))}
@@ -219,15 +219,15 @@ export default function Home() {
       case 'ctaBlock':
       case 'contactBlock':
         return (
-          <div className="max-w-3xl mx-auto text-center p-8 md:p-12 rounded-3xl border border-white/[0.08] bg-[#0d0d11]/80 backdrop-blur-xl shadow-2xl">
+          <div className="max-w-3xl mx-auto text-center p-8 md:p-12 rounded-3xl border border-[var(--border-color)] bg-[var(--card-bg)] backdrop-blur-xl shadow-2xl">
             {sect.icon && (
               <div className="inline-flex p-3.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] mb-4 animate-bounce">
                 {getIcon(sect.icon, "w-6 h-6")}
               </div>
             )}
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">{title}</h3>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] mb-2">{title}</h3>
             {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold mb-4">{subtitle}</p>}
-            <div className="text-zinc-300 leading-relaxed font-light text-sm mb-6 max-w-xl mx-auto whitespace-pre-wrap">{content}</div>
+            <div className="text-[var(--text-secondary)] leading-relaxed font-light text-sm mb-6 max-w-xl mx-auto whitespace-pre-wrap">{content}</div>
             <button 
               onClick={() => {
                 const el = document.getElementById('contact');
@@ -248,9 +248,9 @@ export default function Home() {
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-[var(--accent)] rounded-full blur-[100px] opacity-10 pointer-events-none" />
               <div className="flex flex-col md:flex-row items-center gap-6 justify-between relative z-10">
                 <div className="space-y-3 text-center md:text-start">
-                  <h3 className="text-2xl sm:text-3xl font-black text-white">{title}</h3>
+                  <h3 className="text-2xl sm:text-3xl font-black text-[var(--text-primary)]">{title}</h3>
                   {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
-                  <div className="text-zinc-300 leading-relaxed font-light text-sm max-w-2xl">{content}</div>
+                  <div className="text-[var(--text-secondary)] leading-relaxed font-light text-sm max-w-2xl">{content}</div>
                 </div>
                 {sect.icon && (
                   <div className="p-4 rounded-xl bg-[var(--primary)]/10 text-[var(--primary)] shrink-0 animate-pulse">
@@ -267,7 +267,7 @@ export default function Home() {
         return (
           <div className="max-w-5xl mx-auto">
             <div className="mb-12 text-center">
-              <h3 className="text-2xl sm:text-4xl font-extrabold text-white mb-2">{title}</h3>
+              <h3 className="text-2xl sm:text-4xl font-extrabold text-[var(--text-primary)] mb-2">{title}</h3>
               {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
@@ -276,11 +276,11 @@ export default function Home() {
                 const val = (parts[0] || '').trim();
                 const label = (parts[1] || '').trim();
                 return (
-                  <SpotlightCard key={idx} className="p-8 text-center bg-[#0d0d11]/85 border-white/[0.08] hover:border-[var(--primary)]/20 transition-all rounded-3xl backdrop-blur-xl">
+                  <SpotlightCard key={idx} className="p-8 text-center bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/20 transition-all rounded-3xl backdrop-blur-xl">
                     <span className="text-4xl sm:text-5xl font-mono font-black text-[var(--primary)] block mb-2">
                       <StatCounterLocal target={val} />
                     </span>
-                    <span className="text-[10px] sm:text-xs text-zinc-500 font-bold uppercase tracking-widest mt-1 block">
+                    <span className="text-[10px] sm:text-xs text-[var(--text-secondary)] font-bold uppercase tracking-widest mt-1 block">
                       {label}
                     </span>
                   </SpotlightCard>
@@ -303,21 +303,21 @@ export default function Home() {
         const bodyContent = isUrl ? textLines : content;
 
         return (
-          <div className={`max-w-5xl mx-auto grid grid-cols-1 ${allowImage ? 'md:grid-cols-2' : ''} gap-8 items-center bg-[#0d0d11]/40 border border-white/[0.05] p-6 md:p-10 rounded-[2rem] backdrop-blur-md`}>
+          <div className={`max-w-5xl mx-auto grid grid-cols-1 ${allowImage ? 'md:grid-cols-2' : ''} gap-8 items-center bg-[var(--card-bg)]/40 border border-[var(--border-color)] p-6 md:p-10 rounded-[2rem] backdrop-blur-md`}>
             {allowImage && (imageUrl ? (
-              <div className="rounded-2xl overflow-hidden border border-white/10 shadow-lg relative aspect-video">
+              <div className="rounded-2xl overflow-hidden border border-[var(--border-color)] shadow-lg relative aspect-video">
                 <img src={imageUrl} alt={title} className="object-cover w-full h-full" />
               </div>
             ) : (
-              <div className="rounded-2xl aspect-video bg-gradient-to-br from-white/[0.02] to-white/[0.08] border border-white/10 flex items-center justify-center text-[var(--primary)] p-8">
+              <div className="rounded-2xl aspect-video bg-gradient-to-br from-white/[0.02] to-white/[0.08] border border-[var(--border-color)] flex items-center justify-center text-[var(--primary)] p-8">
                 {sect.icon ? getIcon(sect.icon, "w-16 h-16 opacity-30 animate-pulse") : <Sparkles className="w-16 h-16 opacity-30" />}
               </div>
             ))}
             <div className="space-y-4">
               {sect.icon && imageUrl && <div className="text-[var(--primary)]">{getIcon(sect.icon, "w-6 h-6")}</div>}
-              <h3 className="text-2xl sm:text-3xl font-extrabold text-white">{title}</h3>
+              <h3 className="text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)]">{title}</h3>
               {subtitle && <p className="text-xs uppercase tracking-widest text-[var(--primary)] font-bold">{subtitle}</p>}
-              <div className="text-zinc-300 leading-relaxed whitespace-pre-wrap font-light text-sm">{bodyContent}</div>
+              <div className="text-[var(--text-secondary)] leading-relaxed whitespace-pre-wrap font-light text-sm">{bodyContent}</div>
             </div>
           </div>
         );
@@ -328,12 +328,12 @@ export default function Home() {
           <div className="max-w-4xl mx-auto relative px-6 text-center">
             <Quote className="w-16 h-16 mx-auto text-[var(--primary)] opacity-10 mb-6" />
             <div className="relative z-10 space-y-4">
-              <blockquote className="text-xl sm:text-2xl md:text-3xl font-light italic text-zinc-100 leading-relaxed">
+              <blockquote className="text-xl sm:text-2xl md:text-3xl font-light italic text-[var(--text-secondary)] leading-relaxed">
                 "{content}"
               </blockquote>
               <div className="pt-4">
                 <cite className="not-italic text-sm font-bold text-[var(--primary)] uppercase tracking-widest">— {title}</cite>
-                {subtitle && <span className="block text-[10px] text-zinc-500 uppercase mt-1">{subtitle}</span>}
+                {subtitle && <span className="block text-[10px] text-[var(--text-secondary)] uppercase mt-1">{subtitle}</span>}
               </div>
             </div>
           </div>
@@ -428,7 +428,7 @@ export default function Home() {
                 return wrapSection(<WhyOkash />);
               case 'projects':
                 return wrapSection(
-                  <section id="projects" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-white/[0.04]">
+                  <section id="projects" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]">
                     <div className="mb-16">
                       <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 flex items-center gap-1.5 animate-pulse">
                         <Sparkles className="w-4 h-4 text-[var(--primary)]" />
@@ -520,7 +520,7 @@ export default function Home() {
                     return wrapSection(
                       <section 
                         id={sect.id} 
-                        className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-white/[0.04]"
+                        className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]"
                       >
                         {renderCustomSection(customSect)}
                       </section>

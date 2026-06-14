@@ -54,14 +54,14 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white flex items-center justify-center p-6 relative overflow-hidden transition-theme">
+    <div className="min-h-screen bg-[#050505] text-[var(--text-primary)] flex items-center justify-center p-6 relative overflow-hidden transition-theme">
       {/* Ambient background blobs */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] rounded-full blur-[140px] opacity-15 mix-blend-screen bg-[var(--primary)] pointer-events-none" />
 
       {/* Back to Home button */}
       <button
         onClick={() => navigate('/')}
-        className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.08] text-xs font-bold transition-all cursor-pointer"
+        className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] text-xs font-bold transition-all cursor-pointer"
       >
         <ArrowLeft className="w-4 h-4" />
         {t.backToHome}
@@ -69,10 +69,10 @@ export default function AdminLogin() {
 
       {/* Login Card */}
       <div className="w-full max-w-md">
-        <SpotlightCard className="shadow-2xl border-white/10 p-8 md:p-10 relative">
+        <SpotlightCard className="shadow-2xl border-[var(--border-color)] p-8 md:p-10 relative">
           {/* Lock Icon Header */}
           <div className="flex flex-col items-center mb-8">
-            <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-[var(--primary)] mb-4">
+            <div className="p-4 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--primary)] mb-4">
               <Lock className="w-8 h-8" />
             </div>
             <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-center">
@@ -102,7 +102,7 @@ export default function AdminLogin() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-black/40 border border-white/10 text-sm text-white outline-none focus:border-[var(--primary)]/50 transition-colors"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] outline-none focus:border-[var(--primary)]/50 transition-colors"
                   placeholder="admin@example.com"
                   required
                 />
@@ -120,7 +120,7 @@ export default function AdminLogin() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-black/40 border border-white/10 text-sm text-white outline-none focus:border-[var(--primary)]/50 transition-colors"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] outline-none focus:border-[var(--primary)]/50 transition-colors"
                   placeholder="••••••••"
                   required
                 />

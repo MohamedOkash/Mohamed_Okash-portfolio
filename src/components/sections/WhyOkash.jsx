@@ -34,7 +34,7 @@ export const WhyOkash = () => {
   ];
 
   return (
-    <section id="why-me" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-white/[0.04]">
+    <section id="why-me" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]">
       {/* Header */}
       <div className="mb-16">
         <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 flex items-center gap-1.5 animate-pulse">
@@ -77,10 +77,10 @@ export const WhyOkash = () => {
             }}
             className="h-full"
           >
-            <SpotlightCard className="flex flex-col justify-between h-full bg-white/[0.01] hover:bg-white/[0.03] transition-colors border border-[var(--border)] rounded-[2rem] p-8">
+            <SpotlightCard className="flex flex-col justify-between h-full bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] transition-colors border border-[var(--border)] rounded-[2rem] p-8">
               <div className="space-y-6">
                 {/* Icon */}
-                <div className="p-4 w-fit rounded-2xl bg-white/[0.02] border border-white/[0.05] shadow-inner">
+                <div className="p-4 w-fit rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] shadow-inner">
                   {item.icon}
                 </div>
 
@@ -130,7 +130,7 @@ export const WhyOkash = () => {
         </div>
 
         <div className="shrink-0 relative z-10">
-          <div className="px-5 py-2.5 rounded-full border border-white/10 bg-white/5 font-semibold text-xs tracking-wider uppercase">
+          <div className="px-5 py-2.5 rounded-full border border-[var(--border-color)] bg-[var(--surface-hover)] font-semibold text-xs tracking-wider uppercase">
             {data?.translations?.[lang]?.whyMeBannerBadge || t.whyMeBannerBadge || (
               lang === 'ar' ? 'اندماج الكفاءات' : lang === 'ur' ? 'مہارتوں کا ملاپ' : 'Convergence of Skills'
             )}

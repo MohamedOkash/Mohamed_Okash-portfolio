@@ -209,10 +209,10 @@ export const Navbar = () => {
               onClick={toggleLang}
               aria-haspopup="true"
               aria-expanded={isLangOpen}
-              className="p-3 rounded-xl border border-[var(--border)] bg-white/[0.02] hover:bg-white/[0.08] active:scale-95 transition-all cursor-pointer flex items-center justify-center min-w-[44px] min-h-[44px]"
+              className="p-3 rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] active:scale-95 transition-all cursor-pointer flex items-center justify-center min-w-[44px] min-h-[44px]"
               title="Change Language"
             >
-              <Languages className="w-5 h-5 text-white/80" />
+              <Languages className="w-5 h-5 text-[var(--text-primary)]/80" />
             </button>
             <AnimatePresence>
               {isLangOpen && (
@@ -226,21 +226,21 @@ export const Navbar = () => {
                   >
                     <button 
                       onClick={() => { setLanguage('ar'); setIsLangOpen(false); }} 
-                      className={`w-full text-right px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${lang === 'ar' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                      className={`w-full text-right px-4 py-3 text-sm rounded-lg hover:bg-[var(--surface-hover)] transition-colors cursor-pointer flex items-center justify-between ${lang === 'ar' ? 'text-[var(--primary)] font-bold bg-[var(--surface-hover)]' : 'text-[var(--text-primary)]/70'}`}
                     >
                       <span>العربية</span>
                       {lang === 'ar' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
                     </button>
                     <button 
                       onClick={() => { setLanguage('en'); setIsLangOpen(false); }} 
-                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${lang === 'en' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-[var(--surface-hover)] transition-colors cursor-pointer flex items-center justify-between ${lang === 'en' ? 'text-[var(--primary)] font-bold bg-[var(--surface-hover)]' : 'text-[var(--text-primary)]/70'}`}
                     >
                       <span>English</span>
                       {lang === 'en' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
                     </button>
                     <button 
                       onClick={() => { setLanguage('ur'); setIsLangOpen(false); }} 
-                      className={`w-full text-right px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${lang === 'ur' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                      className={`w-full text-right px-4 py-3 text-sm rounded-lg hover:bg-[var(--surface-hover)] transition-colors cursor-pointer flex items-center justify-between ${lang === 'ur' ? 'text-[var(--primary)] font-bold bg-[var(--surface-hover)]' : 'text-[var(--text-primary)]/70'}`}
                     >
                       <span>اردو</span>
                       {lang === 'ur' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
@@ -262,10 +262,10 @@ export const Navbar = () => {
               onClick={toggleTheme}
               aria-haspopup="true"
               aria-expanded={isThemeOpen}
-              className="p-3 rounded-xl border border-[var(--border)] bg-white/[0.02] hover:bg-white/[0.08] active:scale-95 transition-all cursor-pointer flex items-center justify-center min-w-[44px] min-h-[44px]"
+              className="p-3 rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] active:scale-95 transition-all cursor-pointer flex items-center justify-center min-w-[44px] min-h-[44px]"
               title="Change Theme"
             >
-              <SunMoon className="w-5 h-5 text-white/80" />
+              <SunMoon className="w-5 h-5 text-[var(--text-primary)]/80" />
             </button>
             <AnimatePresence>
               {isThemeOpen && (
@@ -279,35 +279,35 @@ export const Navbar = () => {
                   >
                     <button 
                       onClick={() => { setTheme('dark'); setIsThemeOpen(false); }} 
-                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'dark' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-[var(--surface-hover)] transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'dark' ? 'text-[var(--primary)] font-bold bg-[var(--surface-hover)]' : 'text-[var(--text-primary)]/70'}`}
                     >
                       <span>Obsidian Liquid</span>
                       {activeTheme === 'dark' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
                     </button>
                     <button 
                       onClick={() => { setTheme('ocean'); setIsThemeOpen(false); }} 
-                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'ocean' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-[var(--surface-hover)] transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'ocean' ? 'text-[var(--primary)] font-bold bg-[var(--surface-hover)]' : 'text-[var(--text-primary)]/70'}`}
                     >
                       <span>Deep Ocean</span>
                       {activeTheme === 'ocean' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
                     </button>
                     <button 
                       onClick={() => { setTheme('aurora'); setIsThemeOpen(false); }} 
-                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'aurora' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-[var(--surface-hover)] transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'aurora' ? 'text-[var(--primary)] font-bold bg-[var(--surface-hover)]' : 'text-[var(--text-primary)]/70'}`}
                     >
                       <span>Aurora Green</span>
                       {activeTheme === 'aurora' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
                     </button>
                     <button
                       onClick={() => { setTheme('platinum'); setIsThemeOpen(false); }}
-                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'platinum' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-[var(--surface-hover)] transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'platinum' ? 'text-[var(--primary)] font-bold bg-[var(--surface-hover)]' : 'text-[var(--text-primary)]/70'}`}
                     >
                       <span>Platinum White</span>
                       {activeTheme === 'platinum' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
                     </button>
                     <button
                       onClick={() => { setTheme('midnight'); setIsThemeOpen(false); }}
-                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'midnight' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-[var(--surface-hover)] transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'midnight' ? 'text-[var(--primary)] font-bold bg-[var(--surface-hover)]' : 'text-[var(--text-primary)]/70'}`}
                     >
                       <span>Midnight Purple</span>
                       {activeTheme === 'midnight' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
@@ -323,7 +323,7 @@ export const Navbar = () => {
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => navigate('/admin/dashboard')} 
-                className="p-2.5 rounded-xl border border-[var(--border)] bg-white/[0.02] hover:bg-white/[0.08] text-[var(--primary)] cursor-pointer flex items-center justify-center"
+                className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] text-[var(--primary)] cursor-pointer flex items-center justify-center"
                 title="CMS Dashboard"
               >
                 <LayoutDashboard className="w-4.5 h-4.5" />

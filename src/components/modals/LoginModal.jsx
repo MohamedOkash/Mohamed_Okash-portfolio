@@ -60,7 +60,7 @@ export const LoginModal = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setLoginModalOpen(false)}
-            className="fixed inset-0 bg-black/85 backdrop-blur-md cursor-pointer"
+            className="fixed inset-0 bg-[var(--card-bg)] backdrop-blur-md cursor-pointer"
           />
 
           {/* Modal Container */}
@@ -75,14 +75,14 @@ export const LoginModal = () => {
               {/* Close Button */}
               <button
                 onClick={() => setLoginModalOpen(false)}
-                className="absolute top-4 right-4 p-2 rounded-xl border border-white/[0.08] hover:bg-white/10 text-white transition-all cursor-pointer"
+                className="absolute top-4 right-4 p-2 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] transition-all cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
 
               {/* Lock Icon Header */}
               <div className="flex flex-col items-center mb-8">
-                <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.08] text-[var(--primary)] mb-4">
+                <div className="p-4 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--primary)] mb-4">
                   <Lock className="w-8 h-8" />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-center">
@@ -112,7 +112,7 @@ export const LoginModal = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-12 pr-4 py-4 rounded-xl bg-black/40 border border-white/10 text-sm text-white outline-none focus:border-[var(--primary)]/50 transition-colors"
+                      className="w-full pl-12 pr-4 py-4 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] outline-none focus:border-[var(--primary)]/50 transition-colors"
                       placeholder="admin@example.com"
                       required
                     />
@@ -130,7 +130,7 @@ export const LoginModal = () => {
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-12 pr-4 py-4 rounded-xl bg-black/40 border border-white/10 text-sm text-white outline-none focus:border-[var(--primary)]/50 transition-colors"
+                      className="w-full pl-12 pr-4 py-4 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] outline-none focus:border-[var(--primary)]/50 transition-colors"
                       placeholder="••••••••"
                       required
                     />

@@ -71,10 +71,10 @@ export const Skills = () => {
             >
               {/* Header Icon + Category Title */}
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-[var(--primary)]">
+                <div className="p-3 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--primary)]">
                   {getIcon(group.iconType, "w-6 h-6")}
                 </div>
-                <h3 className="text-lg md:text-xl font-bold tracking-tight text-white">
+                <h3 className="text-lg md:text-xl font-bold tracking-tight text-[var(--text-primary)]">
                   {group.category[lang] || group.category.en}
                 </h3>
               </div>
@@ -84,7 +84,7 @@ export const Skills = () => {
                 {group.items.map((item, index) => (
                   <span 
                     key={index}
-                    className="px-3.5 py-1.5 text-xs rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.08] hover:border-[var(--primary)]/30 hover:text-[var(--primary)] transition-all duration-300 font-medium"
+                    className="px-3.5 py-1.5 text-xs rounded-xl bg-[var(--surface-hover)] border border-[var(--border-color)] hover:bg-[var(--surface-hover)] hover:border-[var(--primary)]/30 hover:text-[var(--primary)] transition-all duration-300 font-medium"
                   >
                     {item[lang] || item.en}
                   </span>

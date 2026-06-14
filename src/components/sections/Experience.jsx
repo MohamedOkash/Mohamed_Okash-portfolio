@@ -29,7 +29,7 @@ export const Experience = () => {
       </div>
 
       {/* Timeline Container - Logical start border (border-s-2) */}
-      <div className="relative border-s-2 border-white/[0.06] ms-4 md:ms-8 space-y-12">
+      <div className="relative border-s-2 border-[var(--border-color)] ms-4 md:ms-8 space-y-12">
         {experienceList.map((exp) => (
           <motion.div 
             key={exp.id} 
@@ -40,8 +40,8 @@ export const Experience = () => {
             className="relative ps-8 md:ps-10 group"
           >
             {/* Dot indicator aligned with logical start border */}
-            <div className="absolute top-1.5 -start-[11px] w-5 h-5 rounded-full bg-[#050505] border-2 border-white/20 group-hover:border-[var(--primary)] transition-colors duration-300 flex items-center justify-center z-10">
-              <div className="w-1.5 h-1.5 rounded-full bg-white/40 group-hover:bg-[var(--primary)] transition-all duration-300" />
+            <div className="absolute top-1.5 -start-[11px] w-5 h-5 rounded-full bg-[var(--bg-primary)] border-2 border-[var(--border-color)] group-hover:border-[var(--primary)] transition-colors duration-300 flex items-center justify-center z-10">
+              <div className="w-1.5 h-1.5 rounded-full bg-[var(--text-primary)]/40 group-hover:bg-[var(--primary)] transition-all duration-300" />
             </div>
 
             {/* Experience Card */}
@@ -51,7 +51,7 @@ export const Experience = () => {
               <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
                 <div>
                   {/* Role title */}
-                  <h3 className="text-xl font-bold tracking-tight text-white mb-2 flex items-center gap-2">
+                  <h3 className="text-xl font-bold tracking-tight text-[var(--text-primary)] mb-2 flex items-center gap-2">
                     <Briefcase className="w-4.5 h-4.5 text-[var(--primary)] shrink-0" />
                     {exp.role[lang] || exp.role.en}
                   </h3>
@@ -64,7 +64,7 @@ export const Experience = () => {
                 </div>
 
                 {/* Period badge */}
-                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-[var(--border)] bg-white/[0.02] text-xs font-semibold text-[var(--primary)] shrink-0 h-fit self-start md:self-auto shadow-sm">
+                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] text-xs font-semibold text-[var(--primary)] shrink-0 h-fit self-start md:self-auto shadow-sm">
                   <Calendar className="w-3.5 h-3.5" />
                   {exp.period[lang] || exp.period.en}
                 </div>

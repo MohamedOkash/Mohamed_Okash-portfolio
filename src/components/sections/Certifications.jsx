@@ -74,22 +74,22 @@ export const Certifications = () => {
               isCertificate={true}
               className="flex flex-col justify-between h-full hover:border-[var(--primary)]/30 transition-all duration-300 min-h-[200px]"
             >
-              <div className="p-2 w-fit rounded-xl bg-white/[0.02] border border-white/[0.06] text-[var(--primary)] mb-6">
+              <div className="p-2 w-fit rounded-xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--primary)] mb-6">
                 {getCertIcon(cert.id, "w-6 h-6")}
               </div>
 
-              <h3 className="text-base md:text-lg font-bold leading-snug text-white tracking-tight">
+              <h3 className="text-base md:text-lg font-bold leading-snug text-[var(--text-primary)] tracking-tight">
                 {cert.name?.[lang] || cert[lang] || cert.en}
               </h3>
 
               {(cert.provider || cert.date) && (
-                <div className="text-xs text-zinc-400 mt-2 flex flex-col gap-0.5">
+                <div className="text-xs text-[var(--text-secondary)] mt-2 flex flex-col gap-0.5">
                   {cert.provider && <span>{cert.provider[lang] || cert.provider.en}</span>}
-                  {cert.date && <span className="text-[10px] text-zinc-500">{cert.date[lang] || cert.date.en}</span>}
+                  {cert.date && <span className="text-[10px] text-[var(--text-secondary)]">{cert.date[lang] || cert.date.en}</span>}
                 </div>
               )}
 
-              <div className="text-[10px] md:text-xs font-semibold uppercase tracking-widest opacity-40 mt-6 pt-4 border-t border-white/[0.04]">
+              <div className="text-[10px] md:text-xs font-semibold uppercase tracking-widest opacity-40 mt-6 pt-4 border-t border-[var(--border-color)]">
                 {data?.translations?.[lang]?.verifiedAccreditation || (lang === 'ar' ? 'اعتماد دولي معتمد' : lang === 'ur' ? 'تصدیق شدہ سند' : 'Verified Accreditation')}
               </div>
             </SpotlightCard>

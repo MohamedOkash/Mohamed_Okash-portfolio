@@ -46,10 +46,10 @@ export const About = () => {
 
         {/* Visual Comparative Bridge Card (2/5 width) */}
         <div className="lg:col-span-2 space-y-6">
-          <SpotlightCard className="border border-[var(--border)] bg-white/[0.03] backdrop-blur-2xl rounded-2xl relative overflow-hidden">
+          <SpotlightCard className="border border-[var(--border)] bg-[var(--surface-hover)] backdrop-blur-2xl rounded-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-40 h-40 bg-[var(--primary)] rounded-full blur-[80px] opacity-10 pointer-events-none" />
 
-            <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-white">
+            <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-[var(--text-primary)]">
               <TrendingUp className="w-5 h-5 text-[var(--primary)]" />
               {data?.translations?.[lang]?.aboutBridgeTitle || t.aboutBridgeTitle || (lang === 'ar' ? 'التحول والتكامل المهني' : lang === 'ur' ? 'پیشہ ورانہ انضمام' : 'The Structural Bridge')}
             </h3>
@@ -62,10 +62,10 @@ export const About = () => {
                   <Server className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm mb-1 text-white">
+                  <h4 className="font-bold text-sm mb-1 text-[var(--text-primary)]">
                     {data?.translations?.[lang]?.aboutITTitle || t.aboutITTitle || (lang === 'ar' ? 'البنية التحتية والشبكات (2016 - 2023)' : lang === 'ur' ? 'آئی ٹی انفراسٹرکچر' : 'IT Infrastructure Engineering (2016 - 2023)')}
                   </h4>
-                  <p className="text-xs opacity-60 leading-relaxed text-zinc-300">
+                  <p className="text-xs opacity-60 leading-relaxed text-[var(--text-secondary)]">
                     {data?.translations?.[lang]?.aboutITDesc || t.aboutITDesc || (lang === 'ar' ? 'تجهيز السيرفرات، الشبكات اللاسلكية المعقدة، الفايبر، وكاميرات المراقبة للشبكات الأمنية الضخمة.' : 'Servers, complex routing, fiber cabling, CCTV security nodes, access controls, and multi-endpoint software integration.')}
                   </p>
                 </div>
@@ -77,10 +77,10 @@ export const About = () => {
                   <HardHat className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-sm mb-1 text-white">
+                  <h4 className="font-bold text-sm mb-1 text-[var(--text-primary)]">
                     {data?.translations?.[lang]?.aboutHSETitle || t.aboutHSETitle || (lang === 'ar' ? 'إدارة السلامة وهندسة الأمن (2023 - الآن)' : lang === 'ur' ? 'کام کی جگہ کی حفاظت' : 'HSE Workplace safety (2023 - Present)')}
                   </h4>
-                  <p className="text-xs opacity-60 leading-relaxed text-zinc-300">
+                  <p className="text-xs opacity-60 leading-relaxed text-[var(--text-secondary)]">
                     {data?.translations?.[lang]?.aboutHSEDesc || t.aboutHSEDesc || (lang === 'ar' ? 'رقمنة عمليات السلامة بالكامل، تتبع الامتثال، القضاء على الورقيات، وتحليل المخاطر الميدانية.' : 'OSHA compliance audits, risk mitigation structures, site-level incident protocols, and digitizing paper processes using custom software.')}
                   </p>
                 </div>

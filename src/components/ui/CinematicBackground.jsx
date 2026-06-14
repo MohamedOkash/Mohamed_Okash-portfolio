@@ -33,11 +33,11 @@ export const CinematicBackground = () => {
 
       {/* Layer 1: Engineering Blueprint Grid */}
       <div 
-        className="absolute inset-0 opacity-[0.06] transition-all"
+        className="absolute inset-0 opacity-[0.08] transition-all"
         style={{
           backgroundImage: `
-            linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px)
+            linear-gradient(to right, rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(255, 255, 255, 0.18) 1px, transparent 1px)
           `,
           backgroundSize: '60px 60px',
           animation: 'gridScroll 180s linear infinite',
@@ -47,7 +47,7 @@ export const CinematicBackground = () => {
       />
 
       {/* Layer 5: Ambient Premium Light Rays & Glow Trails */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
+      <svg className="absolute inset-0 w-full h-full opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="lightRay1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.8" />
@@ -69,7 +69,7 @@ export const CinematicBackground = () => {
         
         {/* Layer 2: IT Infrastructure Topology */}
         {/* Router, Switches, Servers, Fiber Links & Connections */}
-        <g className="opacity-[0.075]" stroke="var(--primary)" strokeWidth="1" fill="none">
+        <g className="opacity-[0.12]" stroke="var(--primary)" strokeWidth="1" fill="none">
           {/* Fiber Links (Glowing/Dashed Paths) */}
           <path d="M 120 180 H 380 V 320 H 550" strokeDasharray="5 5" className="animate-dash" />
           <path d="M 850 120 H 1050 V 280 H 900 V 450" strokeDasharray="6 4" className="animate-dash" style={{ animationDirection: 'reverse' }} />
@@ -133,7 +133,7 @@ export const CinematicBackground = () => {
 
         {/* Layer 3: AI & Vibe Coding Layer */}
         {/* Neural Pathways, Flow Diagrams, Logic Nodes, Code Streams */}
-        <g className="opacity-[0.065]">
+        <g className="opacity-[0.1]">
           {/* Neural pathways & Flow diagrams */}
           <g stroke="rgba(255,255,255,0.2)" strokeWidth="0.75" fill="none">
             {/* Logic Node / Decision Diamond */}
@@ -182,7 +182,7 @@ export const CinematicBackground = () => {
 
         {/* Layer 4: HSE (Health, Safety & Environment) Layer */}
         {/* Safety Geometry, Hazard Triangles, Compliance Indicators, Inspection Markers */}
-        <g className="opacity-[0.07]" stroke="white" strokeWidth="0.8" fill="none">
+        <g className="opacity-[0.1]" stroke="white" strokeWidth="0.8" fill="none">
           {/* Construction planning / Grid guidelines */}
           <line x1="0" y1="8%" x2="100%" y2="8%" strokeDasharray="10 20" />
           <line x1="0" y1="92%" x2="100%" y2="92%" strokeDasharray="10 20" />
@@ -232,10 +232,10 @@ export const CinematicBackground = () => {
 
       {/* Layer 5: Ambient Floating Glass Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[20%] left-[15%] w-12 h-16 rounded-lg bg-white/[0.01] border border-white/[0.05] backdrop-blur-[2px] shadow-sm animate-drift-slow-1" />
-        <div className="absolute top-[65%] right-[12%] w-16 h-20 rounded-xl bg-white/[0.01] border border-white/[0.04] backdrop-blur-[3px] shadow-sm animate-drift-slow-2" />
-        <div className="absolute bottom-[20%] left-[25%] w-10 h-10 rounded bg-white/[0.01] border border-white/[0.06] backdrop-blur-[1px] shadow-sm animate-drift-slow-3" />
-        <div className="absolute top-[10%] right-[30%] w-8 h-12 rounded-lg bg-white/[0.01] border border-white/[0.05] backdrop-blur-[2px] shadow-sm animate-drift-slow-4" />
+        <div className="absolute top-[20%] left-[15%] w-12 h-16 rounded-lg bg-[var(--surface-hover)] border border-[var(--border-color)] backdrop-blur-[2px] shadow-sm animate-drift-slow-1" />
+        <div className="absolute top-[65%] right-[12%] w-16 h-20 rounded-xl bg-[var(--surface-hover)] border border-[var(--border-color)] backdrop-blur-[3px] shadow-sm animate-drift-slow-2" />
+        <div className="absolute bottom-[20%] left-[25%] w-10 h-10 rounded bg-[var(--surface-hover)] border border-[var(--border-color)] backdrop-blur-[1px] shadow-sm animate-drift-slow-3" />
+        <div className="absolute top-[10%] right-[30%] w-8 h-12 rounded-lg bg-[var(--surface-hover)] border border-[var(--border-color)] backdrop-blur-[2px] shadow-sm animate-drift-slow-4" />
       </div>
 
       {/* Dynamic Keyframes Injection */}
