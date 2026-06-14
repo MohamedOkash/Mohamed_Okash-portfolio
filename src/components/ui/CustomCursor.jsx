@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { isPointerFine, usePerformance, useTabVisibility } from '../../utils/perf';
 
-export const CustomCursor = () => {
+export const CustomCursor = React.memo(() => {
+  const { isTouch } = usePerformance();
+  const tabHidden = useTabVisibility();
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isClicking, setIsClicking] = useState(false);
@@ -10,19 +13,18 @@ export const CustomCursor = () => {
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
 
-  // Smooth spring configuration for trailing ring
-  const springConfig = { damping: 40, stiffness: 400, mass: 0.4 };
+  // Smoother spring with lighter mass for better perf
+  const springConfig = { damping: 30, stiffness: 300, mass: 0.3 };
   const trailX = useSpring(mouseX, springConfig);
   const trailY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    // Check if device supports hover (is a desktop)
-    const mediaQuery = window.matchMedia('(any-hover: hover)');
-    if (!mediaQuery.matches) return;
+    if (!isPointerFine() || isTouch) return;
 
     setIsVisible(true);
 
     const moveCursor = (e) => {
+      if (document.hidden) return;
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
     };
@@ -33,7 +35,6 @@ export const CustomCursor = () => {
     const handleMouseDown = () => setIsClicking(true);
     const handleMouseUp = () => setIsClicking(false);
 
-    // Detect if hovering over clickable elements
     const handleMouseOver = (e) => {
       const target = e.target;
       const isClickable = 
@@ -63,9 +64,9 @@ export const CustomCursor = () => {
       window.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mouseover', handleMouseOver);
     };
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, isTouch]);
 
-  if (!isVisible) return null;
+  if (!isVisible || tabHidden) return null;
 
   return (
     <>
@@ -102,4 +103,4 @@ export const CustomCursor = () => {
       />
     </>
   );
-};
+});

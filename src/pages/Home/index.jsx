@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePortfolioStore } from '../../store/portfolioStore';
@@ -24,29 +24,10 @@ import { translations } from '../../data/translations';
 import { Sparkles, Quote, HelpCircle } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { SpotlightCard } from '../../components/ui/SpotlightCard';
+import { useRAFCounter } from '../../utils/perf';
 
-// Local Counter helper for custom stats block
 const StatCounterLocal = ({ target, duration = 1200 }) => {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    let start = 0;
-    const end = parseInt(target, 10);
-    if (isNaN(end) || start === end) {
-      setCount(target);
-      return;
-    }
-    const increment = end / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) {
-        setCount(end);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [target, duration]);
+  const count = useRAFCounter(target, { duration, enabled: true });
   return <>{count}</>;
 };
 
@@ -68,11 +49,11 @@ export default function Home() {
   const showPreloader = preloaderActive || loading;
 
   // Filter projects by featured vs general
-  const featuredIds = data?.settings?.featuredProjects || [];
-  const projects = data?.projects || [];
+  const featuredIds = useMemo(() => data?.settings?.featuredProjects || [], [data?.settings?.featuredProjects]);
+  const projects = useMemo(() => data?.projects || [], [data?.projects]);
 
-  const featuredProjects = projects.filter(p => p.featured === true || featuredIds.includes(p.id));
-  const generalProjects = projects.filter(p => p.featured !== true && !featuredIds.includes(p.id));
+  const featuredProjects = useMemo(() => projects.filter(p => p.featured === true || featuredIds.includes(p.id)), [projects, featuredIds]);
+  const generalProjects = useMemo(() => projects.filter(p => p.featured !== true && !featuredIds.includes(p.id)), [projects, featuredIds]);
 
   // Connect SEO page parameters to brandIdentity
   const browserTitleVal = data?.brandIdentity?.browserTitle?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
@@ -411,7 +392,7 @@ export default function Home() {
                 initial="hidden"
                 whileInView="visible"
                 exit="hidden"
-                viewport={{ once: false, margin: "-120px" }}
+                viewport={{ once: true, margin: "-120px" }}
                 variants={sectionRevealVariants}
                 style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
               >

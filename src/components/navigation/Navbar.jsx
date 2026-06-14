@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguageStore } from '../../store/languageStore';
@@ -9,7 +9,7 @@ import { DEFAULT_PORTFOLIO_DATA } from '../../data/constants';
 import { translations } from '../../data/translations';
 import { Shield, Languages, SunMoon, LogOut, LayoutDashboard } from 'lucide-react';
 
-export const Navbar = () => {
+export const Navbar = React.memo(() => {
   const navigate = useNavigate();
   const location = useLocation();
   const { lang, setLanguage } = useLanguageStore();
@@ -39,13 +39,14 @@ export const Navbar = () => {
   const t = translations[lang] || translations.ar;
   const isRtl = t.dir === 'rtl';
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+  const handleScroll = useCallback(() => {
+    setScrolled(window.scrollY > 20);
   }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   // Sync theme with document class/attributes
   useEffect(() => {
@@ -341,4 +342,4 @@ export const Navbar = () => {
       </div>
     </nav>
   );
-};
+});

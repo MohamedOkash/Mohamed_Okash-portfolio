@@ -38,7 +38,7 @@ const getCertIcon = (id, className) => {
   }
 };
 
-export const Certifications = () => {
+export const Certifications = React.memo(() => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
   const t = translations[lang] || translations.ar;
@@ -98,4 +98,4 @@ export const Certifications = () => {
       </motion.div>
     </section>
   );
-};
+});

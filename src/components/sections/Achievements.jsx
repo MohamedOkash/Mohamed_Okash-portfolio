@@ -1,40 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
 import { Trophy } from 'lucide-react';
+import { useRAFCounter } from '../../utils/perf';
 
-const StatCounter = ({ value, label, suffix = "" }) => {
+const StatCounter = React.memo(({ value, label, suffix = "" }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    if (isInView) {
-      let start = 0;
-      const end = parseInt(value, 10);
-      if (start === end) {
-        setCurrent(end);
-        return;
-      }
-
-      const duration = 1500; // 1.5 seconds duration
-      const increment = end / (duration / 16); // 16ms approx frame rate
-
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          setCurrent(end);
-          clearInterval(timer);
-        } else {
-          setCurrent(Math.floor(start));
-        }
-      }, 16);
-
-      return () => clearInterval(timer);
-    }
-  }, [isInView, value]);
+  const current = useRAFCounter(value, { duration: 1500, enabled: isInView });
 
   return (
     <div ref={ref} className="text-center p-8 md:p-10 rounded-[2rem] border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] transition-all duration-300 relative group flex flex-col items-center justify-center">
@@ -47,7 +22,7 @@ const StatCounter = ({ value, label, suffix = "" }) => {
       </span>
     </div>
   );
-};
+});
 
 export const Achievements = () => {
   const { lang } = useLanguageStore();

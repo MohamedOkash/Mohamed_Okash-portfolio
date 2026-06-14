@@ -6,7 +6,7 @@ import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
 import { SpotlightCard } from '../ui/SpotlightCard';
 
-export const WhyOkash = () => {
+export const WhyOkash = React.memo(() => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
   const t = translations[lang] || translations.ar;
@@ -139,4 +139,4 @@ export const WhyOkash = () => {
       </div>
     </section>
   );
-};
+});

@@ -6,7 +6,7 @@ import { translations } from '../../data/translations';
 import { SpotlightCard } from '../ui/SpotlightCard';
 import { Briefcase, Calendar, Building2 } from 'lucide-react';
 
-export const Experience = () => {
+export const Experience = React.memo(() => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
   const t = translations[lang] || translations.ar;
@@ -80,4 +80,4 @@ export const Experience = () => {
       </div>
     </section>
   );
-};
+});

@@ -37,7 +37,7 @@ const getIcon = (type, className) => {
   }
 };
 
-export const Skills = () => {
+export const Skills = React.memo(() => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
   const t = translations[lang] || translations.ar;
@@ -96,4 +96,4 @@ export const Skills = () => {
       </motion.div>
     </section>
   );
-};
+});

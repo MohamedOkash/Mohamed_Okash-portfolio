@@ -1,43 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
 import { ArrowDown, Mail, ArrowUpRight } from 'lucide-react';
+import { useRAFCounter } from '../../utils/perf';
 
 const Counter = ({ target, duration = 1200 }) => {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    let start = 0;
-    const end = parseInt(target, 10);
-    if (isNaN(end) || start === end) {
-      setCount(target);
-      return;
-    }
-    const increment = end / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) {
-        setCount(end);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [target, duration]);
+  const count = useRAFCounter(target, { duration, enabled: true });
   return <>{count}</>;
 };
 
-export const Hero = () => {
+export const Hero = React.memo(() => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
   const t = translations[lang] || translations.ar;
 
-  const handleScrollTo = (id) => {
+  const handleScrollTo = useCallback((id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
   const heroNameVal = data?.brandIdentity?.heroName?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
   const identity = data?.hero?.identity || {};
@@ -165,4 +147,4 @@ export const Hero = () => {
       </motion.div>
     </section>
   );
-};
+});

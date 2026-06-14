@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
-export const SpotlightCard = ({ children, className = '', onClick, isCertificate = false }) => {
+export const SpotlightCard = React.memo(({ children, className = '', onClick, isCertificate = false }) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
 
@@ -43,4 +43,4 @@ export const SpotlightCard = ({ children, className = '', onClick, isCertificate
       </div>
     </motion.div>
   );
-};
+});

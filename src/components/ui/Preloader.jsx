@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-export const Preloader = ({ finishLoading, preloaderText }) => {
+export const Preloader = React.memo(({ finishLoading, preloaderText }) => {
   const [progress, setProgress] = useState(0);
+  const rafRef = useRef(null);
+  const startRef = useRef(null);
 
   useEffect(() => {
-    const duration = 1500; // 1.5 seconds loading simulation
-    const interval = 15; // update progress every 15ms
-    const step = 100 / (duration / interval);
+    const duration = 1500;
+    startRef.current = null;
 
-    const timer = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + step;
-        if (next >= 100) {
-          clearInterval(timer);
-          setTimeout(() => {
-            finishLoading();
-          }, 300); // Wait briefly at 100%
-          return 100;
-        }
-        return next;
-      });
-    }, interval);
+    const animate = (timestamp) => {
+      if (startRef.current === null) startRef.current = timestamp;
+      const elapsed = timestamp - startRef.current;
+      const pct = Math.min((elapsed / duration) * 100, 100);
+      setProgress(pct);
+      if (pct < 100) {
+        rafRef.current = requestAnimationFrame(animate);
+      } else {
+        setTimeout(() => finishLoading(), 300);
+      }
+    };
 
-    return () => clearInterval(timer);
+    rafRef.current = requestAnimationFrame(animate);
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, [finishLoading]);
 
   return (
@@ -81,4 +81,4 @@ export const Preloader = ({ finishLoading, preloaderText }) => {
       </div>
     </motion.div>
   );
-};
+});

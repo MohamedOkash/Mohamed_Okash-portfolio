@@ -41,7 +41,7 @@ const LinkedinIcon = (props) => (
   </svg>
 );
 
-export const Contact = () => {
+export const Contact = React.memo(() => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
   const t = translations[lang] || translations.ar;
@@ -167,9 +167,9 @@ export const Contact = () => {
           {lang === 'ar' ? 'زيارة الرابط' : lang === 'ur' ? 'رابط کھولیں' : 'Visit Profile'}
           <ArrowUpRight className="w-3.5 h-3.5" />
         </a>
-      </div>
-    );
-  };
+    </div>
+  );
+};
 
   return (
     <section id="contact" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
@@ -208,4 +208,4 @@ export const Contact = () => {
       </div>
     </section>
   );
-};
+});

@@ -68,7 +68,7 @@ export const LoginModal = () => {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="relative w-full max-w-md z-10"
           >
             <SpotlightCard className="shadow-2xl border-[var(--border)] p-8 md:p-10 relative bg-[var(--bg-primary)]/90 backdrop-blur-2xl">
