@@ -79,7 +79,7 @@ export default function AdminLogin() {
               {t.adminLogin}
             </h1>
             <p className="text-xs opacity-40 mt-1 font-light">
-              Secure control access panel
+              {t.cms?.loginSubtitle2 || 'Secure control access panel'}
             </p>
           </div>
 
@@ -103,7 +103,7 @@ export default function AdminLogin() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-12 pr-4 py-4 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] outline-none focus:border-[var(--primary)]/50 transition-colors"
-                  placeholder="admin@example.com"
+                  placeholder={t.cms?.placeholderEmail || 'admin@example.com'}
                   required
                 />
               </div>

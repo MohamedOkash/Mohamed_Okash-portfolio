@@ -89,7 +89,7 @@ export const LoginModal = () => {
                   {t.adminLogin}
                 </h2>
                 <p className="text-xs opacity-40 mt-1 font-light">
-                  Secure administration control access
+                  {t.cms?.loginSubtitle || 'Secure administration control access'}
                 </p>
               </div>
 
@@ -113,7 +113,7 @@ export const LoginModal = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full pl-12 pr-4 py-4 rounded-xl bg-[var(--card-bg)] border border-[var(--border-color)] text-sm text-[var(--text-primary)] outline-none focus:border-[var(--primary)]/50 transition-colors"
-                      placeholder="admin@example.com"
+                      placeholder={t.cms?.placeholderEmail || 'admin@example.com'}
                       required
                     />
                   </div>
