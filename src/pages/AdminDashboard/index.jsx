@@ -5,6 +5,7 @@ import { usePortfolioStore } from '../../store/portfolioStore';
 import { useLanguageStore } from '../../store/languageStore';
 import { useThemeStore } from '../../store/themeStore';
 import { translations } from '../../data/translations';
+import { THEME_PROFILES_DEFAULTS } from '../../data/constants';
 import { validatePortfolioData } from '../../utils/validators';
 import { 
   User, Star, Award, Briefcase, Plus, Trash2, Save, 
@@ -85,6 +86,8 @@ export default function AdminDashboard() {
   const [localListFilter, setLocalListFilter] = useState('');
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isMobilePreviewOpen, setIsMobilePreviewOpen] = useState(false);
+  const [themeStudioSelectedTheme, setThemeStudioSelectedTheme] = useState('dark');
+  const [previewMode, setPreviewMode] = useState(false);
   const fileInputRef = useRef(null);
 
   const initializeFormData = (rawDoc) => {
@@ -136,6 +139,24 @@ export default function AdminDashboard() {
     }
     if (copy.themeSettings.paragraphWidth === undefined) {
       copy.themeSettings.paragraphWidth = "65ch";
+    }
+    // Initialize per-theme profiles with migration from shared themeSettings if needed
+    if (!copy.themeProfiles) {
+      copy.themeProfiles = {};
+      const themes = ['dark', 'ocean', 'aurora', 'platinum', 'midnight'];
+      themes.forEach(t => {
+        copy.themeProfiles[t] = { ...THEME_PROFILES_DEFAULTS[t], ...copy.themeSettings };
+      });
+    } else {
+      // Ensure each theme profile has all keys from defaults
+      const themes = ['dark', 'ocean', 'aurora', 'platinum', 'midnight'];
+      themes.forEach(t => {
+        if (!copy.themeProfiles[t]) {
+          copy.themeProfiles[t] = { ...THEME_PROFILES_DEFAULTS[t], ...copy.themeSettings };
+        } else {
+          copy.themeProfiles[t] = { ...THEME_PROFILES_DEFAULTS[t], ...copy.themeProfiles[t] };
+        }
+      });
     }
     const identityDefaults = {
       displayName: { ar: '', en: 'Mohamed Okash', ur: '' },
@@ -2436,10 +2457,315 @@ export default function AdminDashboard() {
     </div>
   );
 
+  // --- Theme Studio Helpers ---
+  const getActiveProfile = () => formData.themeProfiles?.[themeStudioSelectedTheme] || THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme] || {};
+  
+  const updateThemeProfileKey = (key, value) => {
+    const updated = { ...formData };
+    if (!updated.themeProfiles) updated.themeProfiles = { ...THEME_PROFILES_DEFAULTS };
+    if (!updated.themeProfiles[themeStudioSelectedTheme]) {
+      updated.themeProfiles[themeStudioSelectedTheme] = { ...THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme] };
+    }
+    updated.themeProfiles[themeStudioSelectedTheme][key] = value;
+    setFormData(updated);
+  };
+
+  // --- Theme Studio Tab ---
+  const renderThemeStudioTab = () => {
+    const profile = getActiveProfile();
+    const themeNames = ['dark', 'ocean', 'aurora', 'platinum', 'midnight'];
+    const themeLabels = { dark: t.cms?.themeDark || 'Dark Obsidian', ocean: t.cms?.themeOcean || 'Ocean Blue', aurora: t.cms?.themeAurora || 'Aurora Green', platinum: t.cms?.themePlatinum || 'Platinum Silver', midnight: t.cms?.themeMidnight || 'Midnight Purple' };
+
+    const handleResetTheme = () => {
+      if (window.confirm(`Reset "${themeLabels[themeStudioSelectedTheme]}" to defaults?`)) {
+        const updated = { ...formData };
+        if (!updated.themeProfiles) updated.themeProfiles = {};
+        updated.themeProfiles[themeStudioSelectedTheme] = { ...THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme] };
+        setFormData(updated);
+      }
+    };
+
+    const handleExportTheme = () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profile, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", `${themeStudioSelectedTheme}-theme.json`);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    };
+
+    const handleImportTheme = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const parsed = JSON.parse(ev.target.result);
+          const updated = { ...formData };
+          if (!updated.themeProfiles) updated.themeProfiles = {};
+          updated.themeProfiles[themeStudioSelectedTheme] = { ...THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme], ...parsed };
+          setFormData(updated);
+        } catch (err) {
+          showStatus('error', `Import Error: ${err.message}`);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    };
+
+    return (
+      <div className="space-y-6">
+        {/* Theme Selector Tabs */}
+        <div className="flex flex-wrap gap-2 border-b border-[var(--border-color)] pb-3 mb-4">
+          {themeNames.map(t => (
+            <button
+              key={t}
+              onClick={() => setThemeStudioSelectedTheme(t)}
+              className={`px-4 py-2 rounded-lg text-xs font-extrabold uppercase transition-all cursor-pointer ${
+                themeStudioSelectedTheme === t
+                  ? 'bg-[var(--primary)]/10 border border-[var(--primary)]/30 text-[var(--primary)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'
+              }`}
+            >
+              {themeLabels[t]}
+            </button>
+          ))}
+        </div>
+
+        {/* Theme Action Bar */}
+        <div className="flex flex-wrap gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]">
+          <button onClick={handleResetTheme} className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] cursor-pointer flex items-center gap-1">
+            <Undo className="w-3.5 h-3.5" /> {t.cms?.reset || 'Reset'} {themeLabels[themeStudioSelectedTheme]}
+          </button>
+          <button onClick={handleExportTheme} className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] cursor-pointer flex items-center gap-1">
+            <Download className="w-3.5 h-3.5" /> Export Theme
+          </button>
+          <label className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] cursor-pointer flex items-center gap-1">
+            <Upload className="w-3.5 h-3.5" /> Import Theme
+            <input type="file" accept=".json" onChange={handleImportTheme} className="hidden" />
+          </label>
+        </div>
+
+        {/* Colors Section */}
+        <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-4">
+          <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Colors</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              ['accentColor', 'Accent Color'],
+              ['accentText', 'Accent Text Color'],
+              ['fontColor', 'Body Font Color'],
+              ['headingColor', 'Heading Color'],
+              ['cardBackground', 'Card Background'],
+              ['inputBackground', 'Input Background'],
+              ['borderColor', 'Border Color'],
+            ].map(([key, label]) => (
+              <div key={key} className="flex items-end gap-3">
+                <div className="flex-1">
+                  <AdminInput label={label} value={profile[key] || ''} onChange={(e) => updateThemeProfileKey(key, e.target.value)} />
+                </div>
+                <input type="color" value={profile[key] || '#ffffff'} onChange={(e) => updateThemeProfileKey(key, e.target.value)} className="w-10 h-10 mb-4 rounded border border-[var(--border-color)] bg-transparent cursor-pointer" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Glass Section */}
+        <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-5">
+          <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Glass</h4>
+          {[
+            ['glassOpacity', 'Glass Opacity', 0, 0.3, 0.01],
+            ['blurStrength', 'Blur Strength', 0, 40, 1],
+            ['borderOpacity', 'Border Opacity', 0, 0.2, 0.01],
+          ].map(([key, label, min, max, step]) => (
+            <div key={key}>
+              <div className="flex justify-between text-xs font-bold uppercase mb-1">
+                <span className="text-[var(--text-secondary)]">{label}</span>
+                <span className="text-[var(--primary)]">{key === 'blurStrength' ? `${profile[key]}px` : profile[key]}</span>
+              </div>
+              <input type="range" min={min} max={max} step={step} value={profile[key] !== undefined ? profile[key] : THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme]?.[key]} onChange={(e) => updateThemeProfileKey(key, Number(e.target.value))} className="w-full accent-[var(--primary)]" />
+            </div>
+          ))}
+        </div>
+
+        {/* Effects Section */}
+        <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-5">
+          <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Effects</h4>
+          {[
+            ['glowIntensity', 'Glow Intensity', 0, 1, 0.05],
+            ['bgIntensity', 'Background Intensity', 0, 0.5, 0.01],
+          ].map(([key, label, min, max, step]) => (
+            <div key={key}>
+              <div className="flex justify-between text-xs font-bold uppercase mb-1">
+                <span className="text-[var(--text-secondary)]">{label}</span>
+                <span className="text-[var(--primary)]">{profile[key]}</span>
+              </div>
+              <input type="range" min={min} max={max} step={step} value={profile[key] !== undefined ? profile[key] : THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme]?.[key]} onChange={(e) => updateThemeProfileKey(key, Number(e.target.value))} className="w-full accent-[var(--primary)]" />
+            </div>
+          ))}
+        </div>
+
+        {/* Typography Section */}
+        <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-5">
+          <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Typography</h4>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">Font Family</label>
+            <select value={profile.fontFamily || 'Inter'} onChange={(e) => updateThemeProfileKey('fontFamily', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm">
+              <option value="Inter">Inter</option>
+              <option value="Cairo">Cairo</option>
+              <option value="Tajawal">Tajawal</option>
+              <option value="IBM Plex Sans">IBM Plex Sans</option>
+              <option value="Poppins">Poppins</option>
+            </select>
+          </div>
+          <div>
+            <div className="flex justify-between text-xs font-bold uppercase mb-1">
+              <span className="text-[var(--text-secondary)]">Font Scale</span>
+              <span className="text-[var(--primary)]">{profile.fontScale || 1.0}x</span>
+            </div>
+            <input type="range" min="0.8" max="1.5" step="0.05" value={profile.fontScale || 1.0} onChange={(e) => updateThemeProfileKey('fontScale', Number(e.target.value))} className="w-full accent-[var(--primary)]" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <div className="flex justify-between text-xs font-bold uppercase mb-1">
+                <span className="text-[var(--text-secondary)]">Heading Size</span>
+                <span className="text-[var(--primary)]">{profile.headingSize || 48}px</span>
+              </div>
+              <input type="range" min="32" max="88" step="2" value={profile.headingSize || 48} onChange={(e) => updateThemeProfileKey('headingSize', Number(e.target.value))} className="w-full accent-[var(--primary)]" />
+            </div>
+            <div>
+              <div className="flex justify-between text-xs font-bold uppercase mb-1">
+                <span className="text-[var(--text-secondary)]">Paragraph Size</span>
+                <span className="text-[var(--primary)]">{profile.paragraphSize || 16}px</span>
+              </div>
+              <input type="range" min="12" max="24" step="1" value={profile.paragraphSize || 16} onChange={(e) => updateThemeProfileKey('paragraphSize', Number(e.target.value))} className="w-full accent-[var(--primary)]" />
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">Heading Weight</label>
+            <select value={profile.headingWeight || '800'} onChange={(e) => updateThemeProfileKey('headingWeight', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm">
+              <option value="400">400 (Regular)</option>
+              <option value="500">500 (Medium)</option>
+              <option value="600">600 (Semibold)</option>
+              <option value="700">700 (Bold)</option>
+              <option value="800">800 (Extra Bold)</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">Body Weight</label>
+            <select value={profile.bodyWeight || '300'} onChange={(e) => updateThemeProfileKey('bodyWeight', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm">
+              <option value="300">300 (Light)</option>
+              <option value="400">400 (Regular)</option>
+              <option value="500">500 (Medium)</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-[var(--text-secondary)]">Letter Spacing</label>
+            <select value={profile.letterSpacing || '0px'} onChange={(e) => updateThemeProfileKey('letterSpacing', e.target.value)} className="w-full p-3 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] text-sm">
+              <option value="-0.05em">-0.05em</option>
+              <option value="-0.02em">-0.02em</option>
+              <option value="0px">0px (Normal)</option>
+              <option value="0.02em">0.02em</option>
+              <option value="0.05em">0.05em</option>
+              <option value="0.1em">0.1em</option>
+              <option value="0.15em">0.15em</option>
+              <option value="0.2em">0.2em</option>
+            </select>
+          </div>
+          <div>
+            <div className="flex justify-between text-xs font-bold uppercase mb-1">
+              <span className="text-[var(--text-secondary)]">Line Height</span>
+              <span className="text-[var(--primary)]">{profile.lineHeight || 1.6}</span>
+            </div>
+            <input type="range" min="1.0" max="2.2" step="0.1" value={profile.lineHeight || 1.6} onChange={(e) => updateThemeProfileKey('lineHeight', Number(e.target.value))} className="w-full accent-[var(--primary)]" />
+          </div>
+        </div>
+
+        {/* Radius Section */}
+        <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-5">
+          <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Radius</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <div className="flex justify-between text-xs font-bold uppercase mb-1">
+                <span className="text-[var(--text-secondary)]">Card Radius</span>
+                <span className="text-[var(--primary)]">{profile.cardRadius || 16}px</span>
+              </div>
+              <input type="range" min="4" max="32" step="2" value={profile.cardRadius || 16} onChange={(e) => updateThemeProfileKey('cardRadius', Number(e.target.value))} className="w-full accent-[var(--primary)]" />
+            </div>
+            <div>
+              <div className="flex justify-between text-xs font-bold uppercase mb-1">
+                <span className="text-[var(--text-secondary)]">Button Radius</span>
+                <span className="text-[var(--primary)]">{profile.buttonRadius || 8}px</span>
+              </div>
+              <input type="range" min="2" max="24" step="2" value={profile.buttonRadius || 8} onChange={(e) => updateThemeProfileKey('buttonRadius', Number(e.target.value))} className="w-full accent-[var(--primary)]" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // --- Background Builder Tab ---
+  const renderBackgroundBuilderTab = () => {
+    const profile = getActiveProfile();
+    const layers = ['grid', 'itNetwork', 'aiNodes', 'safetyGeometry', 'blueprint', 'lightRays'];
+    const layerLabels = { grid: 'Layer 1 — Engineering Grid', itNetwork: 'Layer 2 — IT Network', aiNodes: 'Layer 3 — AI Nodes', safetyGeometry: 'Layer 4 — Safety Geometry', blueprint: 'Layer 5 — Blueprint', lightRays: 'Layer 6 — Ambient Light Rays' };
+
+    return (
+      <div className="space-y-6">
+        <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-[var(--border-color)] pb-3 mb-4">Background Builder</h3>
+
+        <div className="p-4 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-4">
+          <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Visibility</h4>
+          <div className="flex items-center justify-between p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]">
+            <div>
+              <h5 className="font-bold text-sm text-[var(--text-primary)] mb-0.5">Enable Background</h5>
+              <p className="text-xs text-[var(--text-secondary)]">Toggle the full cinematic background</p>
+            </div>
+            <button 
+              onClick={() => updateThemeProfileKey('backgroundEnabled', !profile.backgroundEnabled)}
+              className={`p-2.5 rounded-lg border transition-all cursor-pointer ${
+                profile.backgroundEnabled !== false 
+                  ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary)]' 
+                  : 'border-[var(--border-color)] text-[var(--text-secondary)]'
+              }`}
+            >
+              {profile.backgroundEnabled !== false ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+
+        <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-5">
+          <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Layer Controls</h4>
+          {layers.map(layer => (
+            <div key={layer}>
+              <div className="flex justify-between text-xs font-bold uppercase mb-1">
+                <span className="text-[var(--text-secondary)]">{layerLabels[layer]}</span>
+                <span className="text-[var(--primary)]">{(profile.layerOpacities?.[layer] ?? THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme]?.layerOpacities?.[layer])?.toFixed(2)}</span>
+              </div>
+              <input type="range" min="0" max="0.25" step="0.005" value={profile.layerOpacities?.[layer] ?? THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme]?.layerOpacities?.[layer] ?? 0.08} onChange={(e) => {
+                const updated = { ...formData };
+                if (!updated.themeProfiles) updated.themeProfiles = {};
+                if (!updated.themeProfiles[themeStudioSelectedTheme]) updated.themeProfiles[themeStudioSelectedTheme] = { ...THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme] };
+                if (!updated.themeProfiles[themeStudioSelectedTheme].layerOpacities) {
+                  updated.themeProfiles[themeStudioSelectedTheme].layerOpacities = { ...THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme].layerOpacities };
+                }
+                updated.themeProfiles[themeStudioSelectedTheme].layerOpacities[layer] = Number(e.target.value);
+                setFormData(updated);
+              }} className="w-full accent-[var(--primary)]" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   const renderActiveForm = () => {
     switch (activeTab) {
       case 'general': return renderGeneralTab();
       case 'brandIdentity': return renderBrandIdentityTab();
+      case 'themeStudio': return renderThemeStudioTab();
+      case 'backgroundBuilder': return renderBackgroundBuilderTab();
       case 'structure': return renderStructureTab();
       case 'hero': return renderHeroTab();
       case 'about': return renderAboutTab();
@@ -2497,8 +2823,8 @@ export default function AdminDashboard() {
         <div 
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[80px] pointer-events-none transition-all duration-300" 
           style={{
-            background: formData.themeSettings.accentColor,
-            opacity: formData.themeSettings.glowIntensity * 0.4
+            background: (activeTab === 'themeStudio' || activeTab === 'backgroundBuilder') ? (getActiveProfile().accentColor || formData.themeSettings.accentColor) : formData.themeSettings.accentColor,
+            opacity: (activeTab === 'themeStudio' || activeTab === 'backgroundBuilder') ? (getActiveProfile().glowIntensity || 0.2) * 0.4 : formData.themeSettings.glowIntensity * 0.4
           }}
         />
 
@@ -2663,6 +2989,76 @@ export default function AdminDashboard() {
             </div>
           )}
 
+          {activeTab === 'themeStudio' && (() => {
+            const p = getActiveProfile();
+            const themeNames = ['dark', 'ocean', 'aurora', 'platinum', 'midnight'];
+            const themeLabels = { dark: t.cms?.themeDark || 'Dark Obsidian', ocean: t.cms?.themeOcean || 'Ocean Blue', aurora: t.cms?.themeAurora || 'Aurora Green', platinum: t.cms?.themePlatinum || 'Platinum Silver', midnight: t.cms?.themeMidnight || 'Midnight Purple' };
+            return (
+              <div className="space-y-4" style={{ fontFamily: p.fontFamily ? `'${p.fontFamily}', sans-serif` : undefined }}>
+                <div className="flex items-center justify-between text-[9px] font-bold uppercase text-[var(--text-secondary)] tracking-wider">
+                  <span>Theme Studio Preview</span>
+                  <span className="text-[var(--primary)]">{themeLabels[themeStudioSelectedTheme]}</span>
+                </div>
+                {/* Navbar preview */}
+                <div className="p-3 rounded-xl border flex items-center gap-3 text-xs" style={{ borderColor: p.borderColor, background: p.cardBackground, borderRadius: p.cardRadius }}>
+                  <div className="w-6 h-6 rounded-full" style={{ background: p.accentColor }} />
+                  <span className="font-bold flex-1" style={{ color: p.headingColor }}>Mohamed Okash</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded" style={{ background: p.accentColor + '20', color: p.accentColor }}>Work</span>
+                </div>
+                {/* Hero title preview */}
+                <h3 className="text-lg font-black leading-tight" style={{ color: p.headingColor, fontWeight: p.headingWeight, fontSize: p.headingSize ? `${p.headingSize * 0.5}px` : undefined }}>
+                  HSE & <span style={{ color: p.accentColor }}>Engineering</span>
+                </h3>
+                {/* Paragraph preview */}
+                <p className="text-xs leading-relaxed" style={{ color: p.fontColor, fontWeight: p.bodyWeight, lineHeight: p.lineHeight, letterSpacing: p.letterSpacing }}>
+                  Bridging 7 years of IT infrastructure experience with modern Health & Safety engineering to build practical applications.
+                </p>
+                {/* Button preview */}
+                <div className="flex gap-2">
+                  <div className="px-4 py-2 rounded-lg text-xs font-bold" style={{ background: p.buttonBackgroundColor || p.accentColor, color: p.buttonTextColor || (p.accentText || '#000'), borderRadius: p.buttonRadius }}>
+                    View Projects
+                  </div>
+                  <div className="px-4 py-2 rounded-lg text-xs font-bold border" style={{ borderColor: p.borderColor, color: p.fontColor, borderRadius: p.buttonRadius }}>
+                    Contact Me
+                  </div>
+                </div>
+                {/* Card preview */}
+                <div className="p-4 rounded-xl border space-y-2" style={{ borderColor: p.borderColor, background: `rgba(255,255,255,${p.glassOpacity || 0.03})`, backdropFilter: `blur(${p.blurStrength || 16}px)`, borderRadius: p.cardRadius }}>
+                  <h5 className="text-xs font-bold" style={{ color: p.cardTitleColor || p.headingColor }}>Project Card</h5>
+                  <p className="text-[10px]" style={{ color: p.cardDescriptionColor || p.fontColor }}>Safety management system built with React and Firestore.</p>
+                </div>
+                {/* Input preview */}
+                <input placeholder="Email address" className="w-full p-3 rounded-lg text-xs border outline-none" style={{ borderColor: p.borderColor, background: p.inputBackground || 'rgba(0,0,0,0.3)', color: p.fontColor, borderRadius: p.buttonRadius }} />
+              </div>
+            );
+          })()}
+
+          {activeTab === 'backgroundBuilder' && (() => {
+            const p = getActiveProfile();
+            const layerNames = ['grid', 'itNetwork', 'aiNodes', 'safetyGeometry', 'blueprint', 'lightRays'];
+            const layerLabels = { grid: 'Engineering Grid', itNetwork: 'IT Network', aiNodes: 'AI Nodes', safetyGeometry: 'Safety Geometry', blueprint: 'Blueprint', lightRays: 'Light Rays' };
+            return (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-[9px] font-bold uppercase text-[var(--text-secondary)] tracking-wider">
+                  <span>Background Preview</span>
+                  <span className={p.backgroundEnabled !== false ? 'text-emerald-400' : 'text-red-400'}>{p.backgroundEnabled !== false ? 'ON' : 'OFF'}</span>
+                </div>
+                <div className="p-4 rounded-xl border min-h-[160px] relative overflow-hidden flex items-center justify-center" style={{ borderColor: p.borderColor, background: p.cardBackground }}>
+                  <div className="absolute inset-0 opacity-[0.08]" style={{
+                    backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.18) 1px, transparent 1px)',
+                    backgroundSize: '40px 40px'
+                  }} />
+                  <div className="relative z-10 text-center">
+                    <div className="text-[18px] font-black uppercase tracking-widest" style={{ color: p.accentColor }}>LIVE</div>
+                    <div className="text-[10px] text-[var(--text-secondary)] mt-1">{layerLabels[layerNames[0]]}: ×{(p.layerOpacities?.grid ?? 0.08).toFixed(2)}</div>
+                    <div className="text-[10px] text-[var(--text-secondary)]">{layerLabels[layerNames[1]]}: ×{(p.layerOpacities?.itNetwork ?? 0.12).toFixed(2)}</div>
+                    <div className="text-[10px] text-[var(--text-secondary)]">{layerLabels[layerNames[2]]}: ×{(p.layerOpacities?.aiNodes ?? 0.1).toFixed(2)}</div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
           {activeTab === 'translations' && (
             <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-2">
               <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block">{t.cms.previewTranslation}</span>
@@ -2726,6 +3122,34 @@ export default function AdminDashboard() {
             <option value="en">{t.cms?.english || 'English'}</option>
             <option value="ur">{t.cms?.urdu || 'اردو'}</option>
           </select>
+
+          <select 
+            value={formData.themeSettings?.defaultTheme || 'dark'}
+            onChange={(e) => {
+              const updated = { ...formData };
+              updated.themeSettings.defaultTheme = e.target.value;
+              setFormData(updated);
+              setTheme(e.target.value);
+            }}
+            className="px-2.5 py-1.5 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-xs text-[var(--text-primary)] outline-none cursor-pointer hidden sm:block"
+            title="Default Theme"
+          >
+            <option value="dark">{t.cms?.themeDark || 'Dark'}</option>
+            <option value="ocean">{t.cms?.themeOcean || 'Ocean'}</option>
+            <option value="aurora">{t.cms?.themeAurora || 'Aurora'}</option>
+            <option value="platinum">{t.cms?.themePlatinum || 'Platinum'}</option>
+            <option value="midnight">{t.cms?.themeMidnight || 'Midnight'}</option>
+          </select>
+
+          <button
+            onClick={() => setPreviewMode(!previewMode)}
+            className={`p-2 rounded-lg border text-xs cursor-pointer hidden lg:flex items-center gap-1 ${
+              previewMode ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary)]' : 'border-[var(--border-color)] text-[var(--text-secondary)]'
+            }`}
+            title="Preview Mode"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
           
           <h1 className="text-sm font-black text-[var(--text-primary)] tracking-widest uppercase hidden md:flex items-center gap-2">
             <Cpu className="w-4.5 h-4.5 text-[var(--primary)]" />
@@ -2875,6 +3299,13 @@ export default function AdminDashboard() {
             <Image className="w-3.5 h-3.5" /> {t.cms?.sidebarBranding || 'Media & Branding'}
           </button>
 
+          <button 
+            onClick={() => handleTabChange('themeStudio')}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'themeStudio' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
+          >
+            <Palette className="w-3.5 h-3.5" /> Theme Studio
+          </button>
+
           <div className="px-3 py-2 mt-4 text-[9px] uppercase font-bold text-[var(--text-secondary)] tracking-widest hidden md:block">{t.cms?.sidebarHeaderComponents || 'Components'}</div>
           <button 
             onClick={() => handleTabChange('hero')}
@@ -2948,6 +3379,13 @@ export default function AdminDashboard() {
           </button>
 
           <button 
+            onClick={() => handleTabChange('backgroundBuilder')}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'backgroundBuilder' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
+          >
+            <Layers className="w-3.5 h-3.5" /> Background Builder
+          </button>
+
+          <button 
             onClick={() => handleTabChange('translations')}
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'translations' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
@@ -2997,34 +3435,53 @@ export default function AdminDashboard() {
         </main>
       </div>
 
-      {/* Dirty state / Unsaved changes floating banner at the bottom */}
-      {isDirty && (
-        <div className="fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[var(--card-bg)] border border-[var(--border-color)] px-3 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl flex items-center gap-3 sm:gap-5 justify-between w-[calc(100vw-1rem)] max-w-[540px] animate-bounce-subtle">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping" />
-            <div>
-              <p className="text-xs font-bold text-[var(--text-primary)]">{t.cms?.unsavedTitle || 'Unsaved Changes'}</p>
-              <p className="text-[10px] text-[var(--text-secondary)]">{t.cms?.unsavedSubtitle || 'Press Save Changes to publish.'}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <button 
-              onClick={() => setFormData(JSON.parse(JSON.stringify(data)))}
-              className="px-4 py-2 border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] rounded-lg text-xs font-extrabold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
-            >
-              {t.cms?.reset || 'Reset'}
-            </button>
-            <button 
-              onClick={handleSave} 
-              disabled={isSaving}
-              className="px-5 py-2.5 bg-[var(--primary)] text-[var(--accent-text)] hover:opacity-90 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-[var(--primary)]/10"
-            >
-              {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-              {isSaving ? (t.cms?.saving || 'Saving...') : (t.cms?.saveChanges || 'Save Changes')}
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Persistent sticky save toolbar at the bottom */}
+      <div className="fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[var(--card-bg)] border border-[var(--border-color)] px-3 sm:px-5 py-2.5 sm:py-3 rounded-2xl shadow-2xl flex items-center gap-2 sm:gap-3 flex-wrap justify-center w-[calc(100vw-1rem)] max-w-[600px]">
+        {isDirty && <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping shrink-0" />}
+        <span className={`text-[10px] sm:text-xs font-bold text-[var(--text-secondary)] ${isDirty ? '' : 'hidden'}`}>
+          {t.cms?.unsavedTitle || 'Unsaved'}
+        </span>
+        <button 
+          onClick={() => setFormData(JSON.parse(JSON.stringify(data)))}
+          className="px-3 py-1.5 border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] rounded-lg text-[10px] sm:text-xs font-extrabold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
+          title={t.cms?.reset || 'Reset'}
+        >
+          <Undo className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+        </button>
+        {data?.settings?.backup && (
+          <button
+            onClick={handleRollback}
+            className="px-3 py-1.5 border border-amber-500/20 hover:bg-amber-500/10 rounded-lg text-[10px] sm:text-xs font-extrabold text-amber-400 transition-all cursor-pointer"
+            title={t.cms?.rollbackBackup || 'Restore Backup'}
+          >
+            <Undo className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+          </button>
+        )}
+        <button
+          onClick={handleExportJSON}
+          className="px-3 py-1.5 border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] rounded-lg text-[10px] sm:text-xs font-extrabold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
+          title={t.cms?.exportBackup || 'Export'}
+        >
+          <Download className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+        </button>
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="px-3 py-1.5 border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] rounded-lg text-[10px] sm:text-xs font-extrabold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all cursor-pointer"
+          title={t.cms?.importBackup || 'Import'}
+        >
+          <Upload className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+        </button>
+        <input type="file" ref={fileInputRef} onChange={handleImportJSON} accept=".json" className="hidden" />
+        <div className="w-px h-5 bg-[var(--border-color)] mx-1" />
+        <button 
+          onClick={handleSave} 
+          disabled={isSaving}
+          className="px-4 sm:px-5 py-1.5 sm:py-2 bg-[var(--primary)] text-[var(--accent-text)] hover:opacity-90 rounded-lg text-[10px] sm:text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-[var(--primary)]/10"
+        >
+          {isSaving ? <Loader2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-spin" /> : <Save className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
+          {isSaving ? (t.cms?.saving || 'Saving...') : (t.cms?.saveChanges || 'Save')}
+        </button>
+      </div>
 
     </div>
   );

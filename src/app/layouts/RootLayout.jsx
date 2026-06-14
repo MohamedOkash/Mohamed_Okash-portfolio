@@ -14,6 +14,7 @@ export const RootLayout = ({ children }) => {
   const isRtl = t.dir === 'rtl';
 
   const themeSettings = data?.themeSettings;
+  const themeProfiles = data?.themeProfiles;
   const configuredTheme = themeSettings?.defaultTheme || activeTheme || 'dark';
   const isLightTheme = configuredTheme === 'platinum';
 
@@ -21,35 +22,38 @@ export const RootLayout = ({ children }) => {
     setTheme(configuredTheme);
   }, [configuredTheme, setTheme]);
 
-  const themeStyles = themeSettings ? {
-    '--primary': themeSettings.accentColor || '#ffffff',
-    '--accent': themeSettings.accentColor || '#ffffff',
+  // Use per-theme profile if available, fall back to shared themeSettings
+  const activeProfile = themeProfiles?.[configuredTheme] || themeSettings || {};
+
+  const themeStyles = {
+    '--primary': activeProfile.accentColor || '#ffffff',
+    '--accent': activeProfile.accentColor || '#ffffff',
     '--accent-text': isLightTheme ? '#0f172a' : '#000000',
-    '--glass-opacity': themeSettings.glassOpacity !== undefined ? themeSettings.glassOpacity : 0.03,
-    '--border-opacity': themeSettings.borderOpacity !== undefined ? themeSettings.borderOpacity : 0.06,
-    '--blur-strength': `${themeSettings.blurStrength !== undefined ? themeSettings.blurStrength : 16}px`,
-    '--glow-intensity': themeSettings.glowIntensity !== undefined ? themeSettings.glowIntensity : 0.2,
-    '--bg-intensity': themeSettings.bgIntensity !== undefined ? themeSettings.bgIntensity : 0.1,
+    '--glass-opacity': activeProfile.glassOpacity !== undefined ? activeProfile.glassOpacity : 0.03,
+    '--border-opacity': activeProfile.borderOpacity !== undefined ? activeProfile.borderOpacity : 0.06,
+    '--blur-strength': `${activeProfile.blurStrength !== undefined ? activeProfile.blurStrength : 16}px`,
+    '--glow-intensity': activeProfile.glowIntensity !== undefined ? activeProfile.glowIntensity : 0.2,
+    '--bg-intensity': activeProfile.bgIntensity !== undefined ? activeProfile.bgIntensity : 0.1,
     
     // Typography controls
-    '--font-family-setting': themeSettings.fontFamily ? `'${themeSettings.fontFamily}', var(--font-sans)` : 'var(--font-sans)',
-    '--font-scale-setting': themeSettings.fontScale !== undefined ? themeSettings.fontScale : 1.0,
-    '--heading-size-setting': `${themeSettings.headingSize || 48}px`,
-    '--paragraph-size-setting': `${themeSettings.paragraphSize || 16}px`,
-    '--heading-weight-setting': themeSettings.headingWeight || '800',
-    '--body-weight-setting': themeSettings.bodyWeight || '300',
-    '--font-color-setting': isLightTheme ? 'var(--text-primary)' : (themeSettings.fontColor || 'var(--text-primary)'),
-    '--heading-color-setting': isLightTheme ? 'var(--text-primary)' : (themeSettings.headingColor || 'var(--text-primary)'),
-    '--letter-spacing-setting': themeSettings.letterSpacing || 'normal',
-    '--line-height-setting': themeSettings.lineHeight || '1.6',
-    '--paragraph-width-setting': themeSettings.paragraphWidth || '65ch',
-    '--button-text-color-setting': isLightTheme ? 'var(--accent-text)' : (themeSettings.buttonTextColor || 'var(--accent-text)'),
-    '--button-background-color-setting': isLightTheme ? 'var(--accent-color)' : (themeSettings.buttonBackgroundColor || 'var(--accent)'),
-    '--card-title-color-setting': isLightTheme ? 'var(--text-primary)' : (themeSettings.cardTitleColor || 'var(--heading-color-setting)'),
-    '--card-description-color-setting': isLightTheme ? 'var(--text-secondary)' : (themeSettings.cardDescriptionColor || 'var(--muted)')
-  } : {};
+    '--font-family-setting': activeProfile.fontFamily ? `'${activeProfile.fontFamily}', var(--font-sans)` : 'var(--font-sans)',
+    '--font-scale-setting': activeProfile.fontScale !== undefined ? activeProfile.fontScale : 1.0,
+    '--heading-size-setting': `${activeProfile.headingSize || 48}px`,
+    '--paragraph-size-setting': `${activeProfile.paragraphSize || 16}px`,
+    '--heading-weight-setting': activeProfile.headingWeight || '800',
+    '--body-weight-setting': activeProfile.bodyWeight || '300',
+    '--font-color-setting': isLightTheme ? 'var(--text-primary)' : (activeProfile.fontColor || 'var(--text-primary)'),
+    '--heading-color-setting': isLightTheme ? 'var(--text-primary)' : (activeProfile.headingColor || 'var(--text-primary)'),
+    '--letter-spacing-setting': activeProfile.letterSpacing || 'normal',
+    '--line-height-setting': activeProfile.lineHeight || '1.6',
+    '--paragraph-width-setting': activeProfile.paragraphWidth || '65ch',
+    '--button-text-color-setting': isLightTheme ? 'var(--accent-text)' : (activeProfile.buttonTextColor || 'var(--accent-text)'),
+    '--button-background-color-setting': isLightTheme ? 'var(--accent-color)' : (activeProfile.buttonBackgroundColor || 'var(--accent)'),
+    '--card-title-color-setting': isLightTheme ? 'var(--text-primary)' : (activeProfile.cardTitleColor || 'var(--heading-color-setting)'),
+    '--card-description-color-setting': isLightTheme ? 'var(--text-secondary)' : (activeProfile.cardDescriptionColor || 'var(--muted)')
+  };
 
-  const blobOpacity = themeSettings?.bgIntensity !== undefined ? themeSettings.bgIntensity : 0.45;
+  const blobOpacity = activeProfile?.bgIntensity !== undefined ? activeProfile.bgIntensity : 0.45;
   const copyrightName = data?.brandIdentity?.footerText?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
   const footerTextVal = data?.translations?.[lang]?.footerText || t.footerText;
 
