@@ -90,3 +90,55 @@ input[type="range"]::-moz-range-thumb {
   border: 2px solid var(--card-bg);
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
+
+/* Visual Polish: Better card depth, borders, shadows */
+section .rounded-2xl,
+section .rounded-3xl {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+
+[data-theme='platinum'] section .rounded-2xl,
+[data-theme='platinum'] section .rounded-3xl {
+  box-shadow: 0 1px 3px rgba(15,23,42,0.08), 0 1px 2px rgba(15,23,42,0.04);
+}
+
+/* Button hover/active states */
+button:active {
+  transform: scale(0.98);
+}
+
+button.cursor-pointer:active,
+a.cursor-pointer:active {
+  transform: scale(0.97);
+}
+
+/* Section headings - slightly larger, stronger contrast */
+section h2 {
+  letter-spacing: -0.03em;
+}
+
+section h3 {
+  letter-spacing: -0.02em;
+}
+
+/* Small text readability - labels, badges, helper text, captions */
+.text-\\[10px\\],
+.text-\\[9px\\],
+.text-\\[8px\\] {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Cards: clearer borders */
+section .border,
+section .border-\\[var\\(--border-color\\)\\] {
+  border-color: var(--border-color);
+}
+
+/* Project title contrast */
+#projects h2,
+#projects .font-extrabold {
+  color: var(--text-primary);
+  font-weight: 800;
+}

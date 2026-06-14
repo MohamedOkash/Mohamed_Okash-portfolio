@@ -33,9 +33,9 @@ export const Experience = React.memo(() => {
         {experienceList.map((exp) => (
           <motion.div 
             key={exp.id} 
-            initial={{ opacity: 0, y: 50, scale: 0.97, filter: 'blur(6px)' }}
-            whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-            viewport={{ once: true, margin: "-80px" }}
+            initial={{ opacity: 0, y: 40, scale: 0.97 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="relative ps-8 md:ps-10 group"
           >

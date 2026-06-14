@@ -40,3 +40,13 @@ export const defaultSeoData = {
   description: "Bridging 7 years of IT infrastructure experience with modern Health & Safety engineering to build practical applications.",
   ogImage: "/og-image.svg"
 };
+
+export const getLocalizedSeoData = (lang) => {
+  const isAr = lang === 'ar';
+  const isUr = lang === 'ur';
+  return {
+    title: isAr ? "محمد عكاش | هندسة السلامة وتكنولوجيا المعلومات" : isUr ? "محمد عکاش | HSE اور آئی ٹی انجینئرنگ" : "Mohamed Okash | HSE & IT Engineering",
+    description: isAr ? "أدمج بين خبرة 7 سنوات في البنية التحتية لتكنولوجيا المعلومات وهندسة الأمن والسلامة المهنية لبناء تطبيقات عملية." : isUr ? "7 سال کے آئی ٹی انفراسٹرکچر کے تجربے کو جدید HSE انجینئرنگ کے ساتھ جوڑتا ہوں۔" : "Bridging 7 years of IT infrastructure experience with modern Health & Safety engineering to build practical applications.",
+    ogImage: "/og-image.svg"
+  };
+};

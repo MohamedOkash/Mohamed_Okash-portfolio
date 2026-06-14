@@ -101,7 +101,18 @@ export default function AdminDashboard() {
       delete clone.settings.lastSavedAt;
       delete clone.settings.lastSavedBy;
     }
-    const str = JSON.stringify(clone, Object.keys(clone).sort());
+    const stableStringify = (val) => {
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        const keys = Object.keys(val).sort();
+        const pairs = keys.map(k => `"${k}":${stableStringify(val[k])}`);
+        return `{${pairs.join(',')}}`;
+      }
+      if (Array.isArray(val)) {
+        return `[${val.map(stableStringify).join(',')}]`;
+      }
+      return JSON.stringify(val);
+    };
+    const str = stableStringify(clone);
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
@@ -180,9 +191,9 @@ export default function AdminDashboard() {
       });
     }
     const identityDefaults = {
-      displayName: { ar: '', en: 'Mohamed Okash', ur: '' },
-      availabilityLabel: { ar: '', en: 'Available for work', ur: '' },
-      statusLabel: { ar: '', en: 'Practical problem solver', ur: '' },
+      displayName: { ar: 'محمد عكاش', en: 'Mohamed Okash', ur: 'محمد عکاش' },
+      availabilityLabel: { ar: 'متاح للعمل', en: 'Available for work', ur: 'کام کے لیے دستیاب' },
+      statusLabel: { ar: 'مهندس سلامة وبنية تحتية', en: 'Practical problem solver', ur: 'عملی مسائل حل کرنے والا' },
       statusDotColor: '#10b981',
       badgeBackground: 'rgba(255,255,255,0.02)',
       badgeBorder: 'rgba(255,255,255,0.08)',
@@ -283,7 +294,7 @@ export default function AdminDashboard() {
       // Save to Firestore
       await savePortfolio(updated);
       // Reset dirty state hash to match current formData
-      savedHashRef.current = generateHash(formData);
+      savedHashRef.current = generateHash(updated);
       if (import.meta.env.DEV) {
         console.log('[SaveEngine] Hash updated:', savedHashRef.current, '| isDirty:', false);
       }
@@ -2894,6 +2905,10 @@ export default function AdminDashboard() {
     const previewProfile = isThemeStudio ? getActiveProfile() : (formData.themeProfiles?.[formData.themeSettings?.defaultTheme || 'dark'] || formData.themeSettings);
     const p = previewProfile;
     const isLight = (themeStudioSelectedTheme || formData.themeSettings?.defaultTheme) === 'platinum';
+    // Compute preview-safe text colors derived from profile for guaranteed readability
+    const previewTextColor = isLight ? '#0f172a' : (p.fontColor && p.fontColor !== '#000000' ? p.fontColor : '#f1f5f9');
+    const previewCardText = isLight ? '#334155' : (p.cardDescriptionColor && p.cardDescriptionColor !== '#000000' ? p.cardDescriptionColor : '#cbd5e1');
+    const previewInputText = isLight ? '#0f172a' : (p.fontColor && p.fontColor !== '#000000' ? p.fontColor : '#e2e8f0');
     return (
       <div 
         className="w-full h-full p-6 border border-[var(--border-color)] bg-[var(--card-bg)] rounded-2xl relative overflow-hidden flex flex-col justify-center min-h-[300px]"
@@ -2909,8 +2924,8 @@ export default function AdminDashboard() {
           '--paragraph-size-setting': `${p.paragraphSize || 16}px`,
           '--heading-weight-setting': p.headingWeight || '800',
           '--body-weight-setting': p.bodyWeight || '300',
-          '--font-color-setting': isLight ? 'var(--text-primary)' : (p.fontColor || 'var(--text-primary)'),
-          '--heading-color-setting': isLight ? 'var(--text-primary)' : (p.headingColor || 'var(--text-primary)'),
+          '--font-color-setting': previewTextColor,
+          '--heading-color-setting': isLight ? 'var(--text-primary)' : previewTextColor,
           '--letter-spacing-setting': p.letterSpacing || 'normal',
           '--line-height-setting': p.lineHeight || '1.6',
           '--paragraph-width-setting': p.paragraphWidth || '65ch',
@@ -3111,7 +3126,7 @@ export default function AdminDashboard() {
                 {/* Navbar preview */}
                 <div className="p-3 rounded-xl border flex items-center gap-3 text-xs" style={{ borderColor: p.borderColor, background: p.cardBackground, borderRadius: p.cardRadius }}>
                   <div className="w-6 h-6 rounded-full" style={{ background: p.accentColor }} />
-                  <span className="font-bold flex-1" style={{ color: p.headingColor }}>Mohamed Okash</span>
+                  <span className="font-bold flex-1" style={{ color: p.headingColor }}>{formData.brandIdentity?.logoText?.en || 'Mohamed Okash'}</span>
                   <span className="text-[10px] px-2 py-0.5 rounded" style={{ background: p.accentColor + '20', color: p.accentColor }}>Work</span>
                 </div>
                 {/* Hero title preview */}
@@ -3119,7 +3134,7 @@ export default function AdminDashboard() {
                   HSE & <span style={{ color: p.accentColor }}>Engineering</span>
                 </h3>
                 {/* Paragraph preview */}
-                <p className="text-xs leading-relaxed" style={{ color: p.fontColor, fontWeight: p.bodyWeight, lineHeight: p.lineHeight, letterSpacing: p.letterSpacing }}>
+                <p className="text-xs leading-relaxed" style={{ color: previewCardText, fontWeight: p.bodyWeight, lineHeight: p.lineHeight, letterSpacing: p.letterSpacing }}>
                   Bridging 7 years of IT infrastructure experience with modern Health & Safety engineering to build practical applications.
                 </p>
                 {/* Button preview */}
@@ -3127,17 +3142,17 @@ export default function AdminDashboard() {
                   <div className="px-4 py-2 rounded-lg text-xs font-bold" style={{ background: p.buttonBackgroundColor || p.accentColor, color: p.buttonTextColor || (p.accentText || '#000'), borderRadius: p.buttonRadius }}>
                     View Projects
                   </div>
-                  <div className="px-4 py-2 rounded-lg text-xs font-bold border" style={{ borderColor: p.borderColor, color: p.fontColor, borderRadius: p.buttonRadius }}>
+                  <div className="px-4 py-2 rounded-lg text-xs font-bold border" style={{ borderColor: p.borderColor, color: previewTextColor, borderRadius: p.buttonRadius }}>
                     Contact Me
                   </div>
                 </div>
                 {/* Card preview */}
                 <div className="p-4 rounded-xl border space-y-2" style={{ borderColor: p.borderColor, background: `rgba(255,255,255,${p.glassOpacity || 0.03})`, backdropFilter: `blur(${p.blurStrength || 16}px)`, borderRadius: p.cardRadius }}>
-                  <h5 className="text-xs font-bold" style={{ color: p.cardTitleColor || p.headingColor }}>Project Card</h5>
-                  <p className="text-[10px]" style={{ color: p.cardDescriptionColor || p.fontColor }}>Safety management system built with React and Firestore.</p>
+                  <h5 className="text-xs font-bold" style={{ color: previewTextColor }}>Project Card</h5>
+                  <p className="text-[10px]" style={{ color: previewCardText }}>Safety management system built with React and Firestore.</p>
                 </div>
                 {/* Input preview */}
-                <input placeholder="Email address" className="w-full p-3 rounded-lg text-xs border outline-none" style={{ borderColor: p.borderColor, background: p.inputBackground || 'rgba(0,0,0,0.3)', color: p.fontColor, borderRadius: p.buttonRadius }} />
+                <input placeholder="Email address" className="w-full p-3 rounded-lg text-xs border outline-none" style={{ borderColor: p.borderColor, background: p.inputBackground || 'rgba(0,0,0,0.3)', color: previewInputText, borderRadius: p.buttonRadius }} />
               </div>
             );
           })()}
@@ -3179,7 +3194,7 @@ export default function AdminDashboard() {
           {activeTab === 'branding' && (
             <div className="p-4 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] text-center space-y-2">
               <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block">{t.cms.previewBranding}</span>
-              <div className="text-xl font-bold tracking-widest text-[var(--text-primary)] animate-pulse uppercase">{formData.mediaBranding.preloaderLogo || 'Mohamed Okash'}</div>
+              <div className="text-xl font-bold tracking-widest text-[var(--text-primary)] animate-pulse uppercase">{formData.mediaBranding.preloaderLogo || formData.brandIdentity?.preloaderText?.en || 'OKASH'}</div>
             </div>
           )}
 

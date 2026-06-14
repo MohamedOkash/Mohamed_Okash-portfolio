@@ -334,18 +334,12 @@ export default function Home() {
   const sectionRevealVariants = {
     hidden: { 
       opacity: 0, 
-      scale: 0.92,
-      y: 80,
-      rotateX: 6,
-      filter: 'blur(12px)',
+      y: 60,
       transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
     },
     visible: { 
       opacity: 1, 
-      scale: 1, 
       y: 0,
-      rotateX: 0, 
-      filter: 'blur(0px)',
       transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
     }
   };
@@ -380,7 +374,7 @@ export default function Home() {
           <meta property="og:image" content={ogImageVal} />
           <meta property="og:url" content={canonicalUrl} />
           <meta property="og:type" content="website" />
-          <meta property="og:site_name" content="Mohamed Okash | Portfolio" />
+          <meta property="og:site_name" content={seoTitleVal} />
           <meta property="og:locale" content={ogLocale} />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={seoTitleVal} />
@@ -409,9 +403,8 @@ export default function Home() {
                 initial="hidden"
                 whileInView="visible"
                 exit="hidden"
-                viewport={{ once: true, margin: "-120px" }}
+                viewport={{ once: true, amount: 0.15 }}
                 variants={sectionRevealVariants}
-                style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
               >
                 {comp}
               </motion.div>
@@ -452,9 +445,9 @@ export default function Home() {
                           {featuredProjects.map((project, idx) => (
                             <motion.div 
                               key={project.id} 
-                              initial={{ opacity: 0, y: 40, scale: 0.96, rotateX: 12, filter: 'blur(6px)' }}
-                              whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0, filter: 'blur(0px)' }}
-                              viewport={{ once: true, margin: "-60px" }}
+                              initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                              viewport={{ once: true, amount: 0.15 }}
                               transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
                               className="relative group cursor-pointer"
                             >
@@ -482,9 +475,9 @@ export default function Home() {
                           {generalProjects.map((project, idx) => (
                             <motion.div 
                               key={project.id}
-                              initial={{ opacity: 0, y: 40, scale: 0.96, rotateX: 12, filter: 'blur(6px)' }}
-                              whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0, filter: 'blur(0px)' }}
-                              viewport={{ once: true, margin: "-60px" }}
+                              initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                              viewport={{ once: true, amount: 0.15 }}
                               transition={{ duration: 0.8, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
                             >
                               <ProjectCard 
