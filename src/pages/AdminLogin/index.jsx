@@ -54,7 +54,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-[var(--text-primary)] flex items-center justify-center p-6 relative overflow-hidden transition-theme">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex items-center justify-center p-6 relative overflow-hidden transition-theme">
       {/* Ambient background blobs */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] rounded-full blur-[140px] opacity-15 mix-blend-screen bg-[var(--primary)] pointer-events-none" />
 

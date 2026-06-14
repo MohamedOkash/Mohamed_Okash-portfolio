@@ -584,27 +584,27 @@ export default function AdminDashboard() {
       <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-[var(--border-color)] pb-3 mb-4">{t.cms.sidebarHero}</h3>
       <div className="p-5 border border-[var(--border-color)] rounded-xl bg-[var(--bg-secondary)] space-y-4">
         <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Hero Identity</h4>
-        <AdminMultiLangInput label="Display Name" valueObj={formData.hero.identity.displayName} onChangeKey={(key, val) => {
+        <AdminMultiLangInput label={t.cms.heroIdentityDisplayName} valueObj={formData.hero.identity.displayName} onChangeKey={(key, val) => {
           const updated = structuredClone(formData);
           updated.hero.identity.displayName[key] = val;
           setFormData(updated);
         }} />
-        <AdminMultiLangInput label="Availability Label" valueObj={formData.hero.identity.availabilityLabel} onChangeKey={(key, val) => {
+        <AdminMultiLangInput label={t.cms.heroIdentityAvailabilityLabel} valueObj={formData.hero.identity.availabilityLabel} onChangeKey={(key, val) => {
           const updated = structuredClone(formData);
           updated.hero.identity.availabilityLabel[key] = val;
           setFormData(updated);
         }} />
-        <AdminMultiLangInput label="Status Label" valueObj={formData.hero.identity.statusLabel} onChangeKey={(key, val) => {
+        <AdminMultiLangInput label={t.cms.heroIdentityStatusLabel} valueObj={formData.hero.identity.statusLabel} onChangeKey={(key, val) => {
           const updated = structuredClone(formData);
           updated.hero.identity.statusLabel[key] = val;
           setFormData(updated);
         }} />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
-            ['statusDotColor', 'Status Dot Color'],
-            ['badgeBackground', 'Badge Background'],
-            ['badgeBorder', 'Badge Border'],
-            ['badgeTextColor', 'Badge Text Color']
+            ['statusDotColor', t.cms.heroIdentityStatusDotColor],
+            ['badgeBackground', t.cms.heroIdentityBadgeBackground],
+            ['badgeBorder', t.cms.heroIdentityBadgeBorder],
+            ['badgeTextColor', t.cms.heroIdentityBadgeTextColor]
           ].map(([key, label]) => (
             <AdminInput key={key} label={label} value={formData.hero.identity[key]} onChange={(e) => {
               const updated = structuredClone(formData);
@@ -2061,7 +2061,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div>
             <div className="flex justify-between text-xs font-bold uppercase mb-1">
-              <span className="text-[var(--text-secondary)]">Heading Size</span>
+              <span className="text-[var(--text-secondary)]">{t.cms.headingSize}</span>
               <span className="text-[var(--primary)]">{formData.themeSettings.headingSize}px</span>
             </div>
             <input type="range" min="32" max="88" step="2" value={formData.themeSettings.headingSize} onChange={(e) => {
@@ -2070,7 +2070,7 @@ export default function AdminDashboard() {
           </div>
           <div>
             <div className="flex justify-between text-xs font-bold uppercase mb-1">
-              <span className="text-[var(--text-secondary)]">Paragraph Size</span>
+              <span className="text-[var(--text-secondary)]">{t.cms.paragraphSize}</span>
               <span className="text-[var(--primary)]">{formData.themeSettings.paragraphSize}px</span>
             </div>
             <input type="range" min="12" max="24" step="1" value={formData.themeSettings.paragraphSize} onChange={(e) => {
@@ -2683,18 +2683,18 @@ export default function AdminDashboard() {
               <span className="text-[10px] text-[var(--text-secondary)] font-bold uppercase block text-center border-b border-[var(--border-color)] pb-1 mb-2">
                 {t.cms?.sidebarBrandIdentity || 'Brand Identity'}
               </span>
-              <div><strong className="text-[var(--text-secondary)]">Arabic Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.brandName?.ar || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">English Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.brandName?.en || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">Urdu Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.brandName?.ur || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">Short Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.shortName?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">Subtitle:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.subtitle?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">Navbar Logo:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.logoText?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">Hero Display Name:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.heroName?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">Footer Text:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.footerText?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">Preloader Text:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.preloaderText?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">Browser Title:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.browserTitle?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">SEO Title:</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.seoTitle?.[lang] || 'N/A'}</span></div>
-              <div><strong className="text-[var(--text-secondary)]">SEO Description:</strong> <span className="text-[var(--text-primary)] font-light block mt-1">{formData.brandIdentity?.seoDescription?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentityArabicName}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.brandName?.ar || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentityEnglishName}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.brandName?.en || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentityUrduName}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.brandName?.ur || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentityShortName}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.shortName?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentitySubtitle}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.subtitle?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentityNavbarLogo}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.logoText?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentityHeroDisplay}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.heroName?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentityFooterText}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.footerText?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentityPreloaderText}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.preloaderText?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentityBrowserTitle}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.browserTitle?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentitySeoTitle}</strong> <span className="text-[var(--text-primary)] font-medium">{formData.brandIdentity?.seoTitle?.[lang] || 'N/A'}</span></div>
+              <div><strong className="text-[var(--text-secondary)]">{t.cms.brandIdentitySeoDescription}</strong> <span className="text-[var(--text-primary)] font-light block mt-1">{formData.brandIdentity?.seoDescription?.[lang] || 'N/A'}</span></div>
             </div>
           )}
 
@@ -3017,7 +3017,7 @@ export default function AdminDashboard() {
             <button 
               onClick={handleSave} 
               disabled={isSaving}
-              className="px-5 py-2.5 bg-[var(--primary)] text-black hover:opacity-90 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-[var(--primary)]/10"
+              className="px-5 py-2.5 bg-[var(--primary)] text-[var(--accent-text)] hover:opacity-90 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 cursor-pointer shadow-lg shadow-[var(--primary)]/10"
             >
               {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
               {isSaving ? (t.cms?.saving || 'Saving...') : (t.cms?.saveChanges || 'Save Changes')}

@@ -24,7 +24,7 @@ export const RootLayout = ({ children }) => {
   const themeStyles = themeSettings ? {
     '--primary': themeSettings.accentColor || '#ffffff',
     '--accent': themeSettings.accentColor || '#ffffff',
-    '--accent-text': '#000000',
+    '--accent-text': isLightTheme ? '#0f172a' : '#000000',
     '--glass-opacity': themeSettings.glassOpacity !== undefined ? themeSettings.glassOpacity : 0.03,
     '--border-opacity': themeSettings.borderOpacity !== undefined ? themeSettings.borderOpacity : 0.06,
     '--blur-strength': `${themeSettings.blurStrength !== undefined ? themeSettings.blurStrength : 16}px`,

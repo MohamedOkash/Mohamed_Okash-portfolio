@@ -62,7 +62,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 30 }}
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-            className="relative w-full max-w-5xl bg-[#0a0a0c]/90 border border-[var(--border-color)] rounded-[2rem] shadow-2xl p-6 md:p-10 z-10 overflow-hidden max-h-[90vh] overflow-y-auto liquid-glass"
+            className="relative w-full max-w-5xl bg-[var(--bg-primary)]/90 border border-[var(--border-color)] rounded-[2rem] shadow-2xl p-6 md:p-10 z-10 overflow-hidden max-h-[90vh] overflow-y-auto liquid-glass"
           >
             {/* Ambient inner blob */}
             <div className="absolute top-0 right-0 w-80 h-80 rounded-full blur-[100px] opacity-20 pointer-events-none bg-[var(--primary)]" />

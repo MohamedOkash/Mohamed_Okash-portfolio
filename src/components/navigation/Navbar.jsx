@@ -222,7 +222,7 @@ export const Navbar = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.95 }}
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="bg-[#050505]/95 backdrop-blur-xl border border-[var(--border)] rounded-xl py-2 px-1.5 min-w-[140px] shadow-2xl flex flex-col gap-0.5"
+                    className="bg-[var(--bg-primary)]/95 backdrop-blur-xl border border-[var(--border)] rounded-xl py-2 px-1.5 min-w-[140px] shadow-2xl flex flex-col gap-0.5"
                   >
                     <button 
                       onClick={() => { setLanguage('ar'); setIsLangOpen(false); }} 
@@ -275,7 +275,7 @@ export const Navbar = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.95 }}
                     transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="bg-[#050505]/95 backdrop-blur-xl border border-[var(--border)] rounded-xl py-2 px-1.5 min-w-[190px] shadow-2xl flex flex-col gap-0.5"
+                    className="bg-[var(--bg-primary)]/95 backdrop-blur-xl border border-[var(--border)] rounded-xl py-2 px-1.5 min-w-[190px] shadow-2xl flex flex-col gap-0.5"
                   >
                     <button 
                       onClick={() => { setTheme('dark'); setIsThemeOpen(false); }} 

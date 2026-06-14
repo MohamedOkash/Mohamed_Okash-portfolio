@@ -71,7 +71,7 @@ export const LoginModal = () => {
             transition={{ type: 'spring', damping: 25, stiffness: 350 }}
             className="relative w-full max-w-md z-10"
           >
-            <SpotlightCard className="shadow-2xl border-[var(--border)] p-8 md:p-10 relative bg-[#0a0a0c]/90 backdrop-blur-2xl">
+            <SpotlightCard className="shadow-2xl border-[var(--border)] p-8 md:p-10 relative bg-[var(--bg-primary)]/90 backdrop-blur-2xl">
               {/* Close Button */}
               <button
                 onClick={() => setLoginModalOpen(false)}
