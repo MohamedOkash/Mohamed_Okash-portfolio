@@ -7,6 +7,7 @@ import { useThemeStore } from '../../store/themeStore';
 import { translations } from '../../data/translations';
 import { THEME_PROFILES_DEFAULTS } from '../../data/constants';
 import { validatePortfolioData } from '../../utils/validators';
+import { validateContrasts, calculateHealthScore, getHealthScoreColor, getHealthScoreLabel, getSectionScores, autoFixTheme } from '../../utils/themeValidator';
 import { 
   User, Star, Award, Briefcase, Plus, Trash2, Save, 
   Loader2, Languages, Mail, Settings, ShieldAlert, Cpu, 
@@ -89,6 +90,26 @@ export default function AdminDashboard() {
   const [themeStudioSelectedTheme, setThemeStudioSelectedTheme] = useState('dark');
   const [previewMode, setPreviewMode] = useState(false);
   const fileInputRef = useRef(null);
+  const savedHashRef = useRef(null);
+
+  // Generate hash from formData ignoring transient metadata (settings.backup, settings.lastSavedAt, etc.)
+  const generateHash = (obj) => {
+    if (!obj) return 'null';
+    const clone = JSON.parse(JSON.stringify(obj));
+    if (clone.settings) {
+      delete clone.settings.backup;
+      delete clone.settings.lastSavedAt;
+      delete clone.settings.lastSavedBy;
+    }
+    const str = JSON.stringify(clone, Object.keys(clone).sort());
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash |= 0;
+    }
+    return hash.toString();
+  };
 
   const initializeFormData = (rawDoc) => {
     if (!rawDoc) return null;
@@ -185,7 +206,11 @@ export default function AdminDashboard() {
   // Sync form state on store load
   useEffect(() => {
     if (data) {
-      setFormData(initializeFormData(data));
+      const initialized = initializeFormData(data);
+      setFormData(initialized);
+      if (initialized) {
+        savedHashRef.current = generateHash(initialized);
+      }
     }
   }, [data]);
 
@@ -194,8 +219,15 @@ export default function AdminDashboard() {
     loadPortfolio(user);
   }, [loadPortfolio, user]);
 
-  // isDirty flag
-  const isDirty = formData && data && JSON.stringify(formData) !== JSON.stringify(data);
+  // isDirty flag — hash-based comparison to eliminate false positives after save
+  const isDirty = formData && savedHashRef.current !== null && generateHash(formData) !== savedHashRef.current;
+
+  // Dev logging for dirty state
+  useEffect(() => {
+    if (import.meta.env.DEV) {
+      console.log('[SaveEngine] isDirty:', isDirty, '| Current Hash:', formData ? generateHash(formData) : 'null', '| Saved Hash:', savedHashRef.current);
+    }
+  }, [isDirty, formData]);
 
   // beforeunload protection
   useEffect(() => {
@@ -250,6 +282,11 @@ export default function AdminDashboard() {
       validatePortfolioData(updated);
       // Save to Firestore
       await savePortfolio(updated);
+      // Reset dirty state hash to match current formData
+      savedHashRef.current = generateHash(formData);
+      if (import.meta.env.DEV) {
+        console.log('[SaveEngine] Hash updated:', savedHashRef.current, '| isDirty:', false);
+      }
       showStatus('success', (t.cms?.saveSuccess || 'Saved successfully! Snapshot version #{version} created.').replace('{version}', currentVersion));
     } catch (err) {
       showStatus('error', (t.cms?.saveError || 'Save Error: {error}').replace('{error}', err.message));
@@ -2527,6 +2564,19 @@ export default function AdminDashboard() {
       e.target.value = '';
     };
 
+    const allValidations = validateContrasts(profile, THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme], themeStudioSelectedTheme);
+    const healthScore = calculateHealthScore(allValidations);
+    const sectionScores = getSectionScores(allValidations);
+    const failedChecks = allValidations.filter(v => !v.pass);
+
+    const handleAutoFix = () => {
+      const fixed = autoFixTheme(profile, THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme], themeStudioSelectedTheme);
+      const updated = { ...formData };
+      if (!updated.themeProfiles) updated.themeProfiles = {};
+      updated.themeProfiles[themeStudioSelectedTheme] = { ...THEME_PROFILES_DEFAULTS[themeStudioSelectedTheme], ...fixed };
+      setFormData(updated);
+    };
+
     return (
       <div className="space-y-6">
         {/* Theme Selector Tabs */}
@@ -2546,10 +2596,44 @@ export default function AdminDashboard() {
           ))}
         </div>
 
+        {/* Theme Health Score */}
+        <div className="p-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] space-y-3">
+          <div className="flex items-center justify-between">
+            <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">Theme Health Score</h4>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-black" style={{ color: getHealthScoreColor(healthScore) }}>{healthScore}</span>
+              <span className="text-xs font-bold px-2 py-0.5 rounded" style={{ backgroundColor: getHealthScoreColor(healthScore) + '20', color: getHealthScoreColor(healthScore) }}>{getHealthScoreLabel(healthScore)}</span>
+            </div>
+          </div>
+          <div className="w-full h-2 rounded-full bg-[var(--bg-primary)] overflow-hidden">
+            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${healthScore}%`, backgroundColor: getHealthScoreColor(healthScore) }} />
+          </div>
+          <div className="flex flex-wrap gap-3 pt-1">
+            {Object.entries(sectionScores).map(([key, { score }]) => (
+              <div key={key} className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: getHealthScoreColor(score) }} />
+                <span className="text-[10px] font-bold text-[var(--text-secondary)]">{key}: {score}</span>
+              </div>
+            ))}
+          </div>
+          {failedChecks.length > 0 && (
+            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 space-y-1">
+              {failedChecks.map(check => (
+                <p key={check.key} className="text-[10px] text-red-400 font-medium">
+                  {check.label}: {check.ratio}:1 (needs {check.threshold}:1)
+                </p>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Theme Action Bar */}
         <div className="flex flex-wrap gap-2 p-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]">
           <button onClick={handleResetTheme} className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] cursor-pointer flex items-center gap-1">
             <Undo className="w-3.5 h-3.5" /> {t.cms?.reset || 'Reset'} {themeLabels[themeStudioSelectedTheme]}
+          </button>
+          <button onClick={handleAutoFix} className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-bold text-amber-400 hover:bg-amber-500/10 cursor-pointer flex items-center gap-1">
+            <CheckCircle2 className="w-3.5 h-3.5" /> Auto Fix Theme
           </button>
           <button onClick={handleExportTheme} className="px-3 py-1.5 rounded-lg border border-[var(--border-color)] text-xs font-bold text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] cursor-pointer flex items-center gap-1">
             <Download className="w-3.5 h-3.5" /> {t.cms?.exportTheme || 'Export Theme'}
@@ -2572,14 +2656,21 @@ export default function AdminDashboard() {
               ['cardBackground', t.cms?.cardBackground || 'Card Background'],
               ['inputBackground', t.cms?.inputBackground || 'Input Background'],
               ['borderColor', t.cms?.borderColorLabel || 'Border Color'],
-            ].map(([key, label]) => (
+            ].map(([key, label]) => {
+              const checkMap = { fontColor: 'bgBodyText', headingColor: 'bgHeadingText', accentText: 'accentAccentText', cardBackground: 'cardBodyText', inputBackground: 'inputInputText' };
+              const fail = checkMap[key] ? allValidations.find(v => v.key === checkMap[key]) : null;
+              return (
               <div key={key} className="flex items-end gap-3">
                 <div className="flex-1">
                   <AdminInput label={label} value={profile[key] || ''} onChange={(e) => updateThemeProfileKey(key, e.target.value)} />
                 </div>
-                <input type="color" value={profile[key] || '#ffffff'} onChange={(e) => updateThemeProfileKey(key, e.target.value)} className="w-10 h-10 mb-4 rounded border border-[var(--border-color)] bg-transparent cursor-pointer" />
+                <div className="flex flex-col items-center gap-1 mb-4">
+                  <input type="color" value={profile[key] || '#ffffff'} onChange={(e) => updateThemeProfileKey(key, e.target.value)} className="w-10 h-10 rounded border border-[var(--border-color)] bg-transparent cursor-pointer" />
+                  {fail && !fail.pass && <span className="text-[8px] font-bold text-red-400" title={`${fail.label}: ${fail.ratio}:1`}>⚠</span>}
+                </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -2799,46 +2890,50 @@ export default function AdminDashboard() {
 
   // --- STICKY REAL-TIME PREVIEW WINDOW ---
   const renderPreviewPanel = () => {
+    const isThemeStudio = activeTab === 'themeStudio' || activeTab === 'backgroundBuilder';
+    const previewProfile = isThemeStudio ? getActiveProfile() : (formData.themeProfiles?.[formData.themeSettings?.defaultTheme || 'dark'] || formData.themeSettings);
+    const p = previewProfile;
+    const isLight = (themeStudioSelectedTheme || formData.themeSettings?.defaultTheme) === 'platinum';
     return (
       <div 
         className="w-full h-full p-6 border border-[var(--border-color)] bg-[var(--card-bg)] rounded-2xl relative overflow-hidden flex flex-col justify-center min-h-[300px]"
         style={{
-          '--accent-color': formData.themeSettings.accentColor,
-          '--primary': formData.themeSettings.accentColor,
-          '--glass-opacity': formData.themeSettings.glassOpacity,
-          '--border-opacity': formData.themeSettings.borderOpacity,
-          '--blur-strength': `${formData.themeSettings.blurStrength}px`,
-          '--font-family-setting': formData.themeSettings.fontFamily ? `'${formData.themeSettings.fontFamily}', sans-serif` : 'sans-serif',
-          '--font-scale-setting': formData.themeSettings.fontScale !== undefined ? formData.themeSettings.fontScale : 1.0,
-          '--heading-size-setting': `${formData.themeSettings.headingSize || 48}px`,
-          '--paragraph-size-setting': `${formData.themeSettings.paragraphSize || 16}px`,
-          '--heading-weight-setting': formData.themeSettings.headingWeight || '800',
-          '--body-weight-setting': formData.themeSettings.bodyWeight || '300',
-          '--font-color-setting': formData.themeSettings.fontColor || '#fafafa',
-          '--heading-color-setting': formData.themeSettings.headingColor || '#fafafa',
-          '--letter-spacing-setting': formData.themeSettings.letterSpacing || 'normal',
-          '--line-height-setting': formData.themeSettings.lineHeight || '1.6',
-          '--paragraph-width-setting': formData.themeSettings.paragraphWidth || '65ch',
-          '--button-text-color-setting': formData.themeSettings.buttonTextColor || '#000000',
-          '--button-background-color-setting': formData.themeSettings.buttonBackgroundColor || formData.themeSettings.accentColor,
-          '--card-title-color-setting': formData.themeSettings.cardTitleColor || '#fafafa',
-          '--card-description-color-setting': formData.themeSettings.cardDescriptionColor || '#a1a1aa',
-          'fontFamily': formData.themeSettings.fontFamily ? `'${formData.themeSettings.fontFamily}', sans-serif` : 'sans-serif',
-          'fontSize': `calc(100% * ${formData.themeSettings.fontScale || 1.0})`,
-          'letterSpacing': formData.themeSettings.letterSpacing || 'normal',
-          'lineHeight': formData.themeSettings.lineHeight || '1.6',
-          '--heading-weight': formData.themeSettings.headingWeight || '800',
-          '--body-weight': formData.themeSettings.bodyWeight || '300',
-          '--font-color': formData.themeSettings.fontColor || '#fafafa',
-          '--heading-color': formData.themeSettings.headingColor || '#fafafa'
+          '--accent-color': p.accentColor || '#ffffff',
+          '--primary': p.accentColor || '#ffffff',
+          '--glass-opacity': p.glassOpacity !== undefined ? p.glassOpacity : 0.03,
+          '--border-opacity': p.borderOpacity !== undefined ? p.borderOpacity : 0.06,
+          '--blur-strength': `${p.blurStrength !== undefined ? p.blurStrength : 16}px`,
+          '--font-family-setting': p.fontFamily ? `'${p.fontFamily}', var(--font-sans)` : 'var(--font-sans)',
+          '--font-scale-setting': p.fontScale !== undefined ? p.fontScale : 1.0,
+          '--heading-size-setting': `${p.headingSize || 48}px`,
+          '--paragraph-size-setting': `${p.paragraphSize || 16}px`,
+          '--heading-weight-setting': p.headingWeight || '800',
+          '--body-weight-setting': p.bodyWeight || '300',
+          '--font-color-setting': isLight ? 'var(--text-primary)' : (p.fontColor || 'var(--text-primary)'),
+          '--heading-color-setting': isLight ? 'var(--text-primary)' : (p.headingColor || 'var(--text-primary)'),
+          '--letter-spacing-setting': p.letterSpacing || 'normal',
+          '--line-height-setting': p.lineHeight || '1.6',
+          '--paragraph-width-setting': p.paragraphWidth || '65ch',
+          '--button-text-color-setting': isLight ? 'var(--accent-text)' : (p.buttonTextColor || 'var(--accent-text)'),
+          '--button-background-color-setting': isLight ? 'var(--accent-color)' : (p.buttonBackgroundColor || 'var(--accent)'),
+          '--card-title-color-setting': isLight ? 'var(--text-primary)' : (p.cardTitleColor || 'var(--heading-color-setting)'),
+          '--card-description-color-setting': isLight ? 'var(--text-secondary)' : (p.cardDescriptionColor || 'var(--muted)'),
+          'fontFamily': p.fontFamily ? `'${p.fontFamily}', sans-serif` : 'sans-serif',
+          'fontSize': `calc(100% * ${p.fontScale || 1.0})`,
+          'letterSpacing': p.letterSpacing || 'normal',
+          'lineHeight': p.lineHeight || '1.6',
+          '--heading-weight': p.headingWeight || '800',
+          '--body-weight': p.bodyWeight || '300',
+          '--font-color': isLight ? 'var(--text-primary)' : (p.fontColor || 'var(--text-primary)'),
+          '--heading-color': isLight ? 'var(--text-primary)' : (p.headingColor || 'var(--text-primary)')
         }}
       >
         {/* Glow ambient spot */}
         <div 
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[80px] pointer-events-none transition-all duration-300" 
           style={{
-            background: (activeTab === 'themeStudio' || activeTab === 'backgroundBuilder') ? (getActiveProfile().accentColor || formData.themeSettings.accentColor) : formData.themeSettings.accentColor,
-            opacity: (activeTab === 'themeStudio' || activeTab === 'backgroundBuilder') ? (getActiveProfile().glowIntensity || 0.2) * 0.4 : formData.themeSettings.glowIntensity * 0.4
+            background: p.accentColor || '#ffffff',
+            opacity: (p.glowIntensity !== undefined ? p.glowIntensity : 0.2) * 0.4
           }}
         />
 
@@ -3166,9 +3261,10 @@ export default function AdminDashboard() {
             <Eye className="w-4 h-4" />
           </button>
           
-          <h1 className="text-sm font-black text-[var(--text-primary)] tracking-widest uppercase hidden md:flex items-center gap-2">
-            <Cpu className="w-4.5 h-4.5 text-[var(--primary)]" />
-            {t.cms?.panelTitle || 'Portfolio Enterprise CMS'}
+          <h1 className="font-black text-[var(--text-primary)] tracking-widest uppercase items-center gap-2 hidden md:flex"
+            style={{ fontSize: 'clamp(1.2rem, 2.5vw, 2rem)' }}>
+            <Cpu className="w-4.5 h-4.5 text-[var(--primary)] shrink-0" />
+            <span className="truncate">{t.cms?.panelTitle || 'Portfolio Enterprise CMS'}</span>
           </h1>
         </div>
 
