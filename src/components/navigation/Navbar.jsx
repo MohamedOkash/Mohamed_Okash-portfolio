@@ -210,8 +210,9 @@ export const Navbar = React.memo(() => {
               onClick={toggleLang}
               aria-haspopup="true"
               aria-expanded={isLangOpen}
+              aria-label={t.cms?.ariaChangeLanguage || 'Change Language'}
               className="p-3 rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] active:scale-95 transition-all cursor-pointer flex items-center justify-center min-w-[44px] min-h-[44px]"
-              title="Change Language"
+              title={t.cms?.ariaChangeLanguage || 'Change Language'}
             >
               <Languages className="w-5 h-5 text-[var(--text-primary)]/80" />
             </button>
@@ -263,8 +264,9 @@ export const Navbar = React.memo(() => {
               onClick={toggleTheme}
               aria-haspopup="true"
               aria-expanded={isThemeOpen}
+              aria-label={t.cms?.ariaChangeTheme || 'Change Theme'}
               className="p-3 rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] active:scale-95 transition-all cursor-pointer flex items-center justify-center min-w-[44px] min-h-[44px]"
-              title="Change Theme"
+              title={t.cms?.ariaChangeTheme || 'Change Theme'}
             >
               <SunMoon className="w-5 h-5 text-[var(--text-primary)]/80" />
             </button>
@@ -324,15 +326,17 @@ export const Navbar = React.memo(() => {
             <div className="flex items-center gap-2">
               <button 
                 onClick={() => navigate('/admin/dashboard')} 
+                aria-label={t.cms?.ariaOpenDashboard || 'Open Dashboard'}
                 className="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] text-[var(--primary)] cursor-pointer flex items-center justify-center"
-                title="CMS Dashboard"
+                title={t.cms?.ariaOpenDashboard || 'Open Dashboard'}
               >
                 <LayoutDashboard className="w-4.5 h-4.5" />
               </button>
               <button 
                 onClick={() => logout()} 
+                aria-label={t.cms?.logOut || 'Log Out'}
                 className="p-2.5 rounded-xl border border-[var(--border)] bg-red-500/10 text-red-400 hover:bg-red-500/20 cursor-pointer flex items-center justify-center"
-                title="Log Out"
+                title={t.cms?.logOut || 'Log Out'}
               >
                 <LogOut className="w-4.5 h-4.5" />
               </button>

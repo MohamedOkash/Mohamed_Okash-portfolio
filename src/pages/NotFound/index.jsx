@@ -1,46 +1,76 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useLanguageStore } from '../../store/languageStore';
 import { translations } from '../../data/translations';
-import { Compass, Home } from 'lucide-react';
-import { SpotlightCard } from '../../components/ui/SpotlightCard';
+import { ArrowLeft } from 'lucide-react';
+import { CinematicBackground } from '../../components/ui/CinematicBackground';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.3 }
+  }
+};
+
+const childVariants = {
+  hidden: { opacity: 0, scale: 0.8, y: 20 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+  }
+};
 
 export default function NotFound() {
   const navigate = useNavigate();
   const { lang } = useLanguageStore();
-  const t = translations[lang] || translations.ar;
+  const t = translations[lang] || translations.en;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] flex items-center justify-center p-6 relative overflow-hidden transition-theme">
-      {/* Background blobs */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50vw] h-[50vw] rounded-full blur-[140px] opacity-15 mix-blend-screen bg-pink-500/20 pointer-events-none" />
+    <div className="h-screen overflow-hidden flex items-center justify-center p-6 relative transition-theme bg-[var(--bg-primary)] text-[var(--text-primary)]">
+      <CinematicBackground />
 
-      <div className="w-full max-w-md text-center">
-        <SpotlightCard className="shadow-2xl border-[var(--border-color)] p-8 md:p-10 relative">
-          <div className="flex flex-col items-center mb-6">
-            <div className="p-4 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-pink-500 mb-4 animate-bounce">
-              <Compass className="w-10 h-10" />
-            </div>
-            <h1 className="text-6xl font-black text-[var(--text-primary)] tracking-tight mb-2">404</h1>
-            <h2 className="text-xl font-bold tracking-tight">
-              {lang === 'ar' ? 'الصفحة غير موجودة' : lang === 'ur' ? 'صفحہ نہیں ملا' : 'Page Not Found'}
-            </h2>
-            <p className="text-xs opacity-50 mt-2 font-light leading-relaxed">
-              {lang === 'ar' 
-                ? 'عذراً، الصفحة التي تحاول الوصول إليها قد تم نقلها أو حذفها.' 
-                : 'The page you are looking for does not exist or has been moved.'}
-            </p>
-          </div>
+      <motion.div
+        className="relative z-10 text-center max-w-lg w-full"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.h1
+          className="text-[10rem] sm:text-[14rem] font-black leading-none tracking-tighter select-none"
+          variants={childVariants}
+          style={{
+            background: 'linear-gradient(135deg, var(--primary), var(--accent))',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text'
+          }}
+        >
+          404
+        </motion.h1>
 
+        <motion.p
+          className="text-sm sm:text-base text-[var(--text-secondary)] font-light leading-relaxed max-w-md mx-auto mt-4"
+          variants={childVariants}
+        >
+          {lang === 'ar'
+            ? 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.'
+            : 'The page you\'re looking for doesn\'t exist or has been moved.'}
+        </motion.p>
+
+        <motion.div variants={childVariants} className="mt-10">
           <button
             onClick={() => navigate('/')}
-            className="w-full py-4 rounded-xl font-bold text-sm bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-bold text-xs bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 shadow-lg transition-all cursor-pointer"
           >
-            <Home className="w-4.5 h-4.5" />
+            <ArrowLeft className="w-4 h-4" />
             {t.backToHome}
           </button>
-        </SpotlightCard>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

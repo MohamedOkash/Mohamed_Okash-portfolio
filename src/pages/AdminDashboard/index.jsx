@@ -494,6 +494,7 @@ export default function AdminDashboard() {
             updated.websiteStructure.navbarVisible = !updated.websiteStructure.navbarVisible;
             setFormData(updated);
           }}
+          aria-label={t.cms?.ariaToggleNavbar || 'Toggle navbar'}
           className={`p-2.5 rounded-lg border transition-all ${
             formData.websiteStructure.navbarVisible 
               ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary)]' 
@@ -521,6 +522,7 @@ export default function AdminDashboard() {
                     list[idx - 1] = temp;
                     setFormData({ ...formData, websiteStructure: { ...formData.websiteStructure, sections: list } });
                   }}
+                  aria-label={t.cms?.ariaReorderUp || 'Move up'}
                   className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"
                 >
                   <ArrowUp className="w-4 h-4 text-[var(--text-secondary)]" />
@@ -534,6 +536,7 @@ export default function AdminDashboard() {
                     list[idx + 1] = temp;
                     setFormData({ ...formData, websiteStructure: { ...formData.websiteStructure, sections: list } });
                   }}
+                  aria-label={t.cms?.ariaReorderDown || 'Move down'}
                   className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"
                 >
                   <ArrowDown className="w-4 h-4 text-[var(--text-secondary)]" />
@@ -664,14 +667,14 @@ export default function AdminDashboard() {
                   list[idx] = list[idx - 1];
                   list[idx - 1] = temp;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                }} aria-label={t.cms?.ariaReorderUp || 'Move up'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                 <button disabled={idx === formData.hero.roles.length - 1} onClick={() => {
                   const list = [...formData.hero.roles];
                   const temp = list[idx];
                   list[idx] = list[idx + 1];
                   list[idx + 1] = temp;
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
-                }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                }} aria-label={t.cms?.ariaReorderDown || 'Move down'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
               </div>
 
               <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -697,6 +700,7 @@ export default function AdminDashboard() {
                   const list = formData.hero.roles.filter((_, i) => i !== idx);
                   setFormData({ ...formData, hero: { ...formData.hero, roles: list } });
                 }} 
+                aria-label={t.cms?.ariaDelete || 'Delete'}
                 className="p-2 text-red-400 hover:bg-red-500/10 rounded cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
@@ -836,6 +840,7 @@ export default function AdminDashboard() {
                       <button 
                         disabled={globalIndex === 0}
                         onClick={(e) => { e.stopPropagation(); moveItem('projects', globalIndex, 'up'); }}
+                        aria-label={t.cms?.ariaReorderUp || 'Move up'}
                         className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"
                       >
                         <ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
@@ -843,6 +848,7 @@ export default function AdminDashboard() {
                       <button 
                         disabled={globalIndex === formData.projects.length - 1}
                         onClick={(e) => { e.stopPropagation(); moveItem('projects', globalIndex, 'down'); }}
+                        aria-label={t.cms?.ariaReorderDown || 'Move down'}
                         className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"
                       >
                         <ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" />
@@ -893,7 +899,7 @@ export default function AdminDashboard() {
                           setFormData(updated);
                         }
                       }}
-                      className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                      aria-label={t.cms?.ariaDelete || 'Delete'} className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -1012,6 +1018,7 @@ export default function AdminDashboard() {
                                 updated.projects[globalIndex].features = updated.projects[globalIndex].features.filter((_, i) => i !== fIdx);
                                 setFormData(updated);
                               }}
+                              aria-label={t.cms?.ariaDelete || 'Delete'}
                               className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer shrink-0 self-end mb-5"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -1056,6 +1063,7 @@ export default function AdminDashboard() {
                                   updated.projects[globalIndex].tech = updated.projects[globalIndex].tech.filter((_, i) => i !== tIdx);
                                   setFormData(updated);
                                 }}
+                                aria-label={t.cms?.ariaDelete || 'Delete'}
                                 className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer shrink-0 self-end mb-5"
                               >
                                 <Trash2 className="w-4 h-4" />
@@ -1126,8 +1134,8 @@ export default function AdminDashboard() {
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('skills', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
-                      <button disabled={globalIndex === formData.skills.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('skills', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('skills', globalIndex, 'up'); }} aria-label={t.cms?.ariaReorderUp || 'Move up'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.skills.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('skills', globalIndex, 'down'); }} aria-label={t.cms?.ariaReorderDown || 'Move down'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-[var(--text-primary)]">{group.category?.[lang] || group.category?.en || t.cms.untitledGroup || 'Untitled Group'}</h4>
@@ -1144,7 +1152,7 @@ export default function AdminDashboard() {
                         setFormData(updated);
                       }
                     }}
-                    className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                    aria-label={t.cms?.ariaDelete || 'Delete'} className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -1184,6 +1192,7 @@ export default function AdminDashboard() {
                                 updated.skills[globalIndex].items = updated.skills[globalIndex].items.filter((_, i) => i !== itemIdx);
                                 setFormData(updated);
                               }}
+                              aria-label={t.cms?.ariaDelete || 'Delete'}
                               className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded cursor-pointer shrink-0 self-end mb-5"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -1258,8 +1267,8 @@ export default function AdminDashboard() {
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('experience', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
-                      <button disabled={globalIndex === formData.experience.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('experience', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('experience', globalIndex, 'up'); }} aria-label={t.cms?.ariaReorderUp || 'Move up'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.experience.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('experience', globalIndex, 'down'); }} aria-label={t.cms?.ariaReorderDown || 'Move down'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-[var(--text-primary)]">{exp.role?.[lang] || exp.role?.en || t.cms.untitledJob}</h4>
@@ -1276,7 +1285,7 @@ export default function AdminDashboard() {
                         setFormData(updated);
                       }
                     }}
-                    className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                    aria-label={t.cms?.ariaDelete || 'Delete'} className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -1363,8 +1372,8 @@ export default function AdminDashboard() {
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('certifications', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
-                      <button disabled={globalIndex === formData.certifications.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('certifications', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('certifications', globalIndex, 'up'); }} aria-label={t.cms?.ariaReorderUp || 'Move up'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.certifications.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('certifications', globalIndex, 'down'); }} aria-label={t.cms?.ariaReorderDown || 'Move down'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-[var(--text-primary)]">{name}</h4>
@@ -1381,7 +1390,7 @@ export default function AdminDashboard() {
                         setFormData(updated);
                       }
                     }}
-                    className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                    aria-label={t.cms?.ariaDelete || 'Delete'} className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -1467,8 +1476,8 @@ export default function AdminDashboard() {
               >
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1 shrink-0">
-                    <button disabled={idx === 0} onClick={(e) => { e.stopPropagation(); moveItem('achievements', idx, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
-                    <button disabled={idx === formData.achievements.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('achievements', idx, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                    <button disabled={idx === 0} onClick={(e) => { e.stopPropagation(); moveItem('achievements', idx, 'up'); }} aria-label={t.cms?.ariaReorderUp || 'Move up'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                    <button disabled={idx === formData.achievements.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('achievements', idx, 'down'); }} aria-label={t.cms?.ariaReorderDown || 'Move down'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                   </div>
                   <div>
                     <h4 className="font-bold text-sm text-[var(--text-primary)]">{ach.value}{ach.suffix} {ach.label?.[lang] || ach.label?.en || t.cms.untitled}</h4>
@@ -1485,7 +1494,7 @@ export default function AdminDashboard() {
                       setFormData(updated);
                     }
                   }}
-                  className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
+                  aria-label={t.cms?.ariaDelete || 'Delete'} className="p-2 text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 rounded transition-all cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -1571,8 +1580,8 @@ export default function AdminDashboard() {
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
-                      <button disabled={globalIndex === formData.contactMethods.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'up'); }} aria-label={t.cms?.ariaReorderUp || 'Move up'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.contactMethods.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('contactMethods', globalIndex, 'down'); }} aria-label={t.cms?.ariaReorderDown || 'Move down'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-[var(--text-primary)]">{method.label || t.cms.untitledContactMethod || 'Untitled Method'}</h4>
@@ -1589,6 +1598,7 @@ export default function AdminDashboard() {
                         updated.contactMethods[globalIndex].visible = !updated.contactMethods[globalIndex].visible;
                         setFormData(updated);
                       }}
+                      aria-label={t.cms?.ariaToggleVisibility || 'Toggle visibility'}
                       className={`p-1.5 rounded hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer ${method.visible ? 'text-[var(--primary)]' : 'text-[var(--text-secondary)]'}`}
                     >
                       {method.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
@@ -1603,6 +1613,7 @@ export default function AdminDashboard() {
                           setFormData(updated);
                         }
                       }}
+                      aria-label={t.cms?.ariaDelete || 'Delete'}
                       className="p-1.5 rounded hover:bg-red-950/40 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -1734,8 +1745,8 @@ export default function AdminDashboard() {
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1 shrink-0">
-                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'up'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
-                      <button disabled={globalIndex === formData.customSections.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'down'); }} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === 0} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'up'); }} aria-label={t.cms?.ariaReorderUp || 'Move up'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowUp className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
+                      <button disabled={globalIndex === formData.customSections.length - 1} onClick={(e) => { e.stopPropagation(); moveItem('customSections', globalIndex, 'down'); }} aria-label={t.cms?.ariaReorderDown || 'Move down'} className="p-1 rounded hover:bg-[var(--bg-secondary)] disabled:opacity-20 cursor-pointer"><ArrowDown className="w-3.5 h-3.5 text-[var(--text-secondary)]" /></button>
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-[var(--text-primary)]">{titleText}</h4>
@@ -1759,6 +1770,7 @@ export default function AdminDashboard() {
                         }
                         setFormData(updated);
                       }}
+                      aria-label={t.cms?.ariaToggleVisibility || 'Toggle visibility'}
                       className={`p-1.5 rounded hover:bg-[var(--bg-secondary)] transition-colors cursor-pointer ${section.visible ? 'text-[var(--primary)]' : 'text-[var(--text-secondary)]'}`}
                     >
                       {section.visible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
@@ -1779,6 +1791,7 @@ export default function AdminDashboard() {
                           setFormData(updated);
                         }
                       }}
+                      aria-label={t.cms?.ariaDelete || 'Delete'}
                       className="p-1.5 rounded hover:bg-red-950/40 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -2724,6 +2737,7 @@ export default function AdminDashboard() {
             </div>
             <button 
               onClick={() => updateThemeProfileKey('backgroundEnabled', !profile.backgroundEnabled)}
+              aria-label={t.cms?.ariaToggleVisibility || 'Toggle visibility'}
               className={`p-2.5 rounded-lg border transition-all cursor-pointer ${
                 profile.backgroundEnabled !== false 
                   ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary)]' 
@@ -3143,6 +3157,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => setPreviewMode(!previewMode)}
+            aria-label={t.cms?.ariaPreviewMode || 'Preview mode'}
             className={`p-2 rounded-lg border text-xs cursor-pointer hidden lg:flex items-center gap-1 ${
               previewMode ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary)]' : 'border-[var(--border-color)] text-[var(--text-secondary)]'
             }`}
@@ -3196,6 +3211,7 @@ export default function AdminDashboard() {
         <div className="hidden lg:flex items-center gap-2.5 shrink-0">
           <button
             onClick={handleExportJSON}
+            aria-label={t.cms?.exportBackup || 'Export Portfolio JSON Backup'}
             title={t.cms?.exportBackup || 'Export Portfolio JSON Backup'}
             className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
           >
@@ -3204,6 +3220,7 @@ export default function AdminDashboard() {
           
           <button
             onClick={() => fileInputRef.current?.click()}
+            aria-label={t.cms?.importBackup || 'Import Portfolio JSON Backup'}
             title={t.cms?.importBackup || 'Import Portfolio JSON Backup'}
             className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
           >
@@ -3220,6 +3237,7 @@ export default function AdminDashboard() {
           {data?.settings?.backup && (
             <button
               onClick={handleRollback}
+              aria-label={t.cms?.rollbackBackup || 'Restore Previous Backup Version'}
               title={t.cms?.rollbackBackup || 'Restore Previous Backup Version'}
               className="p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:bg-[var(--bg-secondary)] text-amber-500 hover:bg-amber-500/10 cursor-pointer"
             >
@@ -3235,6 +3253,7 @@ export default function AdminDashboard() {
               await logout();
               navigate('/admin/login', { replace: true });
             }}
+            aria-label={t.cms?.logOut || 'Log Out'}
             className="p-2 rounded-lg border border-red-500/10 text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
             title={t.cms?.logOut || 'Log Out'}
           >
@@ -3245,7 +3264,7 @@ export default function AdminDashboard() {
           type="button"
           onClick={() => setIsMobileNavOpen(true)}
           className="lg:hidden p-2 rounded-lg border border-[var(--border-color)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] shrink-0"
-          aria-label="Open CMS navigation"
+          aria-label={t.cms?.ariaCloseModal || 'Close'}
         >
           <Menu className="w-5 h-5" />
         </button>
@@ -3258,7 +3277,7 @@ export default function AdminDashboard() {
             type="button"
             className="fixed inset-0 top-16 bg-[var(--card-bg)] backdrop-blur-sm z-40 lg:hidden"
             onClick={() => setIsMobileNavOpen(false)}
-            aria-label="Close CMS navigation"
+            aria-label={t.cms?.ariaCloseModal || 'Close'}
           />
         )}
         
@@ -3266,7 +3285,7 @@ export default function AdminDashboard() {
         <aside className={`fixed lg:static top-16 bottom-0 start-0 z-50 w-[min(19rem,88vw)] lg:w-64 bg-[var(--bg-secondary)] lg:bg-[var(--card-bg)] border-e border-[var(--border-color)] h-[calc(100vh-64px)] overflow-y-auto shrink-0 flex flex-col p-4 gap-1 transition-transform duration-300 ease-out will-change-transform ${isMobileNavOpen ? 'translate-x-0' : isRtl ? 'translate-x-full lg:translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
           <div className="lg:hidden flex items-center justify-between px-2 pb-3 mb-2 border-b border-[var(--border-color)]">
             <span className="text-xs font-black uppercase tracking-widest">CMS Navigation</span>
-            <button type="button" onClick={() => setIsMobileNavOpen(false)} className="p-2 rounded-lg hover:bg-[var(--bg-secondary)]" aria-label="Close CMS navigation">
+            <button type="button" onClick={() => setIsMobileNavOpen(false)} className="p-2 rounded-lg hover:bg-[var(--bg-secondary)]" aria-label={t.cms?.ariaCloseModal || 'Close'}>
               <X className="w-5 h-5" />
             </button>
           </div>

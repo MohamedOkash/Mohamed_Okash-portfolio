@@ -88,7 +88,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
               <button 
                 onClick={onClose} 
-                aria-label="Close"
+                aria-label={t.cms?.ariaCloseModal || 'Close'}
                 className="p-3 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] transition-all cursor-pointer"
               >
                 <X className="w-5 h-5" />

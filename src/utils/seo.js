@@ -38,5 +38,5 @@ export const getJsonLdSchema = (lang, data) => {
 export const defaultSeoData = {
   title: "Mohamed Okash | HSE & IT Engineering",
   description: "Bridging 7 years of IT infrastructure experience with modern Health & Safety engineering to build practical applications.",
-  ogImage: "/og-image.jpg"
+  ogImage: "/og-image.svg"
 };

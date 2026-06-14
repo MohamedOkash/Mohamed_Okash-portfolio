@@ -59,7 +59,7 @@ export default function Home() {
   const browserTitleVal = data?.brandIdentity?.browserTitle?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
   const seoTitleVal = data?.brandIdentity?.seoTitle?.[lang] || browserTitleVal;
   const seoDescVal = data?.brandIdentity?.seoDescription?.[lang] || data?.translations?.[lang]?.tagline || t.tagline;
-  const ogImageVal = data?.brandIdentity?.ogImage?.[lang] || data?.brandIdentity?.seoImage || (lang === 'ar' ? '/seo-image.jpg' : '/seo-image.jpg');
+  const ogImageVal = data?.brandIdentity?.ogImage?.[lang] || data?.brandIdentity?.seoImage || '/og-image.svg';
   const siteUrl = window.location.origin;
   const canonicalUrl = window.location.href;
   const localeMap = { ar: 'ar_SA', en: 'en_US', ur: 'ur_PK' };
@@ -292,7 +292,7 @@ export default function Home() {
           <div className={`max-w-5xl mx-auto grid grid-cols-1 ${allowImage ? 'md:grid-cols-2' : ''} gap-8 items-center bg-[var(--card-bg)]/40 border border-[var(--border-color)] p-6 md:p-10 rounded-[2rem] backdrop-blur-md`}>
             {allowImage && (imageUrl ? (
               <div className="rounded-2xl overflow-hidden border border-[var(--border-color)] shadow-lg relative aspect-video">
-                <img src={imageUrl} alt={title} className="object-cover w-full h-full" />
+                <img src={imageUrl} alt={title} loading="lazy" className="object-cover w-full h-full" />
               </div>
             ) : (
               <div className="rounded-2xl aspect-video bg-gradient-to-br from-white/[0.02] to-white/[0.08] border border-[var(--border-color)] flex items-center justify-center text-[var(--primary)] p-8">

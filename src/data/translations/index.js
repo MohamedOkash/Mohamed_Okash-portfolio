@@ -409,7 +409,18 @@ export const translations = {
       // Login
       loginSubtitle: "Secure administration control access",
       loginSubtitle2: "Secure control access panel",
-      placeholderEmail: "admin@example.com"
+      placeholderEmail: "admin@example.com",
+
+      // Icon-only button aria-labels
+      ariaCloseModal: "Close",
+      ariaChangeLanguage: "Change Language",
+      ariaChangeTheme: "Change Theme",
+      ariaOpenDashboard: "Open Dashboard",
+      ariaReorderUp: "Move up",
+      ariaReorderDown: "Move down",
+      ariaDelete: "Delete",
+      ariaToggleVisibility: "Toggle visibility",
+      ariaPreviewMode: "Preview mode"
     }
   },
   ar: {
@@ -822,7 +833,18 @@ export const translations = {
       // Login
       loginSubtitle: "الوصول الآمن للوحة التحكم",
       loginSubtitle2: "لوحة التحكم الآمنة",
-      placeholderEmail: "admin@example.com"
+      placeholderEmail: "admin@example.com",
+
+      // Icon-only button aria-labels
+      ariaCloseModal: "إغلاق",
+      ariaChangeLanguage: "تغيير اللغة",
+      ariaChangeTheme: "تغيير المظهر",
+      ariaOpenDashboard: "فتح لوحة التحكم",
+      ariaReorderUp: "تحريك لأعلى",
+      ariaReorderDown: "تحريك لأسفل",
+      ariaDelete: "حذف",
+      ariaToggleVisibility: "تبديل الظهور",
+      ariaPreviewMode: "وضع المعاينة"
     }
   },
   ur: {
@@ -1235,7 +1257,18 @@ export const translations = {
       // Login
       loginSubtitle: "محفوظ ایڈمن کنٹرول تک رسائی",
       loginSubtitle2: "محفوظ کنٹرول پینل",
-      placeholderEmail: "admin@example.com"
+      placeholderEmail: "admin@example.com",
+
+      // Icon-only button aria-labels
+      ariaCloseModal: "بند کریں",
+      ariaChangeLanguage: "زبان تبدیل کریں",
+      ariaChangeTheme: "تھیم تبدیل کریں",
+      ariaOpenDashboard: "ڈیش بورڈ کھولیں",
+      ariaReorderUp: "اوپر لے جائیں",
+      ariaReorderDown: "نیچے لے جائیں",
+      ariaDelete: "حذف کریں",
+      ariaToggleVisibility: "نمایش کو ٹوگل کریں",
+      ariaPreviewMode: "پیش منظر موڈ"
     }
   }
 };
