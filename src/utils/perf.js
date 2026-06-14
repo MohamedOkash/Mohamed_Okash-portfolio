@@ -34,11 +34,28 @@ export const useRAFCounter = (target, { duration = 1200, enabled = true } = {}) 
   return count;
 };
 
+const detectRefreshRate = () => new Promise((resolve) => {
+  let last = performance.now();
+  let frames = 0;
+  const step = (now) => {
+    frames++;
+    if (now - last >= 500) {
+      const rate = Math.round(frames * 1000 / (now - last));
+      resolve(rate);
+      return;
+    }
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+  setTimeout(() => resolve(60), 600);
+});
+
 export const usePerformance = () => {
   const [mode, setMode] = useState('balanced');
   const [isLowEnd, setIsLowEnd] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [refreshRate, setRefreshRate] = useState(60);
 
   useEffect(() => {
     const touch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -47,14 +64,35 @@ export const usePerformance = () => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setPrefersReducedMotion(reducedMotion);
 
-    const memory = navigator.deviceMemory;
-    const cores = navigator.hardwareConcurrency;
-    const lowEnd = reducedMotion || (touch && (!cores || cores <= 4)) || (memory && memory <= 4);
-    setIsLowEnd(lowEnd);
+    detectRefreshRate().then(rate => {
+      setRefreshRate(rate);
+    });
 
-    if (reducedMotion) setMode('performance');
-    else if (lowEnd) setMode('balanced');
-    else setMode('ultra');
+    const memory = navigator.deviceMemory || 8;
+    const cores = navigator.hardwareConcurrency || 4;
+    const highRefresh = rate => rate >= 120;
+
+    let computedMode = 'ultra';
+    let lowEnd = false;
+
+    if (reducedMotion) {
+      computedMode = 'performance';
+      lowEnd = true;
+    } else if (touch && (!cores || cores <= 4)) {
+      computedMode = 'balanced';
+      lowEnd = true;
+    } else if (memory <= 4) {
+      computedMode = 'performance';
+      lowEnd = true;
+    } else if (cores <= 4 && memory <= 6) {
+      computedMode = 'balanced';
+      lowEnd = true;
+    } else if (touch && cores <= 6) {
+      computedMode = 'balanced';
+    }
+
+    setMode(computedMode);
+    setIsLowEnd(lowEnd);
 
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const handler = (e) => setPrefersReducedMotion(e.matches);
@@ -62,7 +100,7 @@ export const usePerformance = () => {
     return () => reducedMotionQuery.removeEventListener('change', handler);
   }, []);
 
-  return { mode, isLowEnd, isTouch, prefersReducedMotion };
+  return { mode, isLowEnd, isTouch, prefersReducedMotion, refreshRate };
 };
 
 export const isPointerFine = () => {

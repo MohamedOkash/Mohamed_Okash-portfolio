@@ -23,7 +23,7 @@ export const Hero = React.memo(() => {
 
   const heroNameVal = data?.brandIdentity?.heroName?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
   const identity = data?.hero?.identity || {};
-  const displayName = identity.displayName?.[lang] || heroNameVal;
+  const displayName = heroNameVal;
   const availabilityLabel = identity.availabilityLabel?.[lang] || data?.translations?.[lang]?.available || t.available;
   const statusLabel = identity.statusLabel?.[lang] || availabilityLabel;
 

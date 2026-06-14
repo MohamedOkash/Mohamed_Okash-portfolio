@@ -122,9 +122,7 @@ section h3 {
 }
 
 /* Small text readability - labels, badges, helper text, captions */
-.text-\\[10px\\],
-.text-\\[9px\\],
-.text-\\[8px\\] {
+.text-xs.font-bold.uppercase {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -132,7 +130,7 @@ section h3 {
 
 /* Cards: clearer borders */
 section .border,
-section .border-\\[var\\(--border-color\\)\\] {
+section .border-\[var\(--border-color\)\] {
   border-color: var(--border-color);
 }
 
@@ -141,4 +139,41 @@ section .border-\\[var\\(--border-color\\)\\] {
 #projects .font-extrabold {
   color: var(--text-primary);
   font-weight: 800;
+}
+
+/* Badge text: always readable against any badge background */
+span.opacity-60,
+span.opacity-55,
+span.opacity-50 {
+  color: var(--text-secondary);
+}
+
+/* Section meta labels consistency */
+section .uppercase.tracking-widest {
+  color: var(--primary);
+  opacity: 0.85;
+}
+
+/* Stats labels: use text-secondary for guaranteed contrast */
+.stat-label,
+.\\[text-secondary\\] {
+  color: var(--text-secondary);
+}
+
+/* Platinum specific badge enhancements */
+[data-theme='platinum'] .opacity-60,
+[data-theme='platinum'] .opacity-55,
+[data-theme='platinum'] .opacity-50 {
+  color: #475569;
+}
+
+[data-theme='platinum'] .uppercase.tracking-widest {
+  color: #2563eb;
+  opacity: 1;
+}
+
+/* Hero badge: ensure border is always visible */
+#hero .inline-flex.items-center.gap-2\\.5 {
+  border-width: 1px;
+  border-style: solid;
 }

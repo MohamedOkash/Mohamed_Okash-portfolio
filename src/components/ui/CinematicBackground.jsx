@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { usePerformance, useTabVisibility } from '../../utils/perf';
 
-export const CinematicBackground = () => {
+export const CinematicBackground = React.memo(() => {
   const [mounted, setMounted] = useState(false);
   const { mode, isLowEnd, prefersReducedMotion } = usePerformance();
   const tabHidden = useTabVisibility();
@@ -12,14 +12,22 @@ export const CinematicBackground = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (!mounted || mode === 'performance') {
-    if (mode === 'performance') return <div className="fixed inset-0 z-0 bg-[var(--bg-primary)]" />;
-    return null;
-  }
+  // Performance tier constants
+  const perf = useMemo(() => {
+    if (mode === 'performance') return { show: false };
+    const useGrid = true;
+    const useGlows = true;
+    const useLightRays = mode === 'ultra' && !isLowEnd;
+    const useSVG = mode === 'ultra' && !isLowEnd;
+    const useParticles = mode === 'ultra' && !isLowEnd;
+    const gridOpacity = isLowEnd ? 0.03 : (mode === 'balanced' ? 0.05 : 0.08);
+    const glowOpacity = isLowEnd ? 0.12 : 0.25;
+    const gridSpacing = isLowEnd ? '100px 100px' : (mode === 'balanced' ? '80px 80px' : '60px 60px');
+    const animSpeed = paused ? 'none' : (isLowEnd ? 'gridScroll 360s linear infinite' : 'gridScroll 180s linear infinite');
+    return { show: true, useGrid, useGlows, useLightRays, useSVG, useParticles, gridOpacity, glowOpacity, gridSpacing, animSpeed };
+  }, [mode, isLowEnd, paused]);
 
-  const layerOpacity = isLowEnd ? 0.04 : 0.08;
-  const svgOpacity = isLowEnd ? 0.06 : 0.12;
-  const showSVGLayers = mode !== 'balanced';
+  if (!mounted || mode === 'performance') return null;
 
   return (
     <div 
@@ -32,35 +40,41 @@ export const CinematicBackground = () => {
       }}
     >
       {/* Soft Radial Ambient Glows */}
-      <div 
-        className="absolute top-[-5%] left-1/2 -translate-x-1/2 w-[85vw] h-[55vh] rounded-full blur-[140px] pointer-events-none"
-        style={{ opacity: isLowEnd ? 0.15 : 0.3, background: 'radial-gradient(circle, var(--primary) 0%, transparent 70%)', animation: paused ? 'none' : undefined }}
-      />
-      <div 
-        className="absolute top-[40%] right-[-10%] w-[50vw] h-[50vh] rounded-full blur-[160px] pointer-events-none"
-        style={{ opacity: isLowEnd ? 0.08 : 0.15, background: 'var(--accent)' }}
-      />
-      <div 
-        className="absolute bottom-[-10%] left-[-10%] w-[45vw] h-[45vh] rounded-full blur-[150px] pointer-events-none"
-        style={{ opacity: isLowEnd ? 0.06 : 0.12, background: 'var(--primary)' }}
-      />
+      {perf.useGlows && (
+        <>
+          <div 
+            className="absolute top-[-5%] left-1/2 -translate-x-1/2 w-[85vw] h-[55vh] rounded-full blur-[140px] pointer-events-none"
+            style={{ opacity: perf.glowOpacity, background: 'radial-gradient(circle, var(--primary) 0%, transparent 70%)', animation: paused ? 'none' : undefined }}
+          />
+          <div 
+            className="absolute top-[40%] right-[-10%] w-[50vw] h-[50vh] rounded-full blur-[160px] pointer-events-none"
+            style={{ opacity: isLowEnd ? 0.06 : 0.12, background: 'var(--accent)' }}
+          />
+          <div 
+            className="absolute bottom-[-10%] left-[-10%] w-[45vw] h-[45vh] rounded-full blur-[150px] pointer-events-none"
+            style={{ opacity: isLowEnd ? 0.04 : 0.08, background: 'var(--primary)' }}
+          />
+        </>
+      )}
 
       {/* Layer 1: Engineering Blueprint Grid */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          opacity: layerOpacity,
-          backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.18) 1px, transparent 1px)',
-          backgroundSize: isLowEnd ? '80px 80px' : '60px 60px',
-          animation: paused ? 'none' : 'gridScroll 180s linear infinite',
-          maskImage: 'radial-gradient(circle at 50% 50%, black 40%, transparent 95%)',
-          WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 40%, transparent 95%)',
-          willChange: paused ? 'auto' : 'background-position'
-        }}
-      />
+      {perf.useGrid && (
+        <div 
+          className="absolute inset-0"
+          style={{
+            opacity: perf.gridOpacity,
+            backgroundImage: 'linear-gradient(to right, rgba(255, 255, 255, 0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.18) 1px, transparent 1px)',
+            backgroundSize: perf.gridSpacing,
+            animation: perf.animSpeed,
+            maskImage: 'radial-gradient(circle at 50% 50%, black 40%, transparent 95%)',
+            WebkitMaskImage: 'radial-gradient(circle at 50% 50%, black 40%, transparent 95%)',
+            willChange: paused ? 'auto' : 'background-position'
+          }}
+        />
+      )}
 
-      {/* Light Rays - skip on balanced */}
-      {!isLowEnd && (
+      {/* Light Rays - ultra only */}
+      {perf.useLightRays && (
         <svg className="absolute inset-0 w-full h-full opacity-[0.06]" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="lightRay1" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -78,10 +92,10 @@ export const CinematicBackground = () => {
         </svg>
       )}
 
-      {/* SVG Canvas - skip on balanced */}
-      {showSVGLayers && (
-        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" style={{ opacity: paused ? 0.01 : undefined }}>
-          <g style={{ opacity: svgOpacity }} stroke="var(--primary)" strokeWidth="1" fill="none">
+      {/* SVG Canvas - ultra only */}
+      {perf.useSVG && (
+        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" style={{ opacity: paused ? 0.01 : (isLowEnd ? 0.06 : 0.12) }}>
+          <g stroke="var(--primary)" strokeWidth="1" fill="none">
             <path d="M 120 180 H 380 V 320 H 550" strokeDasharray="5 5" className={paused ? '' : 'animate-dash'} />
             <path d="M 850 120 H 1050 V 280 H 900 V 450" strokeDasharray="6 4" className={paused ? '' : 'animate-dash'} style={{ animationDirection: 'reverse' }} />
             <path d="M 100 650 H 320 V 500 H 450" strokeDasharray="4 6" className={paused ? '' : 'animate-dash'} />
@@ -100,8 +114,8 @@ export const CinematicBackground = () => {
         </svg>
       )}
 
-      {/* Floating Glass Particles - skip on low end */}
-      {!isLowEnd && (
+      {/* Floating Glass Particles - ultra only */}
+      {perf.useParticles && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" style={{ opacity: paused ? 0 : undefined }}>
           <div className="absolute top-[20%] left-[15%] w-12 h-16 rounded-lg bg-[var(--surface-hover)] border border-[var(--border-color)] backdrop-blur-[2px] shadow-sm" style={{ animation: paused ? 'none' : 'driftSlow1 28s infinite ease-in-out' }} />
           <div className="absolute top-[65%] right-[12%] w-16 h-20 rounded-xl bg-[var(--surface-hover)] border border-[var(--border-color)] backdrop-blur-[3px] shadow-sm" style={{ animation: paused ? 'none' : 'driftSlow2 32s infinite ease-in-out' }} />
@@ -142,4 +156,4 @@ export const CinematicBackground = () => {
       `}</style>
     </div>
   );
-};
+});
