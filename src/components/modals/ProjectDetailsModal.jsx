@@ -58,6 +58,9 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
           {/* Modal Container */}
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={project.title || 'Project details'}
             initial={{ opacity: 0, scale: 0.95, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 30 }}
@@ -85,6 +88,7 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
 
               <button 
                 onClick={onClose} 
+                aria-label="Close"
                 className="p-3 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] transition-all cursor-pointer"
               >
                 <X className="w-5 h-5" />

@@ -22,6 +22,10 @@ export const RootLayout = ({ children }) => {
     setTheme(configuredTheme);
   }, [configuredTheme, setTheme]);
 
+  useEffect(() => {
+    document.documentElement.setAttribute('lang', lang);
+  }, [lang]);
+
   // Use per-theme profile if available, fall back to shared themeSettings
   const activeProfile = themeProfiles?.[configuredTheme] || themeSettings || {};
 
@@ -63,6 +67,10 @@ export const RootLayout = ({ children }) => {
       className="relative min-h-screen overflow-x-hidden selection:bg-[var(--primary)] selection:text-[var(--accent-text)]"
       style={themeStyles}
     >
+      {/* Skip-to-content link for keyboard navigation */}
+      <a href="#main-content" className="skip-to-content">
+        {lang === 'ar' ? 'تخطى إلى المحتوى الرئيسي' : lang === 'ur' ? 'مرکزی مواد پر جائیں' : 'Skip to main content'}
+      </a>
       {/* Premium Ambient Floating Blobs for Liquid Glass Aesthetics */}
       <div className="absolute top-0 inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full blur-[120px] md:blur-[160px] mix-blend-screen animate-float-1 bg-[var(--blob1)]" style={{ opacity: blobOpacity }} />
@@ -77,7 +85,7 @@ export const RootLayout = ({ children }) => {
       <Navbar />
 
       {/* Main Content Area */}
-      <main className="relative z-10 pt-24 min-h-[calc(100vh-80px)]">
+      <main id="main-content" className="relative z-10 pt-24 min-h-[calc(100vh-80px)]">
         {children}
       </main>
 

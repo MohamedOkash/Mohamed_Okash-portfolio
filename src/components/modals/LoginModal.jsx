@@ -65,6 +65,9 @@ export const LoginModal = () => {
 
           {/* Modal Container */}
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={t.cms?.loginSubtitle || 'Secure administration control access'}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -75,6 +78,7 @@ export const LoginModal = () => {
               {/* Close Button */}
               <button
                 onClick={() => setLoginModalOpen(false)}
+                aria-label={t.cms?.close || (lang === 'ar' ? 'إغلاق' : lang === 'ur' ? 'بند کریں' : 'Close')}
                 className="absolute top-4 right-4 p-2 rounded-xl border border-[var(--border-color)] hover:bg-[var(--surface-hover)] text-[var(--text-primary)] transition-all cursor-pointer"
               >
                 <X className="w-4 h-4" />
@@ -103,12 +107,13 @@ export const LoginModal = () => {
 
                 {/* Email Field */}
                 <div className="relative">
-                  <label className="block text-xs font-bold opacity-60 uppercase mb-2">
+                  <label htmlFor="login-email" className="block text-xs font-bold opacity-60 uppercase mb-2">
                     {t.email}
                   </label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-40" />
                     <input
+                      id="login-email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -121,12 +126,13 @@ export const LoginModal = () => {
 
                 {/* Password Field */}
                 <div className="relative">
-                  <label className="block text-xs font-bold opacity-60 uppercase mb-2">
+                  <label htmlFor="login-password" className="block text-xs font-bold opacity-60 uppercase mb-2">
                     {t.password}
                   </label>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 opacity-40" />
                     <input
+                      id="login-password"
                       type="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}

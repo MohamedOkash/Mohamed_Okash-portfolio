@@ -59,6 +59,11 @@ export default function Home() {
   const browserTitleVal = data?.brandIdentity?.browserTitle?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
   const seoTitleVal = data?.brandIdentity?.seoTitle?.[lang] || browserTitleVal;
   const seoDescVal = data?.brandIdentity?.seoDescription?.[lang] || data?.translations?.[lang]?.tagline || t.tagline;
+  const ogImageVal = data?.brandIdentity?.ogImage?.[lang] || data?.brandIdentity?.seoImage || (lang === 'ar' ? '/seo-image.jpg' : '/seo-image.jpg');
+  const siteUrl = window.location.origin;
+  const canonicalUrl = window.location.href;
+  const localeMap = { ar: 'ar_SA', en: 'en_US', ur: 'ur_PK' };
+  const ogLocale = localeMap[lang] || 'en_US';
 
 
   const renderCustomSection = (sect) => {
@@ -368,13 +373,25 @@ export default function Home() {
         {/* React Helmet for Dynamic Premium SEO */}
         <Helmet>
           <title>{browserTitleVal}</title>
+          <link rel="canonical" href={canonicalUrl} />
           <meta name="description" content={seoDescVal} />
           <meta property="og:title" content={seoTitleVal} />
           <meta property="og:description" content={seoDescVal} />
+          <meta property="og:image" content={ogImageVal} />
+          <meta property="og:url" content={canonicalUrl} />
           <meta property="og:type" content="website" />
+          <meta property="og:site_name" content="Mohamed Okash | Portfolio" />
+          <meta property="og:locale" content={ogLocale} />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={seoTitleVal} />
           <meta name="twitter:description" content={seoDescVal} />
+          <meta name="twitter:image" content={ogImageVal} />
+          
+          {/* Hreflang for multi-language SEO */}
+          <link rel="alternate" hrefLang="ar" href={`${siteUrl}/?lang=ar`} />
+          <link rel="alternate" hrefLang="en" href={`${siteUrl}/?lang=en`} />
+          <link rel="alternate" hrefLang="ur" href={`${siteUrl}/?lang=ur`} />
+          <link rel="alternate" hrefLang="x-default" href={siteUrl} />
           
           {/* Schema.org Structured Data */}
           <script type="application/ld+json">

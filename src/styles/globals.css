@@ -13,7 +13,27 @@ body {
   color: var(--text);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   transition: background-color 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s ease;
+}
+
+/* Skip-to-content link for keyboard users */
+.skip-to-content {
+  position: absolute;
+  top: -9999px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 12px 24px;
+  background: var(--accent, #6366f1);
+  color: #fff;
+  border-radius: 0 0 8px 8px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+.skip-to-content:focus {
+  top: 0;
 }
 
 /* Custom scrollbar for Stripe-like aesthetics */
