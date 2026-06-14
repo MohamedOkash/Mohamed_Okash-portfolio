@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { useLanguageStore } from '../../store/languageStore';
+import { useThemeStore } from '../../store/themeStore';
 import { translations } from '../../data/translations';
 import { validatePortfolioData } from '../../utils/validators';
 import { 
@@ -12,17 +13,17 @@ import {
   Search, ArrowUp, ArrowDown, Upload, Download, Undo, Eye,
   Globe, Palette, Image, ShieldCheck, Shield, HeartPulse, FlameKindling,
   Server, Copy, Check, ArrowUpRight, CheckSquare, Square,
-  ChevronDown, ChevronUp, EyeOff, Layers
+  ChevronDown, ChevronUp, EyeOff, Layers, Menu, X
 } from 'lucide-react';
 
 // Form Input UI Helpers
 const AdminInput = ({ label, value, onChange, type="text", textarea=false, dir="auto", min, max, step }) => (
-  <div className="mb-4 w-full">
+  <div className="mb-4 w-full min-w-0">
     {label && <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{label}</label>}
     {textarea ? (
-      <textarea rows="4" dir={dir} value={value} onChange={onChange} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+      <textarea rows="4" dir={dir} value={value ?? ''} onChange={onChange} className="block w-full min-w-0 max-w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
     ) : (
-      <input type={type} min={min} max={max} step={step} dir={dir} value={value} onChange={onChange} className="w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
+      <input type={type} min={min} max={max} step={step} dir={dir} value={value ?? ''} onChange={onChange} className="block w-full min-w-0 max-w-full p-3 rounded-lg bg-black/60 border border-zinc-800 text-white outline-none focus:border-[var(--primary)] transition-colors text-sm" />
     )}
   </div>
 );
@@ -31,7 +32,7 @@ const AdminMultiLangInput = ({ label, valueObj = { ar: '', en: '', ur: '' }, onC
   const { lang } = useLanguageStore();
   const t = translations[lang] || translations.ar;
   return (
-    <div className="mb-5 p-4 rounded-xl border border-zinc-800 bg-zinc-900/20 space-y-3">
+    <div className="mb-5 p-3 sm:p-4 min-w-0 rounded-xl border border-zinc-800 bg-zinc-900/20 space-y-3">
       {label && <label className="block text-xs font-bold uppercase tracking-wider text-zinc-300 font-extrabold">{label}</label>}
       <div className="space-y-3 pl-3 border-l border-zinc-800">
         <div>
@@ -68,6 +69,7 @@ export default function AdminDashboard() {
   const { logout, user } = useAuthStore();
   const { data, loadPortfolio, savePortfolio } = usePortfolioStore();
   const { lang, setLanguage } = useLanguageStore();
+  const { setTheme } = useThemeStore();
   const t = translations[lang] || translations.ar;
   const isRtl = t.dir === 'rtl';
 
@@ -81,6 +83,8 @@ export default function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedItems, setExpandedItems] = useState({});
   const [localListFilter, setLocalListFilter] = useState('');
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [isMobilePreviewOpen, setIsMobilePreviewOpen] = useState(false);
   const fileInputRef = useRef(null);
 
   const initializeFormData = (rawDoc) => {
@@ -114,6 +118,16 @@ export default function AdminDashboard() {
     if (!copy.themeSettings) {
       copy.themeSettings = {};
     }
+    const themeDefaults = {
+      defaultTheme: 'dark',
+      headingSize: 48,
+      paragraphSize: 16,
+      buttonTextColor: '#000000',
+      buttonBackgroundColor: '#ffffff',
+      cardTitleColor: '#fafafa',
+      cardDescriptionColor: '#a1a1aa'
+    };
+    copy.themeSettings = { ...themeDefaults, ...copy.themeSettings };
     if (copy.themeSettings.letterSpacing === undefined) {
       copy.themeSettings.letterSpacing = "0px";
     }
@@ -123,8 +137,29 @@ export default function AdminDashboard() {
     if (copy.themeSettings.paragraphWidth === undefined) {
       copy.themeSettings.paragraphWidth = "65ch";
     }
+    const identityDefaults = {
+      displayName: { ar: '', en: 'Mohamed Okash', ur: '' },
+      availabilityLabel: { ar: '', en: 'Available for work', ur: '' },
+      statusLabel: { ar: '', en: 'Practical problem solver', ur: '' },
+      statusDotColor: '#10b981',
+      badgeBackground: 'rgba(255,255,255,0.02)',
+      badgeBorder: 'rgba(255,255,255,0.08)',
+      badgeTextColor: '#ffffff'
+    };
+    copy.hero = copy.hero || {};
+    copy.hero.identity = { ...identityDefaults, ...(copy.hero.identity || {}) };
+    for (const key of ['displayName', 'availabilityLabel', 'statusLabel']) {
+      copy.hero.identity[key] = { ...identityDefaults[key], ...(copy.hero.identity[key] || {}) };
+    }
     return copy;
   };
+
+  useEffect(() => {
+    document.body.style.overflow = isMobileNavOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileNavOpen]);
 
   // Sync form state on store load
   useEffect(() => {
@@ -167,6 +202,7 @@ export default function AdminDashboard() {
       }
     }
     setActiveTab(newTab);
+    setIsMobileNavOpen(false);
     setLocalListFilter('');
   };
 
@@ -261,7 +297,23 @@ export default function AdminDashboard() {
     list[index] = list[nextIndex];
     list[nextIndex] = temp;
 
-    setFormData({ ...formData, [listKey]: list });
+    const updated = { ...formData, [listKey]: list };
+    if (listKey === 'customSections' && updated.websiteStructure?.sections) {
+      const customIds = list.map((section) => section.id);
+      const customPositions = updated.websiteStructure.sections
+        .map((section, position) => customIds.includes(section.id) ? position : -1)
+        .filter((position) => position !== -1);
+      const reorderedStructure = [...updated.websiteStructure.sections];
+      customPositions.forEach((position, customIndex) => {
+        const sectionId = customIds[customIndex];
+        reorderedStructure[position] = updated.websiteStructure.sections.find((section) => section.id === sectionId);
+      });
+      updated.websiteStructure = {
+        ...updated.websiteStructure,
+        sections: reorderedStructure
+      };
+    }
+    setFormData(updated);
   };
 
   const toggleAccordion = (id) => {
@@ -437,8 +489,8 @@ export default function AdminDashboard() {
         
         <div className="space-y-3">
           {formData.websiteStructure.sections.map((sect, idx) => (
-            <div key={sect.id} className="p-4 rounded-xl border border-zinc-800 bg-zinc-900/20 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
+            <div key={sect.id} className="p-4 rounded-xl border border-zinc-800 bg-zinc-900/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0">
                 <button
                   disabled={idx === 0}
                   onClick={() => {
@@ -471,7 +523,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 w-full sm:w-auto">
                 <button 
                   onClick={() => {
                     const list = [...formData.websiteStructure.sections];
@@ -495,7 +547,7 @@ export default function AdminDashboard() {
                   {sect.visible ? t.cms.visible : t.cms.hidden}
                 </button>
 
-                <div className="w-44 text-right">
+                <div className="flex-1 sm:w-44 text-right">
                   <input 
                     type="text" 
                     value={sect.title[lang] || sect.title.en || ''} 
@@ -530,6 +582,38 @@ export default function AdminDashboard() {
   const renderHeroTab = () => (
     <div className="space-y-6">
       <h3 className="text-lg font-black uppercase text-[var(--primary)] border-b border-zinc-800 pb-3 mb-4">{t.cms.sidebarHero}</h3>
+      <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/10 space-y-4">
+        <h4 className="font-extrabold text-xs text-zinc-400 uppercase">Hero Identity</h4>
+        <AdminMultiLangInput label="Display Name" valueObj={formData.hero.identity.displayName} onChangeKey={(key, val) => {
+          const updated = structuredClone(formData);
+          updated.hero.identity.displayName[key] = val;
+          setFormData(updated);
+        }} />
+        <AdminMultiLangInput label="Availability Label" valueObj={formData.hero.identity.availabilityLabel} onChangeKey={(key, val) => {
+          const updated = structuredClone(formData);
+          updated.hero.identity.availabilityLabel[key] = val;
+          setFormData(updated);
+        }} />
+        <AdminMultiLangInput label="Status Label" valueObj={formData.hero.identity.statusLabel} onChangeKey={(key, val) => {
+          const updated = structuredClone(formData);
+          updated.hero.identity.statusLabel[key] = val;
+          setFormData(updated);
+        }} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            ['statusDotColor', 'Status Dot Color'],
+            ['badgeBackground', 'Badge Background'],
+            ['badgeBorder', 'Badge Border'],
+            ['badgeTextColor', 'Badge Text Color']
+          ].map(([key, label]) => (
+            <AdminInput key={key} label={label} value={formData.hero.identity[key]} onChange={(e) => {
+              const updated = structuredClone(formData);
+              updated.hero.identity[key] = e.target.value;
+              setFormData(updated);
+            }} />
+          ))}
+        </div>
+      </div>
       <AdminMultiLangInput label={t.cms.heroTitle1} valueObj={formData.hero.title1} onChangeKey={(key, val) => {
         const updated = { ...formData };
         updated.hero.title1[key] = val;
@@ -1739,14 +1823,14 @@ export default function AdminDashboard() {
                           className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
                         >
                           <option value="heroBanner">Hero Banner</option>
-                          <option value="glassCardGrid">Glass Card Grid</option>
-                          <option value="featureGrid">Features Grid</option>
+                          <option value="cardsGrid">Cards Grid</option>
+                          <option value="featureGrid">Features</option>
                           <option value="timeline">Timeline</option>
                           <option value="textBlock">Text Block</option>
                           <option value="ctaBlock">CTA Block</option>
-                          <option value="statisticsBlock">Statistics Block</option>
-                          <option value="imageText">Image + Text</option>
-                          <option value="quoteBlock">Quote Block</option>
+                          <option value="statisticsBlock">Stats</option>
+                          <option value="richContent">Rich Content</option>
+                          <option value="quoteBlock">Quote</option>
                           {/* Backward compatibility aliases */}
                           <option value="glassCard">Glass Card (Deprecated)</option>
                           <option value="contactBlock">Contact Block (Deprecated)</option>
@@ -1835,6 +1919,7 @@ export default function AdminDashboard() {
               const updated = { ...formData };
               updated.themeSettings.defaultTheme = e.target.value;
               setFormData(updated);
+              setTheme(e.target.value);
             }}
             className="w-full p-3 rounded-lg bg-black border border-zinc-800 text-white outline-none focus:border-[var(--primary)] text-sm"
           >
@@ -1973,6 +2058,27 @@ export default function AdminDashboard() {
           }} className="w-full accent-[var(--primary)]" />
         </div>
 
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <div className="flex justify-between text-xs font-bold uppercase mb-1">
+              <span className="text-zinc-400">Heading Size</span>
+              <span className="text-[var(--primary)]">{formData.themeSettings.headingSize}px</span>
+            </div>
+            <input type="range" min="32" max="88" step="2" value={formData.themeSettings.headingSize} onChange={(e) => {
+              setFormData({ ...formData, themeSettings: { ...formData.themeSettings, headingSize: Number(e.target.value) } });
+            }} className="w-full accent-[var(--primary)]" />
+          </div>
+          <div>
+            <div className="flex justify-between text-xs font-bold uppercase mb-1">
+              <span className="text-zinc-400">Paragraph Size</span>
+              <span className="text-[var(--primary)]">{formData.themeSettings.paragraphSize}px</span>
+            </div>
+            <input type="range" min="12" max="24" step="1" value={formData.themeSettings.paragraphSize} onChange={(e) => {
+              setFormData({ ...formData, themeSettings: { ...formData.themeSettings, paragraphSize: Number(e.target.value) } });
+            }} className="w-full accent-[var(--primary)]" />
+          </div>
+        </div>
+
         {/* Heading Weight selection */}
         <div>
           <label className="block text-xs font-bold uppercase tracking-wider mb-2 text-zinc-400">{t.cms.headingWeight}</label>
@@ -2096,6 +2202,26 @@ export default function AdminDashboard() {
               setFormData(updated);
             }} className="w-12 h-12 rounded border border-zinc-800 bg-transparent cursor-pointer" />
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            ['buttonTextColor', 'Button Text Color'],
+            ['buttonBackgroundColor', 'Button Background Color'],
+            ['cardTitleColor', 'Card Title Color'],
+            ['cardDescriptionColor', 'Card Description Color']
+          ].map(([key, label]) => (
+            <div key={key} className="flex items-end gap-3">
+              <div className="flex-1">
+                <AdminInput label={label} value={formData.themeSettings[key]} onChange={(e) => {
+                  setFormData({ ...formData, themeSettings: { ...formData.themeSettings, [key]: e.target.value } });
+                }} />
+              </div>
+              <input type="color" value={formData.themeSettings[key]} onChange={(e) => {
+                setFormData({ ...formData, themeSettings: { ...formData.themeSettings, [key]: e.target.value } });
+              }} className="w-12 h-12 mb-4 rounded border border-zinc-800 bg-transparent cursor-pointer" />
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -2344,6 +2470,8 @@ export default function AdminDashboard() {
           '--blur-strength': `${formData.themeSettings.blurStrength}px`,
           '--font-family-setting': formData.themeSettings.fontFamily ? `'${formData.themeSettings.fontFamily}', sans-serif` : 'sans-serif',
           '--font-scale-setting': formData.themeSettings.fontScale !== undefined ? formData.themeSettings.fontScale : 1.0,
+          '--heading-size-setting': `${formData.themeSettings.headingSize || 48}px`,
+          '--paragraph-size-setting': `${formData.themeSettings.paragraphSize || 16}px`,
           '--heading-weight-setting': formData.themeSettings.headingWeight || '800',
           '--body-weight-setting': formData.themeSettings.bodyWeight || '300',
           '--font-color-setting': formData.themeSettings.fontColor || '#fafafa',
@@ -2351,6 +2479,10 @@ export default function AdminDashboard() {
           '--letter-spacing-setting': formData.themeSettings.letterSpacing || 'normal',
           '--line-height-setting': formData.themeSettings.lineHeight || '1.6',
           '--paragraph-width-setting': formData.themeSettings.paragraphWidth || '65ch',
+          '--button-text-color-setting': formData.themeSettings.buttonTextColor || '#000000',
+          '--button-background-color-setting': formData.themeSettings.buttonBackgroundColor || formData.themeSettings.accentColor,
+          '--card-title-color-setting': formData.themeSettings.cardTitleColor || '#fafafa',
+          '--card-description-color-setting': formData.themeSettings.cardDescriptionColor || '#a1a1aa',
           'fontFamily': formData.themeSettings.fontFamily ? `'${formData.themeSettings.fontFamily}', sans-serif` : 'sans-serif',
           'fontSize': `calc(100% * ${formData.themeSettings.fontScale || 1.0})`,
           'letterSpacing': formData.themeSettings.letterSpacing || 'normal',
@@ -2575,14 +2707,14 @@ export default function AdminDashboard() {
     <div dir={isRtl ? 'rtl' : 'ltr'} className="min-h-screen bg-[#050507] text-white flex flex-col font-sans">
       
       {/* CMS Header Bar */}
-      <header className="fixed top-0 inset-x-0 h-16 bg-black/80 border-b border-zinc-800 backdrop-blur-md flex items-center justify-between px-6 z-40">
-        <div className="flex items-center gap-3">
+      <header className="fixed top-0 inset-x-0 h-16 bg-black/80 border-b border-zinc-800 backdrop-blur-md flex items-center gap-2 px-2 sm:px-4 lg:px-6 z-40">
+        <div className="flex items-center gap-2 shrink-0">
           <button 
             onClick={() => navigate('/')} 
             className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/20 hover:bg-zinc-800 text-xs font-bold flex items-center gap-1.5 cursor-pointer text-zinc-300"
           >
             <ArrowLeft className="w-4 h-4" />
-            {t.cms?.viewSite || 'View Site'}
+            <span className="hidden sm:inline">{t.cms?.viewSite || 'View Site'}</span>
           </button>
           
           <select 
@@ -2602,7 +2734,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Global Search Bar */}
-        <div className="relative w-64 md:w-80">
+        <div className="relative flex-1 min-w-0 max-w-md mx-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
           <input 
             type="text" 
@@ -2614,7 +2746,7 @@ export default function AdminDashboard() {
 
           {/* Search Dropdown Overlay */}
           {searchQuery && (
-            <div className="absolute top-full right-0 w-80 mt-1 border border-zinc-800 bg-black/95 rounded-xl shadow-2xl overflow-hidden z-50 py-1.5">
+            <div className="absolute top-full right-0 w-[min(20rem,calc(100vw-1rem))] mt-1 border border-zinc-800 bg-black/95 rounded-xl shadow-2xl overflow-hidden z-50 py-1.5">
               <div className="px-3 py-1 text-[9px] uppercase font-bold text-zinc-500 tracking-wider border-b border-zinc-900">{t.cms?.searchResults || 'Search Results'}</div>
               {searchResults.length === 0 ? (
                 <div className="px-4 py-3 text-xs text-zinc-500">{t.cms?.noResults || 'No matches found.'}</div>
@@ -2637,7 +2769,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Action controls (Export/Import, LogOut) */}
-        <div className="flex items-center gap-2.5">
+        <div className="hidden lg:flex items-center gap-2.5 shrink-0">
           <button
             onClick={handleExportJSON}
             title={t.cms?.exportBackup || 'Export Portfolio JSON Backup'}
@@ -2685,13 +2817,35 @@ export default function AdminDashboard() {
             <LogOut className="w-4 h-4" />
           </button>
         </div>
+        <button
+          type="button"
+          onClick={() => setIsMobileNavOpen(true)}
+          className="lg:hidden p-2 rounded-lg border border-zinc-800 bg-zinc-900/40 text-zinc-200 shrink-0"
+          aria-label="Open CMS navigation"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
       </header>
 
       {/* Main Panel Content */}
-      <div className="flex-1 pt-16 flex flex-col md:flex-row h-screen overflow-hidden">
+      <div className="flex-1 pt-16 flex h-screen overflow-hidden">
+        {isMobileNavOpen && (
+          <button
+            type="button"
+            className="fixed inset-0 top-16 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
+            onClick={() => setIsMobileNavOpen(false)}
+            aria-label="Close CMS navigation"
+          />
+        )}
         
         {/* Navigation Sidebar */}
-        <aside className="w-full md:w-64 bg-black/60 border-b md:border-b-0 md:border-r border-zinc-800 md:h-[calc(100vh-64px)] overflow-y-auto shrink-0 flex md:flex-col p-4 gap-1 flex-wrap md:flex-nowrap">
+        <aside className={`fixed lg:static top-16 bottom-0 start-0 z-50 w-[min(19rem,88vw)] lg:w-64 bg-[#070709] lg:bg-black/60 border-e border-zinc-800 h-[calc(100vh-64px)] overflow-y-auto shrink-0 flex flex-col p-4 gap-1 transition-transform duration-300 ease-out will-change-transform ${isMobileNavOpen ? 'translate-x-0' : isRtl ? 'translate-x-full lg:translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+          <div className="lg:hidden flex items-center justify-between px-2 pb-3 mb-2 border-b border-zinc-800">
+            <span className="text-xs font-black uppercase tracking-widest">CMS Navigation</span>
+            <button type="button" onClick={() => setIsMobileNavOpen(false)} className="p-2 rounded-lg hover:bg-zinc-900" aria-label="Close CMS navigation">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
           <div className="px-3 py-2 text-[9px] uppercase font-bold text-zinc-600 tracking-widest hidden md:block">{t.cms?.sidebarHeaderSettings || 'Settings'}</div>
           <button 
             onClick={() => handleTabChange('general')}
@@ -2802,10 +2956,10 @@ export default function AdminDashboard() {
         </aside>
 
         {/* Content Pane Split (60% Form Editor, 40% Visual Preview Card) */}
-        <main className="flex-1 flex flex-col md:flex-row h-[calc(100vh-64px)] overflow-hidden">
+        <main className="flex-1 min-w-0 flex flex-col lg:flex-row h-[calc(100vh-64px)] overflow-hidden">
           
           {/* Left Form Workspace (60% width) */}
-          <div className="flex-1 p-6 md:p-8 overflow-y-auto h-full space-y-6">
+          <div className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto h-full space-y-6">
             
             {/* Action status message toast */}
             {statusMsg.text && (
@@ -2819,13 +2973,24 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            <div className="max-w-3xl pb-16">
+            <div className="max-w-3xl pb-28 overflow-x-hidden">
               {renderActiveForm()}
+              <div className="lg:hidden mt-8 rounded-xl border border-zinc-800 overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setIsMobilePreviewOpen((open) => !open)}
+                  className="w-full p-4 flex items-center justify-between bg-zinc-950/70 text-sm font-bold"
+                >
+                  <span>Live Preview</span>
+                  {isMobilePreviewOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </button>
+                {isMobilePreviewOpen && <div className="p-4 bg-[#040405]">{renderPreviewPanel()}</div>}
+              </div>
             </div>
           </div>
 
           {/* Right Visual Preview Sidebar Panel (40% width) */}
-          <div className="hidden lg:block w-96 xl:w-[28rem] h-full p-6 border-l border-zinc-800 bg-[#040405] shrink-0 overflow-y-auto">
+          <div className="hidden lg:block w-96 xl:w-[28rem] h-full p-6 border-s border-zinc-800 bg-[#040405] shrink-0 overflow-y-auto">
             {renderPreviewPanel()}
           </div>
 
@@ -2834,7 +2999,7 @@ export default function AdminDashboard() {
 
       {/* Dirty state / Unsaved changes floating banner at the bottom */}
       {isDirty && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#0d0d12] border border-zinc-800 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-5 justify-between min-w-[320px] md:min-w-[500px] animate-bounce-subtle">
+        <div className="fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#0d0d12] border border-zinc-800 px-3 sm:px-6 py-3 sm:py-4 rounded-2xl shadow-2xl flex items-center gap-3 sm:gap-5 justify-between w-[calc(100vw-1rem)] max-w-[540px] animate-bounce-subtle">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping" />
             <div>

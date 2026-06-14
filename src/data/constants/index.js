@@ -39,6 +39,15 @@ export const DEFAULT_PORTFOLIO_DATA = {
     }
   },
   hero: {
+    identity: {
+      displayName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+      availabilityLabel: { ar: "متاح للعمل", en: "Available for work", ur: "کام کے لیے دستیاب" },
+      statusLabel: { ar: "حلّال مشاكل عملي", en: "Practical problem solver", ur: "عملی مسائل کا حل" },
+      statusDotColor: "#10b981",
+      badgeBackground: "rgba(255,255,255,0.02)",
+      badgeBorder: "rgba(255,255,255,0.08)",
+      badgeTextColor: "#ffffff"
+    },
     title1: {
       ar: "هندسة IT",
       en: "HSE & IT",
@@ -602,13 +611,19 @@ export const DEFAULT_PORTFOLIO_DATA = {
     bgIntensity: 0.1,
     fontFamily: "Inter",
     fontScale: 1.0,
+    headingSize: 48,
+    paragraphSize: 16,
     headingWeight: "800",
     bodyWeight: "300",
     fontColor: "#fafafa",
     headingColor: "#fafafa",
     letterSpacing: "0px",
     lineHeight: "1.6",
-    paragraphWidth: "65ch"
+    paragraphWidth: "65ch",
+    buttonTextColor: "#000000",
+    buttonBackgroundColor: "#ffffff",
+    cardTitleColor: "#fafafa",
+    cardDescriptionColor: "#a1a1aa"
   },
   languageSettings: {
     languages: ["ar", "en", "ur"]

@@ -295,8 +295,22 @@ export const Navbar = () => {
                       onClick={() => { setTheme('aurora'); setIsThemeOpen(false); }} 
                       className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'aurora' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
                     >
-                      <span>Neon Aurora</span>
+                      <span>Aurora Green</span>
                       {activeTheme === 'aurora' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
+                    </button>
+                    <button
+                      onClick={() => { setTheme('platinum'); setIsThemeOpen(false); }}
+                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'platinum' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                    >
+                      <span>Platinum White</span>
+                      {activeTheme === 'platinum' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
+                    </button>
+                    <button
+                      onClick={() => { setTheme('midnight'); setIsThemeOpen(false); }}
+                      className={`w-full text-left px-4 py-3 text-sm rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-between ${activeTheme === 'midnight' ? 'text-[var(--primary)] font-bold bg-white/[0.04]' : 'text-white/70'}`}
+                    >
+                      <span>Midnight Purple</span>
+                      {activeTheme === 'midnight' && <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />}
                     </button>
                   </motion.div>
                 </div>

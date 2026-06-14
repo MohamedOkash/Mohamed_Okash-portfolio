@@ -124,6 +124,7 @@ export default function Home() {
         );
 
       case 'glassCard':
+      case 'cardsGrid':
       case 'glassCardGrid': {
         const items = content.split('\n').map(line => line.trim()).filter(line => line !== '');
         if (items.length <= 1) {
@@ -192,6 +193,7 @@ export default function Home() {
         );
       }
 
+      case 'features':
       case 'featureGrid': {
         const items = content.split('\n').map(line => line.trim()).filter(line => line !== '');
         return (
@@ -289,17 +291,20 @@ export default function Home() {
         );
       }
 
+      case 'textBlock':
+      case 'richContent':
       case 'imageText': {
         const lines = content.split('\n');
         const firstLine = (lines[0] || '').trim();
         const textLines = lines.slice(1).join('\n');
-        const isUrl = firstLine.startsWith('http') || firstLine.startsWith('/') || firstLine.startsWith('./');
+        const allowImage = sect.layoutType === 'imageText';
+        const isUrl = allowImage && (firstLine.startsWith('http') || firstLine.startsWith('/') || firstLine.startsWith('./'));
         const imageUrl = isUrl ? firstLine : '';
         const bodyContent = isUrl ? textLines : content;
 
         return (
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-[#0d0d11]/40 border border-white/[0.05] p-6 md:p-10 rounded-[2rem] backdrop-blur-md">
-            {imageUrl ? (
+          <div className={`max-w-5xl mx-auto grid grid-cols-1 ${allowImage ? 'md:grid-cols-2' : ''} gap-8 items-center bg-[#0d0d11]/40 border border-white/[0.05] p-6 md:p-10 rounded-[2rem] backdrop-blur-md`}>
+            {allowImage && (imageUrl ? (
               <div className="rounded-2xl overflow-hidden border border-white/10 shadow-lg relative aspect-video">
                 <img src={imageUrl} alt={title} className="object-cover w-full h-full" />
               </div>
@@ -307,7 +312,7 @@ export default function Home() {
               <div className="rounded-2xl aspect-video bg-gradient-to-br from-white/[0.02] to-white/[0.08] border border-white/10 flex items-center justify-center text-[var(--primary)] p-8">
                 {sect.icon ? getIcon(sect.icon, "w-16 h-16 opacity-30 animate-pulse") : <Sparkles className="w-16 h-16 opacity-30" />}
               </div>
-            )}
+            ))}
             <div className="space-y-4">
               {sect.icon && imageUrl && <div className="text-[var(--primary)]">{getIcon(sect.icon, "w-6 h-6")}</div>}
               <h3 className="text-2xl sm:text-3xl font-extrabold text-white">{title}</h3>
@@ -343,14 +348,16 @@ export default function Home() {
   const sectionRevealVariants = {
     hidden: { 
       opacity: 0, 
-      scale: 0.88, 
-      rotateX: 12, 
-      filter: 'blur(16px)',
+      scale: 0.92,
+      y: 80,
+      rotateX: 6,
+      filter: 'blur(12px)',
       transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
     },
     visible: { 
       opacity: 1, 
       scale: 1, 
+      y: 0,
       rotateX: 0, 
       filter: 'blur(0px)',
       transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }

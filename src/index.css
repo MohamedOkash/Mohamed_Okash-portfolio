@@ -28,11 +28,29 @@ body, p, .tagline {
 
 p {
   max-width: var(--paragraph-width-setting, 65ch);
+  font-size: var(--paragraph-size-setting, 16px);
 }
 
 h1, h2, h3, h4, h5, h6, h1 span, h2 span, h3 span, h4 span, h5 span, h6 span {
   font-weight: var(--heading-weight-setting, 800) !important;
   color: var(--heading-color-setting, inherit) !important;
+}
+
+h1, h2 {
+  font-size: clamp(2rem, 5vw, var(--heading-size-setting, 48px));
+}
+
+.cms-themed-button {
+  color: var(--button-text-color-setting, var(--accent-text));
+  background: var(--button-background-color-setting, var(--accent));
+}
+
+.card-title {
+  color: var(--card-title-color-setting, var(--heading-color-setting, var(--text))) !important;
+}
+
+.card-description {
+  color: var(--card-description-color-setting, var(--muted)) !important;
 }
 
 /* Custom scrollbar for Stripe-like aesthetics */

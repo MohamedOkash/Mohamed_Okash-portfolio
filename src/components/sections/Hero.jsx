@@ -40,6 +40,10 @@ export const Hero = () => {
   };
 
   const heroNameVal = data?.brandIdentity?.heroName?.[lang] || (lang === 'ar' ? 'محمد عكاش' : lang === 'ur' ? 'محمد عکاش' : 'Mohamed Okash');
+  const identity = data?.hero?.identity || {};
+  const displayName = identity.displayName?.[lang] || heroNameVal;
+  const availabilityLabel = identity.availabilityLabel?.[lang] || data?.translations?.[lang]?.available || t.available;
+  const statusLabel = identity.statusLabel?.[lang] || availabilityLabel;
 
   return (
     <section id="hero" className="min-h-[75vh] flex flex-col justify-center items-center text-center relative px-6 py-12 overflow-hidden">
@@ -55,12 +59,17 @@ export const Hero = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="inline-flex items-center gap-2.5 px-4.5 py-1.5 rounded-full border border-[var(--border)] bg-white/[0.02] text-xs font-semibold tracking-wider uppercase mb-5 shadow-sm backdrop-blur-md"
+        className="inline-flex items-center gap-2.5 px-4.5 py-1.5 rounded-full border text-xs font-semibold tracking-wider uppercase mb-5 shadow-sm backdrop-blur-md"
+        style={{
+          background: identity.badgeBackground || 'rgba(255,255,255,0.02)',
+          borderColor: identity.badgeBorder || 'var(--border)',
+          color: identity.badgeTextColor || 'var(--text)'
+        }}
       >
-        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-        <span className="opacity-95 text-white">{heroNameVal}</span>
+        <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: identity.statusDotColor || '#10b981' }} />
+        <span className="opacity-95">{displayName}</span>
         <span className="opacity-30 select-none">•</span>
-        <span className="opacity-60">{data?.translations?.[lang]?.available || t.available}</span>
+        <span className="opacity-60">{statusLabel}</span>
       </motion.div>
 
       {/* Main Title (HSE & IT Engineering) */}

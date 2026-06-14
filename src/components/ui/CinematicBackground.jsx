@@ -11,8 +11,8 @@ export const CinematicBackground = () => {
 
   return (
     <div 
-      className="fixed inset-0 overflow-hidden pointer-events-none z-0 select-none transition-opacity duration-[3000ms] ease-in-out"
-      style={{ opacity: mounted ? 1.0 : 0 }}
+      className="cinematic-background fixed inset-0 overflow-hidden pointer-events-none z-0 select-none transition-opacity duration-[3000ms] ease-in-out"
+      style={{ opacity: mounted ? 1.0 : 0, transform: 'translateZ(0)', contain: 'strict' }}
     >
       {/* Soft Radial Ambient Glows */}
       {/* 1. Behind Hero Section */}
@@ -33,7 +33,7 @@ export const CinematicBackground = () => {
 
       {/* Layer 1: Engineering Blueprint Grid */}
       <div 
-        className="absolute inset-0 opacity-[0.035] transition-all"
+        className="absolute inset-0 opacity-[0.06] transition-all"
         style={{
           backgroundImage: `
             linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
@@ -69,7 +69,7 @@ export const CinematicBackground = () => {
         
         {/* Layer 2: IT Infrastructure Topology */}
         {/* Router, Switches, Servers, Fiber Links & Connections */}
-        <g className="opacity-[0.045]" stroke="var(--primary)" strokeWidth="1" fill="none">
+        <g className="opacity-[0.075]" stroke="var(--primary)" strokeWidth="1" fill="none">
           {/* Fiber Links (Glowing/Dashed Paths) */}
           <path d="M 120 180 H 380 V 320 H 550" strokeDasharray="5 5" className="animate-dash" />
           <path d="M 850 120 H 1050 V 280 H 900 V 450" strokeDasharray="6 4" className="animate-dash" style={{ animationDirection: 'reverse' }} />
@@ -133,7 +133,7 @@ export const CinematicBackground = () => {
 
         {/* Layer 3: AI & Vibe Coding Layer */}
         {/* Neural Pathways, Flow Diagrams, Logic Nodes, Code Streams */}
-        <g className="opacity-[0.038]">
+        <g className="opacity-[0.065]">
           {/* Neural pathways & Flow diagrams */}
           <g stroke="rgba(255,255,255,0.2)" strokeWidth="0.75" fill="none">
             {/* Logic Node / Decision Diamond */}
@@ -182,7 +182,7 @@ export const CinematicBackground = () => {
 
         {/* Layer 4: HSE (Health, Safety & Environment) Layer */}
         {/* Safety Geometry, Hazard Triangles, Compliance Indicators, Inspection Markers */}
-        <g className="opacity-[0.045]" stroke="white" strokeWidth="0.8" fill="none">
+        <g className="opacity-[0.07]" stroke="white" strokeWidth="0.8" fill="none">
           {/* Construction planning / Grid guidelines */}
           <line x1="0" y1="8%" x2="100%" y2="8%" strokeDasharray="10 20" />
           <line x1="0" y1="92%" x2="100%" y2="92%" strokeDasharray="10 20" />
@@ -279,6 +279,13 @@ export const CinematicBackground = () => {
         @keyframes driftSlow4 {
           0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
           50% { transform: translate(-30px, -40px) rotate(-25deg); opacity: 0.7; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cinematic-background *,
+          .cinematic-background *::before,
+          .cinematic-background *::after {
+            animation: none !important;
+          }
         }
       `}</style>
     </div>

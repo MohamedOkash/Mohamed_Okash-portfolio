@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navbar } from '../../components/navigation/Navbar';
 import { useLanguageStore } from '../../store/languageStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
 import { CinematicBackground } from '../../components/ui/CinematicBackground';
+import { useThemeStore } from '../../store/themeStore';
 
 export const RootLayout = ({ children }) => {
   const { lang } = useLanguageStore();
   const { data } = usePortfolioStore();
+  const { activeTheme, setTheme } = useThemeStore();
   const t = translations[lang] || translations.ar;
   const isRtl = t.dir === 'rtl';
 
   const themeSettings = data?.themeSettings;
+  const configuredTheme = themeSettings?.defaultTheme || activeTheme || 'dark';
+
+  useEffect(() => {
+    setTheme(configuredTheme);
+  }, [configuredTheme, setTheme]);
+
   const themeStyles = themeSettings ? {
     '--primary': themeSettings.accentColor || '#ffffff',
     '--accent': themeSettings.accentColor || '#ffffff',
@@ -25,13 +33,19 @@ export const RootLayout = ({ children }) => {
     // Typography controls
     '--font-family-setting': themeSettings.fontFamily ? `'${themeSettings.fontFamily}', var(--font-sans)` : 'var(--font-sans)',
     '--font-scale-setting': themeSettings.fontScale !== undefined ? themeSettings.fontScale : 1.0,
+    '--heading-size-setting': `${themeSettings.headingSize || 48}px`,
+    '--paragraph-size-setting': `${themeSettings.paragraphSize || 16}px`,
     '--heading-weight-setting': themeSettings.headingWeight || '800',
     '--body-weight-setting': themeSettings.bodyWeight || '300',
     '--font-color-setting': themeSettings.fontColor || '#fafafa',
     '--heading-color-setting': themeSettings.headingColor || '#fafafa',
     '--letter-spacing-setting': themeSettings.letterSpacing || 'normal',
     '--line-height-setting': themeSettings.lineHeight || '1.6',
-    '--paragraph-width-setting': themeSettings.paragraphWidth || '65ch'
+    '--paragraph-width-setting': themeSettings.paragraphWidth || '65ch',
+    '--button-text-color-setting': themeSettings.buttonTextColor || 'var(--accent-text)',
+    '--button-background-color-setting': themeSettings.buttonBackgroundColor || 'var(--accent)',
+    '--card-title-color-setting': themeSettings.cardTitleColor || 'var(--heading-color-setting)',
+    '--card-description-color-setting': themeSettings.cardDescriptionColor || 'var(--muted)'
   } : {};
 
   const blobOpacity = themeSettings?.bgIntensity !== undefined ? themeSettings.bgIntensity : 0.45;
