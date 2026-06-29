@@ -20,7 +20,6 @@ import { ProjectCard } from '../../components/cards/ProjectCard';
 import { ProjectDetailsModal } from '../../components/modals/ProjectDetailsModal';
 import { LoginModal } from '../../components/modals/LoginModal';
 import { Preloader } from '../../components/ui/Preloader';
-import { CustomCursor } from '../../components/ui/CustomCursor';
 import { translations } from '../../data/translations';
 import { Sparkles, Quote, HelpCircle } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
@@ -86,11 +85,11 @@ export default function Home() {
     switch (sect.layoutType) {
       case 'heroBanner':
         return (
-          <div className="relative rounded-3xl border border-[var(--primary)]/20 bg-gradient-to-br from-[var(--primary)]/5 to-[var(--accent)]/5 p-10 md:p-16 overflow-hidden shadow-2xl text-center max-w-5xl mx-auto">
+          <div className="relative rounded-3xl border border-[var(--primary)]/20 bg-gradient-to-br from-[var(--primary)]/5 to-[var(--accent)]/5 p-10 md:p-16 overflow-hidden text-center max-w-5xl mx-auto">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--primary)] rounded-full blur-[100px] opacity-10 pointer-events-none" />
             <div className="relative z-10 space-y-6">
               {sect.icon && (
-                <div className="inline-flex p-4 rounded-2xl bg-[var(--primary)]/15 text-[var(--primary)] mb-2 animate-pulse">
+                <div className="inline-flex p-4 rounded-2xl bg-[var(--primary)]/15 text-[var(--primary)] mb-2">
                   {getIcon(sect.icon, "w-8 h-8")}
                 </div>
               )}
@@ -102,7 +101,7 @@ export default function Home() {
                   const el = document.getElementById('contact');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="px-8 py-3.5 rounded-xl font-bold text-xs bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 shadow-lg transition-all cursor-pointer inline-flex items-center gap-1.5"
+                className="px-8 py-3.5 rounded-xl font-bold text-xs bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 transition-all cursor-pointer inline-flex items-center gap-1.5"
               >
                 {lang === 'ar' ? 'تواصل معي' : lang === 'ur' ? 'مجھ سے رابطہ کریں' : 'Get in Touch'}
               </button>
@@ -117,7 +116,7 @@ export default function Home() {
         if (items.length <= 1) {
           return (
             <div className="max-w-4xl mx-auto">
-              <SpotlightCard className="p-8 md:p-12 hover:border-[var(--primary)]/20 transition-all duration-500 relative overflow-hidden bg-[var(--card-bg)] border-[var(--border-color)] rounded-3xl backdrop-blur-xl">
+              <SpotlightCard className="p-8 md:p-12 hover:border-[var(--primary)]/20 transition-all duration-500 relative overflow-hidden bg-[var(--card-bg)] border-[var(--border-color)] rounded-3xl">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-[var(--primary)] rounded-full blur-[100px] opacity-10 pointer-events-none" />
                 <div className="flex flex-col md:flex-row gap-8 items-start relative z-10">
                   {sect.icon && (
@@ -143,7 +142,7 @@ export default function Home() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {items.map((item, idx) => (
-                  <SpotlightCard key={idx} className="p-6 md:p-8 bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/20 transition-all duration-300 rounded-2xl backdrop-blur-xl flex gap-4">
+                  <SpotlightCard key={idx} className="p-6 md:p-8 bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/20 transition-all duration-300 rounded-2xl flex gap-4">
                     {sect.icon && <div className="text-[var(--primary)] shrink-0 mt-1">{getIcon(sect.icon, "w-5 h-5")}</div>}
                     <div className="space-y-2">
                       <div className="text-[var(--text-secondary)] leading-relaxed font-light text-sm whitespace-pre-wrap">{item}</div>
@@ -170,7 +169,7 @@ export default function Home() {
                   <div className="absolute top-1.5 -start-[6px] w-3 h-3 rounded-full bg-[var(--bg-primary)] border border-[var(--border-color)] group-hover:border-[var(--primary)] transition-colors duration-300 flex items-center justify-center z-10">
                     <div className="w-1 h-1 rounded-full bg-[var(--text-primary)]/40 group-hover:bg-[var(--primary)] transition-all duration-300" />
                   </div>
-                  <SpotlightCard className="p-5 hover:border-[var(--primary)]/20 transition-all duration-300 bg-[var(--card-bg)] border-[var(--border-color)] rounded-xl backdrop-blur-xl">
+                  <SpotlightCard className="p-5 hover:border-[var(--primary)]/20 transition-all duration-300 bg-[var(--card-bg)] border-[var(--border-color)] rounded-xl">
                     <div className="text-[var(--text-secondary)] leading-relaxed font-light text-sm">{item}</div>
                   </SpotlightCard>
                 </div>
@@ -191,7 +190,7 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {items.map((item, idx) => (
-                <SpotlightCard key={idx} className="p-6 bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/20 transition-all duration-300 flex flex-col justify-between h-full rounded-2xl backdrop-blur-xl">
+                <SpotlightCard key={idx} className="p-6 bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/20 transition-all duration-300 flex flex-col justify-between h-full rounded-2xl">
                   <div className="space-y-3">
                     {sect.icon && <div className="text-[var(--primary)]">{getIcon(sect.icon, "w-5 h-5")}</div>}
                     <div className="text-[var(--text-secondary)] leading-relaxed font-light text-sm">{item}</div>
@@ -206,9 +205,9 @@ export default function Home() {
       case 'ctaBlock':
       case 'contactBlock':
         return (
-          <div className="max-w-3xl mx-auto text-center p-8 md:p-12 rounded-3xl border border-[var(--border-color)] bg-[var(--card-bg)] backdrop-blur-xl shadow-2xl">
+          <div className="max-w-3xl mx-auto text-center p-8 md:p-12 rounded-3xl border border-[var(--border-color)] bg-[var(--card-bg)]">
             {sect.icon && (
-              <div className="inline-flex p-3.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] mb-4 animate-bounce">
+              <div className="inline-flex p-3.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] mb-4">
                 {getIcon(sect.icon, "w-6 h-6")}
               </div>
             )}
@@ -220,7 +219,7 @@ export default function Home() {
                 const el = document.getElementById('contact');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-6 py-3 rounded-xl font-bold text-xs bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 shadow-lg transition-all cursor-pointer"
+              className="px-6 py-3 rounded-xl font-bold text-xs bg-[var(--accent)] text-[var(--accent-text)] hover:opacity-90 transition-all cursor-pointer"
             >
               {lang === 'ar' ? 'تواصل معي الآن' : lang === 'ur' ? 'مجھ سے رابطہ کریں' : 'Get In Touch'}
             </button>
@@ -230,7 +229,7 @@ export default function Home() {
       case 'highlightBanner':
         return (
           <div className="max-w-5xl mx-auto">
-            <div className="relative rounded-3xl border border-[var(--primary)]/20 bg-gradient-to-r from-[var(--primary)]/5 to-[var(--accent)]/5 p-8 sm:p-10 md:p-12 overflow-hidden shadow-2xl">
+            <div className="relative rounded-3xl border border-[var(--primary)]/20 bg-gradient-to-r from-[var(--primary)]/5 to-[var(--accent)]/5 p-8 sm:p-10 md:p-12 overflow-hidden">
               <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--primary)] rounded-full blur-[120px] opacity-10 pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-48 h-48 bg-[var(--accent)] rounded-full blur-[100px] opacity-10 pointer-events-none" />
               <div className="flex flex-col md:flex-row items-center gap-6 justify-between relative z-10">
@@ -240,7 +239,7 @@ export default function Home() {
                   <div className="text-[var(--text-secondary)] leading-relaxed font-light text-sm max-w-2xl">{content}</div>
                 </div>
                 {sect.icon && (
-                  <div className="p-4 rounded-xl bg-[var(--primary)]/10 text-[var(--primary)] shrink-0 animate-pulse">
+                  <div className="p-4 rounded-xl bg-[var(--primary)]/10 text-[var(--primary)] shrink-0">
                     {getIcon(sect.icon, "w-8 h-8")}
                   </div>
                 )}
@@ -263,7 +262,7 @@ export default function Home() {
                 const val = (parts[0] || '').trim();
                 const label = (parts[1] || '').trim();
                 return (
-                  <SpotlightCard key={idx} className="p-8 text-center bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/20 transition-all rounded-3xl backdrop-blur-xl">
+                  <SpotlightCard key={idx} className="p-8 text-center bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/20 transition-all rounded-3xl">
                     <span className="text-4xl sm:text-5xl font-mono font-black text-[var(--primary)] block mb-2">
                       <StatCounterLocal target={val} />
                     </span>
@@ -290,14 +289,14 @@ export default function Home() {
         const bodyContent = isUrl ? textLines : content;
 
         return (
-          <div className={`max-w-5xl mx-auto grid grid-cols-1 ${allowImage ? 'md:grid-cols-2' : ''} gap-8 items-center bg-[var(--card-bg)]/40 border border-[var(--border-color)] p-6 md:p-10 rounded-[2rem] backdrop-blur-md`}>
+          <div className={`max-w-5xl mx-auto grid grid-cols-1 ${allowImage ? 'md:grid-cols-2' : ''} gap-8 items-center bg-[var(--card-bg)]/40 border border-[var(--border-color)] p-6 md:p-10 rounded-[2rem]`}>
             {allowImage && (imageUrl ? (
-              <div className="rounded-2xl overflow-hidden border border-[var(--border-color)] shadow-lg relative aspect-video">
+              <div className="rounded-2xl overflow-hidden border border-[var(--border-color)] relative aspect-video">
                 <img src={imageUrl} alt={title} loading="lazy" className="object-cover w-full h-full" />
               </div>
             ) : (
               <div className="rounded-2xl aspect-video bg-gradient-to-br from-white/[0.02] to-white/[0.08] border border-[var(--border-color)] flex items-center justify-center text-[var(--primary)] p-8">
-                {sect.icon ? getIcon(sect.icon, "w-16 h-16 opacity-30 animate-pulse") : <Sparkles className="w-16 h-16 opacity-30" />}
+                {sect.icon ? getIcon(sect.icon, "w-16 h-16 opacity-30") : <Sparkles className="w-16 h-16 opacity-30" />}
               </div>
             ))}
             <div className="space-y-4">
@@ -357,9 +356,6 @@ export default function Home() {
           />
         )}
       </AnimatePresence>
-
-      {/* Desktop Custom Cursor */}
-      {!showPreloader && <CustomCursor />}
 
       {/* Hidden Login Modal */}
       <LoginModal />
@@ -424,7 +420,7 @@ export default function Home() {
                 return wrapSection(
                   <section id="projects" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]">
                     <div className="mb-16">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 flex items-center gap-1.5 animate-pulse">
+                      <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 flex items-center gap-1.5">
                         <Sparkles className="w-4 h-4 text-[var(--primary)]" />
                         {data?.translations?.[lang]?.workTitle || t.workTitle}
                       </span>
@@ -444,7 +440,7 @@ export default function Home() {
                         <h3 className="text-xs uppercase tracking-widest font-bold opacity-45 mb-6">
                           {data?.translations?.[lang]?.featuredBadge || t.featuredBadge}
                         </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ perspective: 1200 }}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                           {featuredProjects.map((project, idx) => (
                             <motion.div 
                               key={project.id} 
@@ -454,7 +450,6 @@ export default function Home() {
                               transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
                               className="relative group cursor-pointer"
                             >
-                              <div className="absolute -inset-1 rounded-[1.6rem] bg-gradient-to-r from-[var(--primary)]/10 to-[var(--accent)]/10 opacity-75 group-hover:opacity-100 blur-sm transition duration-500" />
                               <ProjectCard 
                                 project={project} 
                                 onClick={() => {
@@ -474,7 +469,7 @@ export default function Home() {
                         <h3 className="text-xs uppercase tracking-widest font-bold opacity-45 mb-6">
                           {data?.translations?.[lang]?.additionalSolutions || t.additionalSolutions || (lang === 'ar' ? 'أدوات وحلول برمجية إضافية' : 'Additional Solutions')}
                         </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style={{ perspective: 1200 }}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                           {generalProjects.map((project, idx) => (
                             <motion.div 
                               key={project.id}

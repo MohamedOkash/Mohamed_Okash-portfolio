@@ -1,25 +1,25 @@
 export const DEFAULT_PORTFOLIO_DATA = {
   brandIdentity: {
-    brandName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+    brandName: { ar: "محمد عكاش", en: "Okash", ur: "محمد عکاش" },
     shortName: { ar: "عكاش", en: "Okash", ur: "عکاش" },
     subtitle: { ar: "مهندس سلامة وبنية تحتية IT", en: "HSE & IT Infrastructure Engineer", ur: "ایچ ایس ای اور آئی تي انفراسٹرکچر انجینئر" },
-    logoText: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
-    heroName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
-    footerText: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "Mohamed Okash" },
+    logoText: { ar: "محمد عكاش", en: "Okash", ur: "محمد عکاش" },
+    heroName: { ar: "محمد عكاش", en: "Okash", ur: "محمد عکاش" },
+    footerText: { ar: "محمد عكاش", en: "Okash", ur: "Okash" },
     preloaderText: { ar: "عكاش", en: "OKASH", ur: "عکاش" },
-    browserTitle: { ar: "محمد عكاش | معرض الأعمال", en: "Mohamed Okash | Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
-    seoTitle: { ar: "محمد عكاش | معرض الأعمال الاحترافي", en: "Mohamed Okash | Professional Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
-    seoDescription: { ar: "الموقع الشخصي لمحمد عكاش - مهندس بنية تحتية IT وأمن وسلامة مهنية HSE", en: "Personal portfolio of Mohamed Okash - IT Infrastructure & HSE Safety Engineer", ur: "محمد عکاش کا ذاتی پورٹ فولیو - آئی تي انفراسٹرکچر اور ایچ ایس ای سيفتي انجینئر" }
+    browserTitle: { ar: "محمد عكاش | معرض الأعمال", en: "Okash | Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
+    seoTitle: { ar: "محمد عكاش | معرض الأعمال الاحترافي", en: "Okash | Professional Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
+    seoDescription: { ar: "الموقع الشخصي لمحمد عكاش - مهندس بنية تحتية IT وأمن وسلامة مهنية HSE", en: "Personal portfolio of Okash - IT Infrastructure & HSE Safety Engineer", ur: "محمد عکاش کا ذاتی پورٹ فولیو - آئی تي انفراسٹرکچر اور ایچ ایس ای سيفتي انجینئر" }
   },
   general: {
     siteName: {
       ar: "محمد عكاش",
-      en: "Mohamed Okash",
+      en: "Okash",
       ur: "محمد عکاش"
     },
     logoText: {
       ar: "محمد عكاش",
-      en: "Mohamed Okash",
+      en: "Okash",
       ur: "محمد عکاش"
     },
     brandIdentity: {
@@ -29,7 +29,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
     },
     seoDescription: {
       ar: "الموقع الشخصي لمحمد عكاش - مهندس بنية تحتية IT وأمن وسلامة مهنية HSE",
-      en: "Personal portfolio of Mohamed Okash - IT Infrastructure & HSE Safety Engineer",
+      en: "Personal portfolio of Okash - IT Infrastructure & HSE Safety Engineer",
       ur: "محمد عکاش کا ذاتی پورٹ فولیو - آئی ٹی انفراسٹرکچر اور ایچ ایس ای سيفتي انجینئر"
     },
     socialLinks: {
@@ -40,7 +40,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
   },
   hero: {
     identity: {
-      displayName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+      displayName: { ar: "محمد عكاش", en: "Okash", ur: "محمد عکاش" },
       availabilityLabel: { ar: "متاح للعمل", en: "Available for work", ur: "کام کے لیے دستیاب" },
       statusLabel: { ar: "حلّال مشاكل عملي", en: "Practical problem solver", ur: "عملی مسائل کا حل" },
       statusDotColor: "#10b981",
@@ -693,7 +693,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
     favicon: "/favicon.ico",
     seoImage: "/seo-image.jpg",
     openGraphImage: "/og-image.jpg",
-    preloaderLogo: "Mohamed Okash"
+    preloaderLogo: "Okash"
   },
   translations: {
     en: {
@@ -707,7 +707,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
       whyMeSubtitle: "Blending technical execution with field-tested safety leadership.",
       contactTitle: "Let's connect.",
       contactSubtitle: "Always open to discussing HSE operations, IT solutions, and innovative applications.",
-      footerText: "Designed & Engineered with React, Framer Motion & TailwindCSS.",
+      footerText: "Built by Okash.",
       homeMenu: "Home",
       aboutMenu: "About",
       projectsMenu: "Projects",
@@ -736,7 +736,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
       connectLinkedIn: "Connect on LinkedIn",
       additionalSolutions: "Additional Solutions",
       featuredBadge: "Featured Product",
-      name: "Mohamed Okash",
+      name: "Okash",
       available: "Practical Problem Solver",
       heroTitle1: "HSE & IT",
       heroTitle2: "Engineering.",

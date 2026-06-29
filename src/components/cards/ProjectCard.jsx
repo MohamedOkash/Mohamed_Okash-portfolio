@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SpotlightCard } from '../ui/SpotlightCard';
 import { useLanguageStore } from '../../store/languageStore';
 import { ArrowUpRight, Award, Layers, Activity } from 'lucide-react';
@@ -25,24 +25,6 @@ export const ProjectCard = ({ project, onClick }) => {
   const { lang } = useLanguageStore();
   const t = translations[lang] || translations.ar;
 
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e) => {
-    const el = e.currentTarget;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    // Calculate tilt angles (max 8 degrees for a premium organic feel)
-    setTilt({
-      x: -y / (rect.height / 2) * 8,
-      y: x / (rect.width / 2) * 8
-    });
-  };
-
-  const handleMouseLeave = () => {
-    setTilt({ x: 0, y: 0 });
-  };
-
   const category = project.category?.[lang] || project.category?.en || '';
   const description = project.description?.[lang] || project.description?.en || '';
 
@@ -57,42 +39,28 @@ export const ProjectCard = ({ project, onClick }) => {
   };
 
   return (
-    <div
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) translateY(${tilt.x !== 0 ? -6 : 0}px)`,
-        transition: 'transform 0.15s ease-out, box-shadow 0.3s ease',
-      }}
-      className="h-full rounded-3xl"
-    >
+    <article className="h-full rounded-3xl">
       <SpotlightCard 
         onClick={onClick}
-        className="flex flex-col h-full bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--primary)]/40 transition-all duration-300 shadow-2xl backdrop-blur-xl relative overflow-hidden group rounded-3xl"
+        className="flex flex-col h-full bg-[var(--card-bg)] border-[var(--border-color)] hover:border-[var(--accent-color)] transition-colors duration-300 relative overflow-hidden group rounded-3xl"
       >
-        <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--primary)] rounded-full blur-[60px] opacity-10 pointer-events-none group-hover:opacity-25 transition-opacity" />
-
         <div className="flex-1 p-6">
           {/* Badge toolbar */}
           <div className="flex flex-wrap gap-2 mb-4">
             {project.featured && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 border border-amber-500/30 text-amber-400 uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--accent-color)] uppercase tracking-wider">
                 <Award className="w-3 h-3" />
                 {t.cms?.featured || 'Featured'}
               </span>
             )}
             {project.projectType && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-purple-500/10 border border-purple-500/30 text-purple-400 uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--text-secondary)] uppercase tracking-wider">
                 <Layers className="w-3 h-3" />
                 {getTypeLabel(project.projectType)}
               </span>
             )}
             {project.status && (
-              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${
-                project.status === 'completed'
-                  ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400'
-                  : 'bg-blue-500/10 border border-blue-500/30 text-blue-400'
-              }`}>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--text-secondary)]">
                 <Activity className="w-3 h-3" />
                 {getStatusLabel(project.status)}
               </span>
@@ -105,12 +73,12 @@ export const ProjectCard = ({ project, onClick }) => {
           </span>
 
           {/* Title */}
-          <h3 className="text-xl md:text-2xl font-black mb-3 tracking-tight group-hover:text-[var(--primary)] transition-colors">
+          <h3 className="text-xl md:text-2xl font-black mb-3 tracking-tight group-hover:text-[var(--accent-color)] transition-colors">
             {project.title}
           </h3>
 
           {/* Description */}
-          <p className="text-sm md:text-base opacity-70 leading-relaxed mb-6 line-clamp-3 font-light">
+          <p className="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed mb-6 line-clamp-3 font-light">
             {description}
           </p>
         </div>
@@ -135,7 +103,7 @@ export const ProjectCard = ({ project, onClick }) => {
 
           {/* Footer controls */}
           <div className="flex justify-between items-center pt-4 border-t border-[var(--border-color)]">
-            <span className="text-xs font-bold text-[var(--primary)] flex items-center gap-1 group-hover:underline">
+            <span className="text-xs font-bold text-[var(--accent-color)] flex items-center gap-1 group-hover:underline">
               {lang === 'ar' ? 'استكشف المنتج' : lang === 'ur' ? 'تفصیلات دیکھیں' : 'Explore Product'}
               <ArrowUpRight className="w-3.5 h-3.5" />
             </span>
@@ -147,7 +115,7 @@ export const ProjectCard = ({ project, onClick }) => {
                   target="_blank"
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="hover:text-[var(--primary)] transition-colors p-3"
+                  className="hover:text-[var(--accent-color)] transition-colors p-3"
                 >
                   <GithubIcon className="w-4.5 h-4.5" />
                 </a>
@@ -158,7 +126,7 @@ export const ProjectCard = ({ project, onClick }) => {
                   target="_blank"
                   rel="noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="hover:text-[var(--primary)] transition-colors p-3"
+                  className="hover:text-[var(--accent-color)] transition-colors p-3"
                 >
                   <ArrowUpRight className="w-4.5 h-4.5" />
                 </a>
@@ -167,6 +135,6 @@ export const ProjectCard = ({ project, onClick }) => {
           </div>
         </div>
       </SpotlightCard>
-    </div>
+    </article>
   );
 };

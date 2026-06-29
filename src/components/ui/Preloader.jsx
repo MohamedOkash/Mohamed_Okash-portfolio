@@ -1,83 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export const Preloader = React.memo(({ finishLoading, preloaderText }) => {
-  const [progress, setProgress] = useState(0);
-  const rafRef = useRef(null);
-  const startRef = useRef(null);
-
   useEffect(() => {
-    const duration = 1500;
-    startRef.current = null;
-
-    const animate = (timestamp) => {
-      if (startRef.current === null) startRef.current = timestamp;
-      const elapsed = timestamp - startRef.current;
-      const pct = Math.min((elapsed / duration) * 100, 100);
-      setProgress(pct);
-      if (pct < 100) {
-        rafRef.current = requestAnimationFrame(animate);
-      } else {
-        setTimeout(() => finishLoading(), 300);
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+    const timer = window.setTimeout(finishLoading, 650);
+    return () => window.clearTimeout(timer);
   }, [finishLoading]);
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
-      exit={{ 
-        opacity: 0,
-        filter: 'blur(10px)',
-        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-      }}
-      className="fixed inset-0 bg-[var(--bg-primary)] z-[9999] flex flex-col items-center justify-center select-none"
+      exit={{ opacity: 0, transition: { duration: 0.18, ease: 'easeOut' } }}
+      className="fixed inset-0 bg-[var(--bg-primary)] z-[9999] flex items-center justify-center select-none"
     >
-      <div className="relative flex flex-col items-center justify-center">
-        {/* Glow behind monogram */}
-        <motion.div 
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1.1, opacity: 0.15 }}
-          transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
-            className="absolute w-40 h-40 rounded-full bg-[var(--accent-color)] blur-[40px] pointer-events-none"
-        />
-
-        {/* Monogram MO container */}
-        <div className="relative w-28 h-28 mb-6 flex items-center justify-center border border-[var(--border-color)] rounded-2xl bg-[var(--surface-hover)] backdrop-blur-md overflow-hidden p-2">
-          {/* Glass light sweep animation */}
-          <motion.div 
-            initial={{ x: '-100%', y: '-100%' }}
-            animate={{ x: '100%', y: '100%' }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute inset-0 bg-gradient-to-br from-transparent via-[var(--text-primary)]/10 to-transparent"
-          />
-
-          <motion.span 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="text-[var(--text-primary)] text-xl font-extrabold tracking-widest font-sans text-center truncate w-full"
-          >
-            {preloaderText || 'MO'}
-          </motion.span>
+      <div className="flex flex-col items-center gap-5">
+        <div className="w-24 h-24 rounded-[2rem] border border-[var(--border-color)] bg-[var(--card-bg)] flex items-center justify-center">
+          <span className="text-[var(--text-primary)] text-xl font-black tracking-[0.22em] uppercase">
+            {preloaderText || 'OK'}
+          </span>
         </div>
-
-        {/* Loading Progress */}
-        <div className="w-48 h-[1px] bg-[var(--border-color)] rounded-full overflow-hidden mb-3">
-          <motion.div 
+        <div className="w-36 h-px bg-[var(--border-color)] overflow-hidden">
+          <motion.div
             className="h-full bg-[var(--accent-color)]"
-            style={{ width: `${progress}%` }}
+            initial={{ scaleX: 0, transformOrigin: 'left' }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           />
         </div>
-
-        <motion.span 
-          className="text-[10px] tracking-[0.3em] font-medium text-[var(--text-primary)]/50 uppercase"
-        >
-          {Math.round(progress)}%
-        </motion.span>
       </div>
     </motion.div>
   );

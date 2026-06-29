@@ -5,7 +5,7 @@ export const getJsonLdSchema = (lang, data) => {
   const isAr = lang === 'ar';
   const isUr = lang === 'ur';
   
-  const brandName = data?.brandIdentity?.brandName?.[lang] || (isAr ? "محمد عكاش" : isUr ? "محمد عکاش" : "Mohamed Okash");
+  const brandName = data?.brandIdentity?.brandName?.[lang] || (isAr ? "محمد عكاش" : isUr ? "محمد عکاش" : "Okash");
   const brandSubtitle = data?.brandIdentity?.subtitle?.[lang] || (isAr ? "مهندس سلامة وبنية تحتية IT" : isUr ? "ایچ ایس ای اور آئی تي انفراسٹرکچر انجینئر" : "HSE & IT Infrastructure Engineer");
   const brandDesc = data?.brandIdentity?.seoDescription?.[lang] || (isAr 
     ? "أدمج بين خبرة 7 سنوات في البنية التحتية لتكنولوجيا المعلومات وهندسة الأمن والسلامة المهنية لبناء تطبيقات عملية."
@@ -36,7 +36,7 @@ export const getJsonLdSchema = (lang, data) => {
 };
 
 export const defaultSeoData = {
-  title: "Mohamed Okash | HSE & IT Engineering",
+  title: "Okash | HSE & IT Engineering",
   description: "Bridging 7 years of IT infrastructure experience with modern Health & Safety engineering to build practical applications.",
   ogImage: "/og-image.svg"
 };
@@ -45,7 +45,7 @@ export const getLocalizedSeoData = (lang) => {
   const isAr = lang === 'ar';
   const isUr = lang === 'ur';
   return {
-    title: isAr ? "محمد عكاش | هندسة السلامة وتكنولوجيا المعلومات" : isUr ? "محمد عکاش | HSE اور آئی ٹی انجینئرنگ" : "Mohamed Okash | HSE & IT Engineering",
+    title: isAr ? "محمد عكاش | هندسة السلامة وتكنولوجيا المعلومات" : isUr ? "محمد عکاش | HSE اور آئی ٹی انجینئرنگ" : "Okash | HSE & IT Engineering",
     description: isAr ? "أدمج بين خبرة 7 سنوات في البنية التحتية لتكنولوجيا المعلومات وهندسة الأمن والسلامة المهنية لبناء تطبيقات عملية." : isUr ? "7 سال کے آئی ٹی انفراسٹرکچر کے تجربے کو جدید HSE انجینئرنگ کے ساتھ جوڑتا ہوں۔" : "Bridging 7 years of IT infrastructure experience with modern Health & Safety engineering to build practical applications.",
     ogImage: "/og-image.svg"
   };

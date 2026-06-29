@@ -129,16 +129,16 @@ export default function AdminDashboard() {
       copy.brandIdentity = {};
     }
     const defaultBrand = {
-      brandName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
+      brandName: { ar: "محمد عكاش", en: "Okash", ur: "محمد عکاش" },
       shortName: { ar: "عكاش", en: "Okash", ur: "عکاش" },
       subtitle: { ar: "مهندس سلامة وبنية تحتية IT", en: "HSE & IT Infrastructure Engineer", ur: "ایچ ایس ای اور آئی تي انفراسٹرکچر انجینئر" },
-      logoText: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
-      heroName: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "محمد عکاش" },
-      footerText: { ar: "محمد عكاش", en: "Mohamed Okash", ur: "Mohamed Okash" },
+      logoText: { ar: "محمد عكاش", en: "Okash", ur: "محمد عکاش" },
+      heroName: { ar: "محمد عكاش", en: "Okash", ur: "محمد عکاش" },
+      footerText: { ar: "محمد عكاش", en: "Okash", ur: "Okash" },
       preloaderText: { ar: "عكاش", en: "OKASH", ur: "عکاش" },
-      browserTitle: { ar: "محمد عكاش | معرض الأعمال", en: "Mohamed Okash | Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
-      seoTitle: { ar: "محمد عكاش | معرض الأعمال الاحترافي", en: "Mohamed Okash | Professional Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
-      seoDescription: { ar: "الموقع الشخصي لمحمد عكاش - مهندس بنية تحتية IT وأمن وسلامة مهنية HSE", en: "Personal portfolio of Mohamed Okash - IT Infrastructure & HSE Safety Engineer", ur: "محمد عکاش کا ذاتی پورٹ فولیو - آئی تي انفراسٹرکچر اور ایچ ایس ای سيفتي انجینئر" }
+      browserTitle: { ar: "محمد عكاش | معرض الأعمال", en: "Okash | Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
+      seoTitle: { ar: "محمد عكاش | معرض الأعمال الاحترافي", en: "Okash | Professional Portfolio", ur: "محمد عکاش | پورٹ فولیو" },
+      seoDescription: { ar: "الموقع الشخصي لمحمد عكاش - مهندس بنية تحتية IT وأمن وسلامة مهنية HSE", en: "Personal portfolio of Okash - IT Infrastructure & HSE Safety Engineer", ur: "محمد عکاش کا ذاتی پورٹ فولیو - آئی تي انفراسٹرکچر اور ایچ ایس ای سيفتي انجینئر" }
     };
     copy.brandIdentity = {
       ...defaultBrand,
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
       });
     }
     const identityDefaults = {
-      displayName: { ar: 'محمد عكاش', en: 'Mohamed Okash', ur: 'محمد عکاش' },
+      displayName: { ar: 'محمد عكاش', en: 'Okash', ur: 'محمد عکاش' },
       availabilityLabel: { ar: 'متاح للعمل', en: 'Available for work', ur: 'کام کے لیے دستیاب' },
       statusLabel: { ar: 'مهندس سلامة وبنية تحتية', en: 'Practical problem solver', ur: 'عملی مسائل حل کرنے والا' },
       statusDotColor: '#10b981',
@@ -3321,7 +3321,7 @@ export default function AdminDashboard() {
                 {/* Navbar preview */}
                 <div className="p-3 rounded-xl border flex items-center gap-3 text-xs" style={{ borderColor: p.borderColor, background: p.cardBackground, borderRadius: p.cardRadius }}>
                   <div className="w-6 h-6 rounded-full" style={{ background: p.accentColor }} />
-                  <span className="font-bold flex-1" style={{ color: p.headingColor }}>{formData.brandIdentity?.logoText?.en || 'Mohamed Okash'}</span>
+                  <span className="font-bold flex-1" style={{ color: p.headingColor }}>{formData.brandIdentity?.logoText?.en || 'Okash'}</span>
                   <span className="text-[10px] px-2 py-0.5 rounded" style={{ background: p.accentColor + '20', color: p.accentColor }}>Work</span>
                 </div>
                 {/* Hero title preview */}

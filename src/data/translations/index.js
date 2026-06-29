@@ -1,7 +1,7 @@
 export const translations = {
   en: {
     dir: 'ltr',
-    name: "Mohamed Okash",
+    name: "Okash",
     available: "Practical Problem Solver",
     heroTitle1: "HSE & IT",
     heroTitle2: "Engineering.",
@@ -30,7 +30,7 @@ export const translations = {
     whatsappLabel: "WhatsApp",
     copied: "Copied successfully!",
     clickToCopy: "Click to copy",
-    footerText: "Designed & Engineered with React, Framer Motion & TailwindCSS.",
+    footerText: "Built by Okash.",
     adminLogin: "Admin Login",
     email: "Email Address",
     password: "Password",
