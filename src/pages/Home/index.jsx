@@ -10,6 +10,7 @@ import { RootLayout } from '../../app/layouts/RootLayout';
 import { Hero } from '../../components/sections/Hero';
 import { About } from '../../components/sections/About';
 import { WhyOkash } from '../../components/sections/WhyOkash';
+import { StorySection } from '../../components/sections/StorySection';
 import { Skills } from '../../components/sections/Skills';
 import { Experience } from '../../components/sections/Experience';
 import { Certifications } from '../../components/sections/Certifications';
@@ -417,6 +418,8 @@ export default function Home() {
                 return wrapSection(<About />);
               case 'why-me':
                 return wrapSection(<WhyOkash />);
+              case 'story':
+                return <StorySection key="story" />;
               case 'projects':
                 return wrapSection(
                   <section id="projects" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]">

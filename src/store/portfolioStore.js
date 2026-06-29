@@ -26,6 +26,38 @@ const deepMerge = (target, source) => {
   return output;
 };
 
+const mergeMissingHomepageSections = (data) => {
+  const currentSections = Array.isArray(data?.websiteStructure?.sections)
+    ? [...data.websiteStructure.sections]
+    : [];
+  const defaultSections = DEFAULT_PORTFOLIO_DATA.websiteStructure.sections;
+  const existingIds = new Set(currentSections.map((section) => section.id));
+
+  defaultSections.forEach((defaultSection) => {
+    if (existingIds.has(defaultSection.id)) return;
+
+    const defaultIndex = defaultSections.findIndex((section) => section.id === defaultSection.id);
+    const previousDefaultIds = defaultSections.slice(0, defaultIndex).map((section) => section.id);
+    const previousExistingIndexes = previousDefaultIds
+      .map((id) => currentSections.findIndex((section) => section.id === id))
+      .filter((index) => index !== -1);
+    const insertAt = previousExistingIndexes.length > 0
+      ? Math.max(...previousExistingIndexes) + 1
+      : currentSections.length;
+
+    currentSections.splice(insertAt, 0, defaultSection);
+    existingIds.add(defaultSection.id);
+  });
+
+  return {
+    ...data,
+    websiteStructure: {
+      ...data.websiteStructure,
+      sections: currentSections
+    }
+  };
+};
+
 export const usePortfolioStore = create((set, get) => ({
   data: DEFAULT_PORTFOLIO_DATA,
   loading: true,
@@ -37,7 +69,7 @@ export const usePortfolioStore = create((set, get) => ({
     try {
       const dbData = await getPortfolioData();
       if (dbData) {
-        const mergedData = deepMerge(DEFAULT_PORTFOLIO_DATA, dbData);
+        const mergedData = mergeMissingHomepageSections(deepMerge(DEFAULT_PORTFOLIO_DATA, dbData));
         set({ data: mergedData, loading: false });
       } else {
         // If data is missing in Firestore and an authenticated admin is active, bootstrap it

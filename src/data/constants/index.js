@@ -91,6 +91,52 @@ export const DEFAULT_PORTFOLIO_DATA = {
       ur: "میرا پیشہ ورانہ سفر انتہائی منفرد ہے جس میں آئی ٹی انفراسٹرکچر کی گہری سمجھ اور ہیلتھ اینڈ سیفٹی (HSE) انجینئرنگ کی وسیع مہارت شامل ہے۔\n\nمیں نے 2016 میں آئی ٹی انجینئر کے طور پر شروعات کی۔ سات سالوں میں، میں نے مضبوط انفراسٹرکچر بنانے میں مہارت حاصل کی: سرورز کی تنصیب، وائرلیس نیٹ ورکس، فائبر آپٹکس اور ڈیٹا کیبلز، سی سی ٹی وی اور سمارٹ دروازے کے نظام۔\n\n2023 میں، میں نے HSE کے میدان میں قدم رکھا۔ جو چیز مجھے الگ کرتی ہے وہ ان دونوں دنیاؤں کو ملانے کی میری صلاحیت ہے۔ روایتی کاغذی طریقوں پر انحصار کرنے کے بجائے، میں 'وائب کوڈنگ' اور AI کا استعمال کرتے ہوئے HSE-PRO، ConstructFlow، اور NotificationCenter جیسے طاقتور سسٹمز بناتا ہوں۔ یہ سسٹمز ایک سیفٹی انجینئر کی ذہنیت اور ایک آئی ٹی ماہر کی تکنیکی مہارت کے ساتھ بنائے گئے ہیں۔"
     }
   },
+  storySection: {
+    enabled: true,
+    title: {
+      ar: "ما وراء التنفيذ",
+      en: "Beyond The Build",
+      ur: "تعمیر سے آگے"
+    },
+    content: {
+      ar: [
+        "الذكاء الاصطناعي ساعد في البناء.",
+        "لكنه لم يتخذ القرارات.",
+        "لم يحدد ما يجب حذفه.",
+        "ولم يحدد ما يجب الاحتفاظ به.",
+        "ولم يعرف متى يجب إعادة بناء النظام بالكامل.",
+        "لقد ولّد الاحتمالات فقط.",
+        "أما المنتج...",
+        "فصُنع من الاختيار بينها.",
+        "سبع سنوات من الخبرة بين هندسة السلامة والبنية التحتية وتطوير الأنظمة والذكاء الاصطناعي علمتني أن الأدوات لا تصنع القيمة.",
+        "القرارات هي التي تصنعها."
+      ],
+      en: [
+        "AI helped with the build.",
+        "But it did not make the decisions.",
+        "It did not decide what should be removed.",
+        "It did not decide what should be kept.",
+        "And it did not know when the whole system needed to be rebuilt.",
+        "It only generated possibilities.",
+        "The product...",
+        "was made by choosing between them.",
+        "Seven years across safety engineering, infrastructure, systems development, and AI taught me that tools do not create value.",
+        "Decisions do."
+      ],
+      ur: [
+        "اے آئی نے تعمیر میں مدد کی۔",
+        "لیکن اس نے فیصلے نہیں کیے۔",
+        "اس نے یہ طے نہیں کیا کہ کیا حذف ہونا چاہیے۔",
+        "اور اس نے یہ طے نہیں کیا کہ کیا باقی رہنا چاہیے۔",
+        "اسے یہ بھی معلوم نہیں تھا کہ پورا نظام کب دوبارہ بنانا ضروری ہے۔",
+        "اس نے صرف امکانات پیدا کیے۔",
+        "لیکن پروڈکٹ...",
+        "ان امکانات میں سے انتخاب سے بنی۔",
+        "سیفٹی انجینئرنگ، انفراسٹرکچر، سسٹمز ڈویلپمنٹ، اور اے آئی کے درمیان سات سال کے تجربے نے مجھے سکھایا کہ اوزار قدر نہیں بناتے۔",
+        "فیصلے بناتے ہیں۔"
+      ]
+    }
+  },
   skills: [
     {
       id: "sk1",
@@ -633,6 +679,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
       { id: "hero", visible: true, title: { ar: "الرئيسية", en: "Home", ur: "ہوم" } },
       { id: "about", visible: true, title: { ar: "نبذة شخصية", en: "Biography", ur: "تعارف" } },
       { id: "why-me", visible: true, title: { ar: "لماذا أنا؟", en: "Why Work With Me?", ur: "میرا انتخاب کیوں؟" } },
+      { id: "story", visible: true, title: { ar: "ما وراء التنفيذ", en: "Beyond The Build", ur: "تعمیر سے آگے" } },
       { id: "projects", visible: true, title: { ar: "مشاريعي", en: "My Projects", ur: "میرے پروجیکٹس" } },
       { id: "skills", visible: true, title: { ar: "المهارات", en: "Toolbox", ur: "مہارتیں" } },
       { id: "experience", visible: true, title: { ar: "الخبرات", en: "Experience", ur: "تجربہ" } },

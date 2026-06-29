@@ -5,7 +5,7 @@ import { usePortfolioStore } from '../../store/portfolioStore';
 import { useLanguageStore } from '../../store/languageStore';
 import { useThemeStore } from '../../store/themeStore';
 import { translations } from '../../data/translations';
-import { THEME_PROFILES_DEFAULTS } from '../../data/constants';
+import { DEFAULT_PORTFOLIO_DATA, THEME_PROFILES_DEFAULTS } from '../../data/constants';
 import { validatePortfolioData } from '../../utils/validators';
 import { validateContrasts, calculateHealthScore, getHealthScoreColor, getHealthScoreLabel, getSectionScores, autoFixTheme } from '../../utils/themeValidator';
 import { 
@@ -15,7 +15,7 @@ import {
   Search, ArrowUp, ArrowDown, Upload, Download, Undo, Eye,
   Globe, Palette, Image, ShieldCheck, Shield, HeartPulse, FlameKindling,
   Server, Copy, Check, ArrowUpRight, CheckSquare, Square,
-  ChevronDown, ChevronUp, EyeOff, Layers, Menu, X
+  ChevronDown, ChevronUp, EyeOff, Layers, Menu, X, Sparkles
 } from 'lucide-react';
 
 // Form Input UI Helpers
@@ -203,6 +203,26 @@ export default function AdminDashboard() {
     copy.hero.identity = { ...identityDefaults, ...(copy.hero.identity || {}) };
     for (const key of ['displayName', 'availabilityLabel', 'statusLabel']) {
       copy.hero.identity[key] = { ...identityDefaults[key], ...(copy.hero.identity[key] || {}) };
+    }
+    const storyDefaults = DEFAULT_PORTFOLIO_DATA.storySection;
+    copy.storySection = {
+      ...storyDefaults,
+      ...(copy.storySection || {}),
+      title: {
+        ...storyDefaults.title,
+        ...(copy.storySection?.title || {})
+      },
+      content: {
+        ...storyDefaults.content,
+        ...(copy.storySection?.content || {})
+      }
+    };
+    if (!copy.websiteStructure) copy.websiteStructure = { sections: [] };
+    if (!Array.isArray(copy.websiteStructure.sections)) copy.websiteStructure.sections = [];
+    if (!copy.websiteStructure.sections.some((section) => section.id === 'story')) {
+      const storySection = DEFAULT_PORTFOLIO_DATA.websiteStructure.sections.find((section) => section.id === 'story');
+      const whyIndex = copy.websiteStructure.sections.findIndex((section) => section.id === 'why-me');
+      copy.websiteStructure.sections.splice(whyIndex === -1 ? copy.websiteStructure.sections.length : whyIndex + 1, 0, storySection);
     }
     return copy;
   };
@@ -403,6 +423,14 @@ export default function AdminDashboard() {
         results.push({ tab: 'projects', id: proj.id, name: `Project: ${proj.title}`, desc: proj.category?.en });
       }
     });
+
+    if (
+      formData.storySection?.title?.en?.toLowerCase().includes(q) ||
+      formData.storySection?.content?.en?.some((line) => line.toLowerCase().includes(q)) ||
+      formData.storySection?.content?.ar?.some((line) => line.toLowerCase().includes(q))
+    ) {
+      results.push({ tab: 'story', id: 'story', name: `Story: ${formData.storySection.title?.en}`, desc: 'Flagship storytelling section' });
+    }
 
     // Skills
     formData.skills?.forEach(group => {
@@ -608,6 +636,12 @@ export default function AdminDashboard() {
                         updated.customSections[cIdx].visible = nextVal;
                       }
                     }
+                    if (sect.id === 'story') {
+                      updated.storySection = {
+                        ...updated.storySection,
+                        enabled: nextVal
+                      };
+                    }
                     setFormData(updated);
                   }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
@@ -635,6 +669,15 @@ export default function AdminDashboard() {
                           }
                           updated.customSections[cIdx].title[lang] = e.target.value;
                         }
+                      }
+                      if (sect.id === 'story') {
+                        updated.storySection = {
+                          ...updated.storySection,
+                          title: {
+                            ...updated.storySection?.title,
+                            [lang]: e.target.value
+                          }
+                        };
                       }
                       setFormData(updated);
                     }}
@@ -812,6 +855,157 @@ export default function AdminDashboard() {
       }} />
     </div>
   );
+
+  const renderStorySectionTab = () => {
+    const selectedLines = formData.storySection?.content?.[lang] || [];
+    const updateStorySection = (updater) => {
+      const updated = JSON.parse(JSON.stringify(formData));
+      if (!updated.storySection) {
+        updated.storySection = JSON.parse(JSON.stringify(DEFAULT_PORTFOLIO_DATA.storySection));
+      }
+      updated.storySection.title = {
+        ...DEFAULT_PORTFOLIO_DATA.storySection.title,
+        ...(updated.storySection.title || {})
+      };
+      updated.storySection.content = {
+        ...DEFAULT_PORTFOLIO_DATA.storySection.content,
+        ...(updated.storySection.content || {})
+      };
+      ['ar', 'en', 'ur'].forEach((languageKey) => {
+        if (!Array.isArray(updated.storySection.content[languageKey])) {
+          updated.storySection.content[languageKey] = [];
+        }
+      });
+      updater(updated.storySection, updated);
+      const structureIndex = updated.websiteStructure?.sections?.findIndex((section) => section.id === 'story');
+      if (structureIndex !== undefined && structureIndex !== -1) {
+        updated.websiteStructure.sections[structureIndex] = {
+          ...updated.websiteStructure.sections[structureIndex],
+          visible: updated.storySection.enabled !== false,
+          title: {
+            ...updated.websiteStructure.sections[structureIndex].title,
+            ...updated.storySection.title
+          }
+        };
+      }
+      setFormData(updated);
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="border-b border-[var(--border-color)] pb-3 mb-4">
+          <h3 className="text-lg font-black uppercase text-[var(--primary)]">{t.cms.storySectionTitle}</h3>
+          <p className="text-xs text-[var(--text-secondary)] mt-1">{t.cms.storySectionDesc}</p>
+        </div>
+
+        <div className="flex items-center justify-between p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)]">
+          <div>
+            <h5 className="font-bold text-sm text-[var(--text-primary)] mb-0.5">{t.cms.storySectionEnable}</h5>
+            <p className="text-xs text-[var(--text-secondary)]">{t.cms.storySectionEnableDesc}</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => updateStorySection((section) => {
+              section.enabled = section.enabled === false;
+            })}
+            aria-label={t.cms.storySectionEnable}
+            className={`p-2.5 rounded-lg border transition-all cursor-pointer ${
+              formData.storySection?.enabled !== false
+                ? 'bg-[var(--primary)]/10 border-[var(--primary)]/30 text-[var(--primary)]'
+                : 'border-[var(--border-color)] text-[var(--text-secondary)]'
+            }`}
+          >
+            {formData.storySection?.enabled !== false ? <CheckSquare className="w-5 h-5" /> : <Square className="w-5 h-5" />}
+          </button>
+        </div>
+
+        <AdminMultiLangInput
+          label={t.cms.storySectionCmsTitle}
+          valueObj={formData.storySection?.title}
+          onChangeKey={(key, val) => updateStorySection((section) => {
+            section.title[key] = val;
+          })}
+        />
+
+        <div className="p-5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h4 className="font-extrabold text-xs text-[var(--text-secondary)] uppercase">{t.cms.storySectionLines}</h4>
+              <p className="text-xs text-[var(--text-secondary)] mt-1">{t.cms.storySectionLinesDesc}</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => updateStorySection((section) => {
+                section.content[lang] = [...(section.content[lang] || []), ''];
+              })}
+              className="px-3.5 py-2 rounded-lg bg-[var(--primary)]/10 hover:bg-[var(--surface-hover)] border border-[var(--primary)]/30 text-[var(--primary)] font-bold text-xs flex items-center justify-center gap-1 cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" /> {t.cms.storySectionAddLine}
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            {selectedLines.map((line, index) => (
+              <div key={index} className="p-3 rounded-xl border border-[var(--border-color)] bg-[var(--card-bg)] space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-secondary)]">
+                    {t.cms.storySectionLine} {index + 1}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      disabled={index === 0}
+                      onClick={() => updateStorySection((section) => {
+                        const lines = [...section.content[lang]];
+                        [lines[index - 1], lines[index]] = [lines[index], lines[index - 1]];
+                        section.content[lang] = lines;
+                      })}
+                      aria-label={t.cms?.ariaReorderUp || 'Move up'}
+                      className="p-1.5 rounded hover:bg-[var(--surface-hover)] disabled:opacity-20 cursor-pointer"
+                    >
+                      <ArrowUp className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      disabled={index === selectedLines.length - 1}
+                      onClick={() => updateStorySection((section) => {
+                        const lines = [...section.content[lang]];
+                        [lines[index + 1], lines[index]] = [lines[index], lines[index + 1]];
+                        section.content[lang] = lines;
+                      })}
+                      aria-label={t.cms?.ariaReorderDown || 'Move down'}
+                      className="p-1.5 rounded hover:bg-[var(--surface-hover)] disabled:opacity-20 cursor-pointer"
+                    >
+                      <ArrowDown className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => updateStorySection((section) => {
+                        section.content[lang] = section.content[lang].filter((_, lineIndex) => lineIndex !== index);
+                      })}
+                      aria-label={t.cms?.ariaDelete || 'Delete'}
+                      className="p-1.5 rounded text-red-400 hover:bg-red-500/10 cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+                <textarea
+                  rows="3"
+                  dir={lang === 'en' ? 'ltr' : 'rtl'}
+                  value={line}
+                  onChange={(e) => updateStorySection((section) => {
+                    section.content[lang][index] = e.target.value;
+                  })}
+                  className="block w-full min-w-0 rounded-lg bg-[var(--input-bg)] border border-[var(--border-color)] text-[var(--text-primary)] outline-none focus:border-[var(--primary)] transition-colors text-sm p-3"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   // Helper local search input
   const renderListFilterBar = (placeholder = "Search items...") => (
@@ -2885,6 +3079,7 @@ export default function AdminDashboard() {
       case 'structure': return renderStructureTab();
       case 'hero': return renderHeroTab();
       case 'about': return renderAboutTab();
+      case 'story': return renderStorySectionTab();
       case 'projects': return renderProjectsTab();
       case 'skills': return renderSkillsTab();
       case 'experience': return renderExperienceTab();
@@ -3449,6 +3644,13 @@ export default function AdminDashboard() {
             className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'about' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
           >
             <Star className="w-3.5 h-3.5" /> {t.cms?.sidebarAbout || 'About Section'}
+          </button>
+
+          <button
+            onClick={() => handleTabChange('story')}
+            className={`w-full py-2.5 px-3 rounded-lg font-bold text-xs flex items-center gap-2 transition-all cursor-pointer ${activeTab === 'story' ? 'bg-[var(--bg-secondary)] text-[var(--text-primary)] border-l-2 border-[var(--primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)] hover:text-[var(--text-primary)]'}`}
+          >
+            <Sparkles className="w-3.5 h-3.5" /> {t.cms?.sidebarStorySection || 'Beyond The Build'}
           </button>
 
           <button 
