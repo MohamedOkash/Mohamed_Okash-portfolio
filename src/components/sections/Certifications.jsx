@@ -45,7 +45,7 @@ export const Certifications = React.memo(() => {
   const certsList = data?.certifications || [];
 
   return (
-    <section id="certifications" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
+    <section id="certifications" data-section-id="certifications" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
       {/* Section Header */}
       <div className="mb-16">
         <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3">
@@ -54,7 +54,7 @@ export const Certifications = React.memo(() => {
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
           {lang === 'ar' ? 'الشهادات والاعتمادات الدولية.' : lang === 'ur' ? 'سرٹیفکیٹ اور لائسنس۔' : 'Accreditations & Licenses.'}
         </h2>
-        <p className="text-lg opacity-60 max-w-3xl leading-relaxed">
+        <p className="text-lg text-[var(--text-secondary)] max-w-3xl leading-relaxed">
           {data?.translations?.[lang]?.certsSubtitle || t.certsSubtitle}
         </p>
       </div>
@@ -88,7 +88,7 @@ export const Certifications = React.memo(() => {
                 </div>
               )}
 
-              <div className="text-[10px] md:text-xs font-semibold uppercase tracking-widest opacity-40 mt-6 pt-4 border-t border-[var(--border-color)]">
+              <div className="text-[10px] md:text-xs font-semibold uppercase tracking-widest text-[var(--muted)] mt-6 pt-4 border-t border-[var(--border-color)]">
                 {data?.translations?.[lang]?.verifiedAccreditation || (lang === 'ar' ? 'اعتماد دولي معتمد' : lang === 'ur' ? 'تصدیق شدہ سند' : 'Verified Accreditation')}
               </div>
             </SpotlightCard>

@@ -142,7 +142,7 @@ export const Contact = React.memo(() => {
             href={getWhatsAppLink(method.value)}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-xs bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 transition-all cursor-pointer"
+            className="flex items-center justify-center gap-2 w-full py-4 rounded-xl font-bold text-xs bg-[var(--brand-whatsapp-bg)] border border-[var(--brand-whatsapp-border)] text-[var(--brand-whatsapp-text)] hover:bg-[var(--brand-whatsapp-hover)] transition-all cursor-pointer"
           >
             {data?.translations?.[lang]?.sendWhatsApp || t.sendWhatsApp || (lang === 'ar' ? 'بدء محادثة واتساب' : 'Send WhatsApp')}
             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -154,7 +154,7 @@ export const Contact = React.memo(() => {
     // Default for linkedin, github, custom links
     let btnColorClass = "bg-[var(--surface-hover)] border border-[var(--border-color)] hover:bg-[var(--surface-hover)] text-[var(--text-secondary)]";
     if (method.type === 'linkedin') {
-      btnColorClass = "bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20";
+      btnColorClass = "bg-[var(--brand-linkedin-bg)] border border-[var(--brand-linkedin-border)] text-[var(--brand-linkedin-text)] hover:bg-[var(--brand-linkedin-hover)]";
     }
 
     return (
@@ -173,7 +173,7 @@ export const Contact = React.memo(() => {
 };
 
   return (
-    <section id="contact" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
+    <section id="contact" data-section-id="contact" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
       {/* Section Header */}
       <div className="mb-16 text-center max-w-3xl mx-auto">
         <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 animate-pulse">
@@ -182,7 +182,7 @@ export const Contact = React.memo(() => {
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
           {lang === 'ar' ? 'دعنا نبني شيئاً معاً.' : lang === 'ur' ? 'آئیں مل کر کام کریں۔' : "Let's connect."}
         </h2>
-        <p className="text-lg opacity-60 leading-relaxed">
+        <p className="text-lg text-[var(--text-secondary)] leading-relaxed">
           {data?.translations?.[lang]?.contactSubtitle || t.contactSubtitle}
         </p>
       </div>
@@ -191,15 +191,27 @@ export const Contact = React.memo(() => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
         {visibleMethods.map((method) => (
           <SpotlightCard key={method.id} className="flex flex-col h-full hover:border-[var(--primary)]/20 transition-all duration-300">
-            <div className="p-3.5 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--primary)] w-fit mb-6">
-              {getContactIcon(method.type, "w-6 h-6")}
-            </div>
+            {(() => {
+              let iconStyle = "bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--text-primary)]";
+              if (method.type === 'whatsapp') {
+                iconStyle = "bg-[var(--brand-whatsapp-bg)] border border-[var(--brand-whatsapp-border)] text-[var(--brand-whatsapp-text)]";
+              } else if (method.type === 'linkedin') {
+                iconStyle = "bg-[var(--brand-linkedin-bg)] border border-[var(--brand-linkedin-border)] text-[var(--brand-linkedin-text)]";
+              } else if (method.type === 'email') {
+                iconStyle = "bg-[var(--status-red-bg)] border border-[var(--status-red-border)] text-[var(--status-red)]";
+              }
+              return (
+                <div className={`p-3.5 rounded-2xl w-fit mb-6 transition-all duration-300 ${iconStyle}`}>
+                  {getContactIcon(method.type, "w-6 h-6")}
+                </div>
+              );
+            })()}
 
             <h3 className="text-lg font-bold mb-1 text-[var(--text-primary)]">
               {method.label}
             </h3>
 
-            <p className="text-sm opacity-60 mb-6 truncate max-w-full font-light">
+            <p className="text-sm text-[var(--text-secondary)] mb-6 truncate max-w-full font-light">
               {getDisplayValue(method.value)}
             </p>
 

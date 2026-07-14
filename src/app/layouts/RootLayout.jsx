@@ -4,7 +4,9 @@ import { useLanguageStore } from '../../store/languageStore';
 import { usePortfolioStore } from '../../store/portfolioStore';
 import { translations } from '../../data/translations';
 import { CinematicBackground } from '../../components/ui/CinematicBackground';
+import { CustomCursor } from '../../components/ui/CustomCursor';
 import { useThemeStore } from '../../store/themeStore';
+import { useSectionThemeObserver } from '../../hooks/useSectionThemeObserver';
 
 export const RootLayout = ({ children }) => {
   const { lang } = useLanguageStore();
@@ -13,15 +15,20 @@ export const RootLayout = ({ children }) => {
   const t = translations[lang] || translations.ar;
   const isRtl = t.dir === 'rtl';
 
+  useSectionThemeObserver();
+
   const themeSettings = data?.themeSettings;
   const themeProfiles = data?.themeProfiles;
-  const configuredTheme = themeSettings?.defaultTheme || activeTheme || 'dark';
-  const isLightTheme = configuredTheme === 'platinum';
-  const activeProfile = themeProfiles?.[configuredTheme] || themeSettings || {};
+  const currentTheme = activeTheme || themeSettings?.defaultTheme || 'dark';
+  const isLightTheme = currentTheme === 'platinum';
+  const activeProfile = themeProfiles?.[currentTheme] || themeSettings || {};
 
   useEffect(() => {
-    setTheme(configuredTheme);
-  }, [configuredTheme, setTheme]);
+    const saved = localStorage.getItem('portfolio-theme');
+    if (!saved && themeSettings?.defaultTheme) {
+      setTheme(themeSettings.defaultTheme);
+    }
+  }, [themeSettings?.defaultTheme, setTheme]);
 
   useEffect(() => {
     document.documentElement.setAttribute('lang', lang);
@@ -69,6 +76,7 @@ export const RootLayout = ({ children }) => {
       </a>
 
       <CinematicBackground />
+      <CustomCursor />
       <Navbar />
 
       <main id="main-content" className="relative z-10 pt-24 min-h-[calc(100vh-80px)]">

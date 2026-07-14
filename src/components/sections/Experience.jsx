@@ -14,7 +14,7 @@ export const Experience = React.memo(() => {
   const experienceList = data?.experience || [];
 
   return (
-    <section id="experience" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
+    <section id="experience" data-section-id="experience" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
       {/* Section Header */}
       <div className="mb-16">
         <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3">
@@ -23,7 +23,7 @@ export const Experience = React.memo(() => {
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
           {lang === 'ar' ? 'المسار المهني والخبرات.' : lang === 'ur' ? 'تجربے کا سفر۔' : 'Career Journey.'}
         </h2>
-        <p className="text-lg opacity-60 max-w-3xl leading-relaxed">
+        <p className="text-lg text-[var(--text-secondary)] max-w-3xl leading-relaxed">
           {data?.translations?.[lang]?.journeySubtitle || t.journeySubtitle}
         </p>
       </div>
@@ -51,27 +51,29 @@ export const Experience = React.memo(() => {
               <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-6">
                 <div>
                   {/* Role title */}
-                  <h3 className="text-xl font-bold tracking-tight text-[var(--text-primary)] mb-2 flex items-center gap-2">
-                    <Briefcase className="w-4.5 h-4.5 text-[var(--primary)] shrink-0" />
+                  <h3 className="text-xl font-extrabold tracking-tight text-[var(--text-primary)] mb-2 flex items-center gap-2.5">
+                    <div className="p-2 rounded-lg bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] shrink-0">
+                      <Briefcase className="w-4 h-4" />
+                    </div>
                     {exp.role[lang] || exp.role.en}
                   </h3>
                   
                   {/* Company */}
-                  <div className="flex items-center gap-2 text-sm opacity-65 font-medium">
-                    <Building2 className="w-4 h-4 shrink-0" />
+                  <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)] font-bold">
+                    <Building2 className="w-4 h-4 text-[var(--primary)] shrink-0" />
                     <span>{exp.company[lang] || exp.company.en}</span>
                   </div>
                 </div>
 
                 {/* Period badge */}
-                <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border border-[var(--border)] bg-[var(--surface-hover)] text-xs font-semibold text-[var(--primary)] shrink-0 h-fit self-start md:self-auto shadow-sm">
-                  <Calendar className="w-3.5 h-3.5" />
+                <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-[var(--border-color)] bg-[var(--surface-hover)] text-xs font-extrabold text-[var(--accent-color)] shrink-0 h-fit self-start md:self-auto shadow-sm">
+                  <Calendar className="w-3.5 h-3.5 text-[var(--accent-color)]" />
                   {exp.period[lang] || exp.period.en}
                 </div>
               </div>
 
               {/* Description body */}
-              <p className="text-sm md:text-base opacity-70 leading-relaxed whitespace-pre-line font-light">
+              <p className="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed whitespace-pre-line font-light">
                 {exp.description[lang] || exp.description.en}
               </p>
             </SpotlightCard>

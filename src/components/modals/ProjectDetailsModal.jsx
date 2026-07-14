@@ -103,22 +103,22 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                 
                 {/* 1. Problem Section */}
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-red-400">
+                  <div className="flex items-center gap-2 text-[var(--status-red)]">
                     <AlertTriangle className="w-5 h-5 shrink-0" />
                     <h4 className="text-xs uppercase tracking-widest font-black">{t.problemLabel || 'Problem Context'}</h4>
                   </div>
-                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-red-500/[0.02] border border-red-500/10 p-5 rounded-2xl">
+                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-[var(--status-red-bg)] border border-[var(--status-red-border)] p-5 rounded-2xl">
                     {problemContent}
                   </p>
                 </div>
 
                 {/* 2. Solution Section */}
                 <div className="pt-6 border-t border-[var(--border-color)] space-y-3">
-                  <div className="flex items-center gap-2 text-green-400">
+                  <div className="flex items-center gap-2 text-[var(--status-green)]">
                     <Lightbulb className="w-5 h-5 shrink-0" />
                     <h4 className="text-xs uppercase tracking-widest font-black">{t.solutionLabel || 'Proposed Solution'}</h4>
                   </div>
-                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-green-500/[0.02] border border-green-500/10 p-5 rounded-2xl">
+                  <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-[var(--status-green-bg)] border border-[var(--status-green-border)] p-5 rounded-2xl">
                     {solutionContent}
                   </p>
                 </div>
@@ -156,11 +156,11 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                 {/* 5. Challenges Section */}
                 {challengesContent && (
                   <div className="pt-6 border-t border-[var(--border-color)] space-y-3">
-                    <div className="flex items-center gap-2 text-orange-400">
+                    <div className="flex items-center gap-2 text-[var(--status-orange)]">
                       <Wrench className="w-5 h-5 shrink-0" />
                       <h4 className="text-xs uppercase tracking-widest font-black">{t.techChallenges || 'Engineering Challenges'}</h4>
                     </div>
-                    <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-orange-500/[0.02] border border-orange-500/10 p-5 rounded-2xl">
+                    <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-[var(--status-orange-bg)] border border-[var(--status-orange-border)] p-5 rounded-2xl">
                       {challengesContent}
                     </p>
                   </div>
@@ -169,11 +169,11 @@ export const ProjectDetailsModal = ({ project, isOpen, onClose }) => {
                 {/* 6. Business Impact Section */}
                 {businessImpactContent && (
                   <div className="pt-6 border-t border-[var(--border-color)] space-y-3">
-                    <div className="flex items-center gap-2 text-yellow-400">
+                    <div className="flex items-center gap-2 text-[var(--status-yellow)]">
                       <TrendingUp className="w-5 h-5 shrink-0" />
                       <h4 className="text-xs uppercase tracking-widest font-black">{t.businessImpactLabel || 'Business Impact & Value'}</h4>
                     </div>
-                    <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-yellow-500/[0.02] border border-yellow-500/10 p-5 rounded-2xl">
+                    <p className="text-sm md:text-base opacity-80 leading-relaxed font-light bg-[var(--status-yellow-bg)] border border-[var(--status-yellow-border)] p-5 rounded-2xl">
                       {businessImpactContent}
                     </p>
                   </div>

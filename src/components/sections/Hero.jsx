@@ -25,6 +25,7 @@ export const Hero = React.memo(() => {
   return (
     <section
       id="hero"
+      data-section-id="hero"
       className="relative min-h-[82vh] overflow-hidden px-6 py-20 flex flex-col items-center justify-center text-center"
       aria-label={data?.translations?.[lang]?.heroTitle1 || t.heroTitle1}
     >
@@ -32,16 +33,22 @@ export const Hero = React.memo(() => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-        className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border text-xs font-semibold tracking-wider uppercase mb-8"
+        className="font-mono-label inline-flex items-center gap-2.5 px-4 py-2 rounded-full border text-[11px] font-medium mb-8"
         style={{
           background: identity.badgeBackground || 'var(--card-bg)',
           borderColor: identity.badgeBorder || 'var(--border-color)',
           color: identity.badgeTextColor || 'var(--text-primary)'
         }}
       >
-        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: identity.statusDotColor || '#10b981' }} />
+        <span className="relative flex w-2 h-2">
+          <span
+            className="absolute inline-flex h-full w-full rounded-full opacity-60 animate-ping"
+            style={{ backgroundColor: identity.statusDotColor || '#10b981' }}
+          />
+          <span className="relative inline-flex rounded-full w-2 h-2" style={{ backgroundColor: identity.statusDotColor || '#10b981' }} />
+        </span>
         <span>{displayName}</span>
-        <span className="opacity-35 select-none">/</span>
+        <span className="text-[var(--muted)] select-none">/</span>
         <span className="text-[var(--text-secondary)]">{statusLabel}</span>
       </motion.div>
 
@@ -52,7 +59,15 @@ export const Hero = React.memo(() => {
         className="max-w-6xl text-[clamp(3.5rem,13vw,10.5rem)] font-black tracking-[-0.085em] leading-[0.88] mb-7 text-[var(--text-primary)]"
       >
         <span className="block">{data?.translations?.[lang]?.heroTitle1 || t.heroTitle1}</span>
-        <span className="block text-[var(--accent-color)] mt-4">
+        <span
+          className="block mt-4"
+          style={{
+            backgroundImage: 'linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color) 40%, var(--text-primary)))',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            color: 'transparent'
+          }}
+        >
           {data?.translations?.[lang]?.heroTitle2 || t.heroTitle2}
         </span>
       </motion.h1>
@@ -76,13 +91,13 @@ export const Hero = React.memo(() => {
           <span className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] leading-tight">
             {data?.hero?.statistics?.projectsBuilt || 8}+
           </span>
-          <span className="block text-[9px] sm:text-xs text-[var(--text-secondary)] font-bold uppercase tracking-widest mt-1">
+          <span className="font-mono-label block text-[9px] sm:text-xs text-[var(--text-secondary)] font-bold mt-1">
             {lang === 'ar' ? 'مشاريع منفذة' : lang === 'ur' ? 'منصوبے' : 'Projects'}
           </span>
         </div>
         <div className="border-x border-[var(--border-color)] px-4 sm:px-8">
           <span className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] leading-tight">4</span>
-          <span className="block text-[9px] sm:text-xs text-[var(--text-secondary)] font-bold uppercase tracking-widest mt-1">
+          <span className="font-mono-label block text-[9px] sm:text-xs text-[var(--text-secondary)] font-bold mt-1">
             {lang === 'ar' ? 'قطاعات' : lang === 'ur' ? 'صنعتیں' : 'Industries'}
           </span>
         </div>
@@ -90,7 +105,7 @@ export const Hero = React.memo(() => {
           <span className="text-2xl sm:text-3xl font-black text-[var(--text-primary)] leading-tight">
             {data?.hero?.statistics?.experienceYears || 7}+
           </span>
-          <span className="block text-[9px] sm:text-xs text-[var(--text-secondary)] font-bold uppercase tracking-widest mt-1">
+          <span className="font-mono-label block text-[9px] sm:text-xs text-[var(--text-secondary)] font-bold mt-1">
             {lang === 'ar' ? 'سنوات خبرة' : lang === 'ur' ? 'سال تجربہ' : 'Years'}
           </span>
         </div>

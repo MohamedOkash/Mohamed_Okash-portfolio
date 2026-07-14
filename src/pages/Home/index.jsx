@@ -400,7 +400,7 @@ export default function Home() {
                 initial="hidden"
                 whileInView="visible"
                 exit="hidden"
-                viewport={{ once: true, amount: 0.15 }}
+                viewport={{ once: true, amount: 0.02 }}
                 variants={sectionRevealVariants}
               >
                 {comp}
@@ -446,7 +446,7 @@ export default function Home() {
                               key={project.id} 
                               initial={{ opacity: 0, y: 30, scale: 0.98 }}
                               whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                              viewport={{ once: true, amount: 0.15 }}
+                              viewport={{ once: true, amount: 0.05 }}
                               transition={{ duration: 0.8, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
                               className="relative group cursor-pointer"
                             >
@@ -475,7 +475,7 @@ export default function Home() {
                               key={project.id}
                               initial={{ opacity: 0, y: 30, scale: 0.98 }}
                               whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                              viewport={{ once: true, amount: 0.15 }}
+                              viewport={{ once: true, amount: 0.05 }}
                               transition={{ duration: 0.8, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
                             >
                               <ProjectCard 

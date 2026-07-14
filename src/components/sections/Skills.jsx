@@ -44,7 +44,7 @@ export const Skills = React.memo(() => {
   const skillGroups = data?.skills || [];
 
   return (
-    <section id="skills" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
+    <section id="skills" data-section-id="skills" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
       {/* Section Header */}
       <div className="mb-16">
         <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3">
@@ -70,9 +70,21 @@ export const Skills = React.memo(() => {
             >
               {/* Header Icon + Category Title */}
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] text-[var(--primary)]">
-                  {getIcon(group.iconType, "w-6 h-6")}
-                </div>
+                {(() => {
+                  let skillIconStyle = "bg-[var(--primary)]/10 border-[var(--primary)]/20 text-[var(--primary)]";
+                  if (group.iconType === 'shield') {
+                    skillIconStyle = "bg-[var(--color-pillar-shield)]/12 border-[var(--color-pillar-shield)]/25 text-[var(--color-pillar-shield)]";
+                  } else if (group.iconType === 'server') {
+                    skillIconStyle = "bg-[var(--color-pillar-server)]/12 border-[var(--color-pillar-server)]/25 text-[var(--color-pillar-server)]";
+                  } else if (group.iconType === 'monitor') {
+                    skillIconStyle = "bg-[var(--color-pillar-cpu)]/12 border-[var(--color-pillar-cpu)]/25 text-[var(--color-pillar-cpu)]";
+                  }
+                  return (
+                    <div className={`p-3 rounded-2xl border transition-all duration-300 ${skillIconStyle}`}>
+                      {getIcon(group.iconType, "w-6 h-6")}
+                    </div>
+                  );
+                })()}
                 <h3 className="text-lg md:text-xl font-bold tracking-tight text-[var(--text-primary)]">
                   {group.category[lang] || group.category.en}
                 </h3>

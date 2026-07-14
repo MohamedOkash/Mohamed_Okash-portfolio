@@ -20,7 +20,7 @@ export const About = React.memo(() => {
   const paragraphs = (aboutData.text[lang] || t.aboutText || "").split('\n\n');
 
   return (
-    <section id="why-me" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
+    <section id="about" data-section-id="about" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
       {/* Section Header */}
       <div className="mb-16">
         <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3">
@@ -29,7 +29,7 @@ export const About = React.memo(() => {
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
           {aboutData.title[lang] || t.aboutTitle}
         </h2>
-        <p className="text-lg md:text-xl opacity-60 max-w-3xl font-medium leading-relaxed">
+        <p className="text-lg md:text-xl text-[var(--text-secondary)] max-w-3xl font-medium leading-relaxed">
           {aboutData.subtitle[lang] || t.aboutSubtitle}
         </p>
       </div>
@@ -58,7 +58,7 @@ export const About = React.memo(() => {
             <div className="space-y-6">
               {/* IT Track */}
               <div className="flex gap-4 items-start">
-                <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 mt-1">
+                <div className="p-3 rounded-xl bg-[var(--color-it-bg)] border border-[var(--color-it-border)] text-[var(--color-it)] mt-1">
                   <Server className="w-5 h-5" />
                 </div>
                 <div>
@@ -73,7 +73,7 @@ export const About = React.memo(() => {
 
               {/* HSE Track */}
               <div className="flex gap-4 items-start">
-                <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 mt-1">
+                <div className="p-3 rounded-xl bg-[var(--color-hse-bg)] border border-[var(--color-hse-border)] text-[var(--color-hse)] mt-1">
                   <HardHat className="w-5 h-5" />
                 </div>
                 <div>

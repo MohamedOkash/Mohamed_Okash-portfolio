@@ -68,9 +68,8 @@ export const StorySection = React.memo(() => {
   };
 
   const paragraphVariants = {
-    hidden: reducedMotion ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 60, scale: 0.98 },
+    hidden: reducedMotion ? { y: 0, scale: 1 } : { y: 40, scale: 0.98 },
     visible: {
-      opacity: 1,
       y: 0,
       scale: 1,
       transition: {
@@ -94,6 +93,7 @@ export const StorySection = React.memo(() => {
   return (
     <section
       id="story"
+      data-section-id="story"
       aria-label={title}
       className="relative z-10 overflow-hidden py-28 sm:py-36 lg:py-44 px-6"
     >
@@ -128,7 +128,7 @@ export const StorySection = React.memo(() => {
               }}
               data-index={index}
               variants={paragraphVariants}
-              className="max-w-[700px] text-[clamp(1.4rem,7vw,2.4rem)] font-extrabold leading-[1.15] tracking-[-0.03em] text-[var(--text-primary)] sm:text-[clamp(2rem,4vw,4rem)]"
+              className="max-w-[700px] text-[clamp(1.1rem,4vw,1.6rem)] font-extrabold leading-[1.25] tracking-[-0.02em] text-[var(--text-primary)] sm:text-[clamp(1.3rem,2.5vw,2rem)]"
               style={{
                 opacity: getParagraphOpacity(index),
                 transition: reducedMotion ? 'none' : 'opacity 500ms cubic-bezier(0.22, 1, 0.36, 1)',

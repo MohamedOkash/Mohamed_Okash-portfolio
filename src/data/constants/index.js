@@ -548,6 +548,96 @@ export const DEFAULT_PORTFOLIO_DATA = {
       iconType: "hardhat",
       demoLink: "https://print-pro-d5e33.web.app",
       githubLink: "https://github.com/MohamedOkash/printpro"
+    },
+    {
+      id: "wasla-link",
+      title: "Wasla-Link",
+      projectType: "commercial",
+      status: "completed",
+      featured: true,
+      category: {
+        en: "Multi-Vendor Logistics & E-Commerce",
+        ar: "منصة تجارة إلكترونية ولوجستيات متعددة التجار",
+        ur: "ملٹی وینڈر ای کامرس اور لاجسٹکس"
+      },
+      description: {
+        en: "A cross-platform localized delivery and multi-vendor directory application connecting physical stores (Groceries, Pharmacies, Libraries) with local delivery drivers. Built using React, Tailwind CSS, TypeScript, and Capacitor for mobile devices.",
+        ar: "تطبيق لوجستيات وتجارة إلكترونية متعدد التجار يربط المتاجر المحلية (البقالة، الصيدليات، المكتبات) مع كابتن التوصيل. تم بناؤه باستخدام React و Tailwind CSS و TypeScript و Capacitor للهواتف الذكية.",
+        ur: "ایک ملٹی وینڈر ای کامرس اور ڈیلیوری ایپلی کیشن جو مقامی دکانوں کو ڈیلیوری ڈرائیورز سے جوڑتی ہے۔"
+      },
+      features: [
+        { en: "Multi-tenant user role dashboards (Customer, Vendor, Admin) with secure authorization", ar: "لوحات تحكم متعددة الأدوار (العميل، التاجر، المدير) مع حماية وتفويض كامل", ur: "صارف کے مختلف کرداروں کے ڈیش بورڈز" },
+        { en: "Interactive location picker and geographic radius delivery boundary controls", ar: "محدد مواقع تفاعلي مع التحكم في نطاق التوصيل الجغرافي للمتاجر", ur: "انٹرایکٹو لوکیشن پکر اور ڈیلیوری کے حدود کا کنٹرول" },
+        { en: "Live search engine with instant store, category, and catalog filtering", ar: "محرك بحث حي لتصفية المتاجر والفئات والمنتجات فورياً", ur: "لائیو سرچ انجن اور مصنوعات کے فلٹرز" }
+      ],
+      challenges: {
+        en: "Managing complex cart, shop, and checkout state transitions across multiple vendors in a single session without state pollution.",
+        ar: "إدارة سلة التسوق والدفع لطلبات تحتوي على منتجات من تجار متعددين في جلسة واحدة دون تداخل البيانات.",
+        ur: "ایک سیشن میں متعدد وینڈرز کے درمیان کارٹ اور چیک آؤٹ کی حالتوں کا انتظام کرنا۔"
+      },
+      tech: [
+        { en: "React & TypeScript", ar: "React & TypeScript", ur: "React & TypeScript" },
+        { en: "Capacitor Mobile Runtime", ar: "محيط التشغيل Capacitor للهواتف", ur: "Capacitor Mobile Runtime" },
+        { en: "Tailwind CSS & Context API", ar: "تصميم Tailwind CSS وإدارة الحالة بـ Context", ur: "Tailwind CSS اور کانٹیکسٹ اے پی آئی" }
+      ],
+      architecture: {
+        en: "Decoupled route-driven dashboard architecture using custom hooks to manage roles and features modularly.",
+        ar: "بنية برمجية معتمدة على مسارات تفاعلية تفصل مهام كل مستخدم عبر Custom Hooks وإدارة مخصصة للأدوار.",
+        ur: "کرداروں اور خصوصیات کے لیے روٹ سے چلنے والا فن تعمیر۔"
+      },
+      businessValue: {
+        en: "Enabled local brick-and-mortar stores to launch digital channels instantly, reducing logistics expenses and boosting order rates.",
+        ar: "تمكين المحلات والمتاجر التقليدية من إطلاق قنوات بيع رقمية فورية، مما قلل تكاليف التوصيل وزاد الطلبات.",
+        ur: "مقامی دکانوں کو فوری طور پر ڈیجیٹل چینلز شروع کرنے اور آرڈرز کو بڑھانے کے قابل بنایا۔"
+      },
+      iconType: "monitor",
+      demoLink: "https://wasla-link.web.app",
+      githubLink: "https://github.com/MohamedOkash/Wasla-Link"
+    },
+    {
+      id: "maintix-diagnostics",
+      title: "Maintix (Enterprise Fleet & Device Diagnostics)",
+      projectType: "enterprise",
+      status: "completed",
+      featured: true,
+      category: {
+        en: "Hardware Diagnostics & IoT Management",
+        ar: "تشخيص الأجهزة وإدارة أسطول الطابعات",
+        ur: "ہارڈ ویئر تشخیص اور پرنٹ فلیٹ مینجمنٹ"
+      },
+      description: {
+        en: "A massive, vendor-agnostic diagnostic and fleet management monorepo for Ricoh Multifunction Printers. Treats physical machines as digital twins to allow offline diagnostics, error analysis, and consumable tracking.",
+        ar: "مستودع برمجيات ضخم لتشخيص الأعطال وإدارة أسطول الطابعات متعددة الوظائف من Ricoh. يتعامل مع الطابعات كتوائم رقمية لإجراء التشخيص دون إنترنت وتتبع استهلاك الأحبار.",
+        ur: "رائیکو ملٹی فنکشن پرنٹرز کے لیے ایک بڑا تشخیصی اور فلیٹ مینجمنٹ مونو ریپو۔"
+      },
+      features: [
+        { en: "Offline-first device twin diagnostic log analysis and lookup tables", ar: "تحليل سجلات الأعطال وجداول التشخيص للتوائم الرقمية دون الحاجة لإنترنت", ur: "پرنٹرز کے تشخیصی لاگ کا آف لائن تجزیہ" },
+        { en: "Extensible adapter system decoupling core diagnostics from hardware-specific protocols", ar: "نظام محولات مرن يفصل منطق التشخيص الأساسي عن بروتوكولات الأجهزة الخاصة", ur: "توسیعی اڈاپٹر システム ਜੋ ਹارڈ ویئر ਦੇ ਪ੍ਰੋਟੋਕੋਲ ਨੂੰ ਅਲੱਗ ਕਰਦਾ ਹੈ" },
+        { en: "Consumable lifecycle timeline tracking and error-code matching engine", ar: "تتبع الجدول الزمني لعمر قطع الغيار والأحبار ومحرك مطابقة أكواد الأعطال", ur: "ٹونر اور پرنٹر کے پرزوں کی لائف سائیکل ٹریکنگ" }
+      ],
+      challenges: {
+        en: "Ensuring high-speed diagnostics performance in basements and network-isolated settings with zero latency using offline cached DBs.",
+        ar: "ضمان أداء تشخيصي سريع جداً في الطوابق السفلية والأماكن المعزولة عن الشبكة بالكامل بالاعتماد على قواعد بيانات محلية.",
+        ur: "آف لائن کیش ڈیٹا بیس کے ذریعے بنا انٹرنیٹ کے دور دراز مقامات پر تشخیصی کارکردگی کو یقینی بنانا۔"
+      },
+      tech: [
+        { en: "TypeScript Monorepo (Nx/Yarn)", ar: "TypeScript Monorepo (Nx/Yarn)", ur: "TypeScript Monorepo (Nx/Yarn)" },
+        { en: "Vitest & Clean Architecture", ar: "هيكلية نظيفة واختبارات Vitest", ur: "Vitest اور کلین آرکیٹیکچر" },
+        { en: "Offline-first IndexedDB Caching", ar: "تخزين مؤقت IndexedDB للعمل دون اتصال", ur: "IndexedDB آف لائن کیشنگ" }
+      ],
+      architecture: {
+        en: "Pure Clean Architecture monorepo dividing application layers into Entities, Core Services, and Platform-specific Adapters.",
+        ar: "بنية نظيفة (Clean Architecture) تقسم طبقات التطبيق إلى Entities، Core Services، ومحولات متوافقة مع أنظمة التشغيل.",
+        ur: "کلین آرکیٹیکچر مونو ریپو جو بنیادی سروسز اور پلیٹ فارم اڈاپٹرز کو الگ کرتا ہے۔"
+      },
+      businessValue: {
+        en: "Significantly decreased Mean Time to Repair (MTTR) for fleet technicians and optimized spare-part usage efficiency.",
+        ar: "تقليل متوسط وقت الإصلاح (MTTR) لمهندسي الصيانة بشكل كبير وتحسين كفاءة استهلاك قطع الغيار.",
+        ur: "ٹیکنیشنز کے لیے مرمت کے وقت (MTTR) کو نمایاں طور پر کم کیا اور کارکردگی کو بہتر بنایا۔"
+      },
+      iconType: "settings",
+      demoLink: "https://maintix-demo.web.app",
+      githubLink: "https://github.com/MohamedOkash/Maintix"
     }
   ],
   experience: [

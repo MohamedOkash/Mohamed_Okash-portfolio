@@ -100,7 +100,7 @@ export const LoginModal = () => {
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-6">
                 {authError && (
-                  <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-bold text-center">
+                  <div className="p-4 rounded-xl bg-[var(--status-red-bg)] border border-[var(--status-red-border)] text-[var(--status-red)] text-xs font-bold text-center">
                     {authError}
                   </div>
                 )}

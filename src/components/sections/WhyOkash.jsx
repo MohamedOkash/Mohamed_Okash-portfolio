@@ -14,19 +14,22 @@ export const WhyOkash = React.memo(() => {
 
   const pillars = [
     {
-      icon: <Shield className="w-8 h-8 text-blue-400" />,
+      type: 'shield',
+      icon: <Shield className="w-8 h-8" />,
       title: data?.translations?.[lang]?.whyMePillar1Title || t.whyMePillar1Title || (lang === 'ar' ? "قيادة السلامة الميدانية (HSE)" : "Field-Tested HSE Leadership"),
       subtitle: data?.translations?.[lang]?.whyMePillar1Sub || t.whyMePillar1Sub || (lang === 'ar' ? "هندسة سلامة نشطة وحية" : "Active Safety Engineering"),
       desc: data?.translations?.[lang]?.whyMePillar1Desc || t.whyMePillar1Desc || (lang === 'ar' ? "خبرة عملية في الإشراف على السلامة المهنية بالمواقع الإنشائية، تطبيق تقييمات المخاطر، التحقيق في الحوادث، والامتثال الكامل لمعايير أوشا وإيوش العالمية." : "Over 3 years of active onsite HSE supervision, implementing rigorous risk assessments, incident management, and ensuring strict compliance with OSHA & IOSH international regulations.")
     },
     {
-      icon: <Server className="w-8 h-8 text-cyan-400" />,
+      type: 'server',
+      icon: <Server className="w-8 h-8" />,
       title: data?.translations?.[lang]?.whyMePillar2Title || t.whyMePillar2Title || (lang === 'ar' ? "خبرة البنية التحتية والشبكات (IT)" : "IT Infrastructure Expertise"),
       subtitle: data?.translations?.[lang]?.whyMePillar2Sub || t.whyMePillar2Sub || (lang === 'ar' ? "7 سنوات في النظم المؤسسية" : "7 Years of Enterprise Systems"),
       desc: data?.translations?.[lang]?.whyMePillar2Desc || t.whyMePillar2Desc || (lang === 'ar' ? "أساس تقني صلب في تركيب السيرفرات وإدارة الشبكات السلكية واللاسلكية، تمديد الفايبر وكاميرات المراقبة. أبني العمود الفقري الرقمي لضمان استمرارية التشغيل." : "A solid foundation in networking, server setup, fiber optics, CCTV, and hardware troubleshooting. I build the digital backbone that keeps complex, large-scale facilities operational.")
     },
     {
-      icon: <Cpu className="w-8 h-8 text-purple-400" />,
+      type: 'cpu',
+      icon: <Cpu className="w-8 h-8" />,
       title: data?.translations?.[lang]?.whyMePillar3Title || t.whyMePillar3Title || (lang === 'ar' ? "مطور أنظمة مدعوم بالذكاء الاصطناعي" : "AI-Powered Systems Builder"),
       subtitle: data?.translations?.[lang]?.whyMePillar3Sub || t.whyMePillar3Sub || (lang === 'ar' ? "رقمنة سريعة للعمليات (Vibe Coding)" : "Rapid Digitization (Vibe Coding)"),
       desc: data?.translations?.[lang]?.whyMePillar3Desc || t.whyMePillar3Desc || (lang === 'ar' ? "أربط بين مخاطر الموقع والحلول التقنية المبتكرة. عبر تسخير الذكاء الاصطناعي، أبني لوحات تحكم وتطبيقات تقضي تماماً على المعاملات الورقية التقليدية." : "I bridge the gap between field hazards and technical solutions. By leveraging AI-assisted coding, I build real-world dashboards and systems that eliminate outdated paper workflows.")
@@ -34,7 +37,7 @@ export const WhyOkash = React.memo(() => {
   ];
 
   return (
-    <section id="why-me" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]">
+    <section id="why-me" data-section-id="why-me" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]">
       {/* Header */}
       <div className="mb-16">
         <span className="text-xs font-bold uppercase tracking-wider text-[var(--primary)] block mb-3 flex items-center gap-1.5 animate-pulse">
@@ -79,13 +82,25 @@ export const WhyOkash = React.memo(() => {
             <SpotlightCard className="flex flex-col justify-between h-full bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] transition-colors border border-[var(--border)] rounded-[2rem] p-8">
               <div className="space-y-6">
                 {/* Icon */}
-                <div className="p-4 w-fit rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-color)] shadow-inner">
-                  {item.icon}
-                </div>
+                {(() => {
+                  let brandStyle = "";
+                  if (item.type === 'shield') {
+                    brandStyle = "bg-[var(--color-pillar-shield)]/12 border-[var(--color-pillar-shield)]/25 text-[var(--color-pillar-shield)]";
+                  } else if (item.type === 'server') {
+                    brandStyle = "bg-[var(--color-pillar-server)]/12 border-[var(--color-pillar-server)]/25 text-[var(--color-pillar-server)]";
+                  } else if (item.type === 'cpu') {
+                    brandStyle = "bg-[var(--color-pillar-cpu)]/12 border-[var(--color-pillar-cpu)]/25 text-[var(--color-pillar-cpu)]";
+                  }
+                  return (
+                    <div className={`p-4 w-fit rounded-2xl border transition-all duration-300 ${brandStyle}`}>
+                      {item.icon}
+                    </div>
+                  );
+                })()}
 
                 {/* Title & Subtitle */}
                 <div className="space-y-1">
-                  <span className="text-xs font-semibold tracking-wider text-[var(--primary)] opacity-60 uppercase block">
+                  <span className="text-xs font-semibold tracking-wider text-[var(--text-secondary)] uppercase block">
                     {item.subtitle}
                   </span>
                   <h3 className="text-xl md:text-2xl font-bold tracking-tight">
@@ -94,7 +109,7 @@ export const WhyOkash = React.memo(() => {
                 </div>
 
                 {/* Description */}
-                <p className="text-sm md:text-base opacity-70 leading-relaxed font-light">
+                <p className="text-sm md:text-base text-[var(--text-secondary)] leading-relaxed font-light">
                   {item.desc}
                 </p>
               </div>
@@ -117,7 +132,7 @@ export const WhyOkash = React.memo(() => {
                 : 'Field Digitization: The Real Difference'
             )}
           </h4>
-          <p className="text-xs md:text-sm opacity-70 leading-relaxed font-light">
+          <p className="text-xs md:text-sm text-[var(--text-secondary)] leading-relaxed font-light">
             {data?.translations?.[lang]?.whyMeBannerDesc || t.whyMeBannerDesc || (
               lang === 'ar'
                 ? 'معظم مهندسي السلامة يتبعون الطرق التقليدية والأوراق. بينما يبني مهندسو البرمجيات تطبيقات دون فهم واقع الموقع ومخاطره. تواجدي في المنتصف يسمح لي ببناء أنظمة برمجية تفهم تماماً واقع العمل الميداني وتفاصيله لتسهل مهام الفرق التشغيلية.'

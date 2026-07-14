@@ -17,7 +17,7 @@ const StatCounter = React.memo(({ value, label, suffix = "" }) => {
       <span className="text-5xl sm:text-7xl font-extrabold tracking-tight text-gradient block mb-3 font-mono">
         {current}{suffix}
       </span>
-      <span className="text-xs md:text-sm uppercase tracking-widest font-bold opacity-60">
+      <span className="text-xs md:text-sm uppercase tracking-widest font-bold text-[var(--text-secondary)]">
         {label}
       </span>
     </div>
@@ -54,7 +54,7 @@ export const Achievements = () => {
   ];
 
   return (
-    <section className="py-16 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]">
+    <section data-section-id="achievements" className="py-16 max-w-7xl mx-auto px-6 relative z-10 border-t border-[var(--border-color)]">
       {/* Title */}
       <div className="mb-12 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
